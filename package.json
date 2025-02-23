@@ -2,14 +2,24 @@
   "name": "flowbiz_app",
   "version": "1.0.0",
   "scripts": {
-      "dev:frontend": "pnpm --filter frontend dev",
-      "dev:backend": "pnpm --filter backend dev",
-      "dev": "concurrently \"pnpm dev:frontend\" \"pnpm dev:backend\""
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend dev",
+    "dev": "concurrently \"pnpm dev:frontend\" \"pnpm dev:backend\"",
+    "build": "pnpm --filter frontend build && pnpm --filter backend build",
+    "lint": "pnpm --filter \"*\" lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md,vue,js,jsx}\"",
+    "clean": "pnpm --filter \"*\" clean"
   },
   "workspaces": [
-      "packages/*"
+    "packages/*"
   ],
   "devDependencies": {
-  "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3"
   }
 }
