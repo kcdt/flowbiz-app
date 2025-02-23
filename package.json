@@ -1,0 +1,15 @@
+{
+  "name": "flowbiz_app",
+  "version": "1.0.0",
+  "scripts": {
+      "dev:frontend": "pnpm --filter frontend dev",
+      "dev:backend": "pnpm --filter backend dev",
+      "dev": "concurrently \"pnpm dev:frontend\" \"pnpm dev:backend\""
+  },
+  "workspaces": [
+      "packages/*"
+  ],
+  "devDependencies": {
+  "concurrently": "^8.2.2"
+  }
+}
