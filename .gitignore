@@ -2,7 +2,7 @@
 node_modules/
 dist/
 build/
-packages/backend/.env*
+.env*
 .env
 .env.production
 .env.local
