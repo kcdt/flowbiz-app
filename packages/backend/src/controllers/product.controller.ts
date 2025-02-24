@@ -32,11 +32,13 @@ export const productController = {
     try {
       const { id } = req.params;
       const product = await productModel.getProductById(parseInt(id));
+
       if (!product) {
         throw new Error("Product not found");
       } else {
         APIResponse(res, product, "Product fetch", 201);
       }
+      
     } catch (error: any) {
       APIResponse(res, null, error.message, 400);
     }
