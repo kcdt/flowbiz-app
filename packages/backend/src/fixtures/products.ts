@@ -22,7 +22,7 @@ export const productFixtures = [
     description: "Écouteurs sans fil avec réduction de bruit active",
     price: "249.99",
     quantity: 0,
-    status: "out_of_stock",
+    status: "unavailable",
     imageUrl: "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434",
     userId: 1
   },
