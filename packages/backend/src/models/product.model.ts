@@ -37,7 +37,7 @@ export const productModel = {
     }
   },
 
-  addProduct (product: NewProduct) {
+  createProduct (product: NewProduct) {
     try {
         return db.insert(products).values(product).returning({ id: products.id }).execute();
     } catch (err) {

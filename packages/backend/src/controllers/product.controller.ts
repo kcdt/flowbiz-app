@@ -6,18 +6,23 @@ export const productController = {
   async getAll(req: Request, res: Response) {
     try {
       const allProduct = await productModel.getAll();
-      APIResponse(res, allProduct.length, "Product", 201);
+      APIResponse(res, allProduct, "Products fetched", 201);
     } catch (error: any) {
-      APIResponse(res, null, 'test', 500);
+      APIResponse(res, null, error.message, 500);
     }
   },
 
   async create(req: Request, res: Response) {
     try {
-      const { name, price } = req.body; // Validation à faire
-      const newProduct = { name, price };
-      await productModel.addProduct(newProduct);
-      APIResponse(res, newProduct, "Product created", 201);
+      const { name, description, quantity, imageUrl, price, status } = req.body; // Validation à faire
+      const newProduct = { name, description, quantity, imageUrl, price, status };
+
+      if (!quantity) {
+        newProduct.quantity = 1;
+      }
+
+      const createdProduct = await productModel.createProduct(newProduct);
+      APIResponse(res, { id: createdProduct[0].id, ...newProduct }, "Product created", 201);
     } catch (error: any) {
       APIResponse(res, null, error.message, 400);
     }
@@ -27,7 +32,11 @@ export const productController = {
     try {
       const { id } = req.params;
       const product = await productModel.getProductById(parseInt(id));
-      APIResponse(res, product, "Product", 201);
+      if (!product) {
+        throw new Error("Product not found");
+      } else {
+        APIResponse(res, product, "Product fetch", 201);
+      }
     } catch (error: any) {
       APIResponse(res, null, error.message, 400);
     }
