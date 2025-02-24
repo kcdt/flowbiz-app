@@ -1,14 +1,16 @@
-import { Pool } from "pg";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { env } from "./env";
-import fs from "fs";
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
+import dotenv from 'dotenv';
+import 'dotenv/config';
+import * as schema from "../schemas";
 
-const { DATABASE_URL } = env;
-export const pool = new Pool({
-    connectionString: DATABASE_URL,
-    ssl: {
-        ca: fs.readFileSync('./certs/neon-ca.crt'), // Utilisation du certificat fourni par Neon
-    }
-});
+dotenv.config({ path: '.env.local' });
 
-export const db = drizzle(pool);
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error('DATABASE_URL is not defined dans .env.local');
+}
+
+const client = postgres(connectionString);
+export const db = drizzle(client, { schema });
