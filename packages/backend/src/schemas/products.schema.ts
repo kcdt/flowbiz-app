@@ -1,4 +1,4 @@
-import { pgTable, serial, varchar, integer, decimal, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, serial, varchar, integer, decimal, timestamp, uuid } from "drizzle-orm/pg-core";
 import { users } from "./users.schema";
 
 export const products = pgTable('products', {
@@ -9,7 +9,7 @@ export const products = pgTable('products', {
   quantity: integer('quantity').notNull().default(1),
   status: varchar('status', { length: 50 }).notNull().default('available'),
   imageUrl: varchar('image_url', { length: 255 }), // image URL sur Cloudinary
-  userId: integer('user_id').references(() => users.id),
+  userId: uuid('user_id').references(() => users.id),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });
