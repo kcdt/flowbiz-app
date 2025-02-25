@@ -5,8 +5,8 @@ import { userModel } from '../models/user.model';
 export const userController = {
   async create(req: Request, res: Response) {
     try {
-      const { name, email, status, phone, passwordHash } = req.body;
-      const newUser = { name, email, status, phone, passwordHash };
+      const { name, email, role, phone, passwordHash, companyId } = req.body;
+      const newUser = { name, email, role, phone, passwordHash, companyId };
 
       const createdUser = await userModel.createUser(newUser);
       APIResponse(res, { id: createdUser[0].id, ...newUser }, "User created", 201);
@@ -15,19 +15,10 @@ export const userController = {
     }
   },
 
-  async getByName(req: Request, res: Response) {
-    try {
-      const user = await userModel.getByName(req.body.name);
-      APIResponse(res, user, "User found", 201);
-    } catch (error: any) {
-      APIResponse(res, null, error.message, 500);
-    }
-  },
-
   async getById(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const user = await userModel.getUserById(id);
+      const user = await userModel.getById(id);
       if (!user) {
         throw new Error("User not found");
       } else {
@@ -37,6 +28,22 @@ export const userController = {
       APIResponse(res, null, error.message, 400);
     }
   },
+
+
+  async getUserProducts (req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const products = await userModel.getUserProducts(id);
+      if (!products) {
+        throw new Error("Products not found");
+      } else {
+        APIResponse(res, products, "Products found", 201);
+      }
+    } catch (error: any) {
+      APIResponse(res, null, error.message, 400);
+    }
+  },
+
 
   async update (req: Request, res: Response) {
     try {
