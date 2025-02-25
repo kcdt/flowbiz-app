@@ -31,7 +31,7 @@ export const productController = {
   async getById(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const product = await productModel.getProductById(parseInt(id));
+      const product = await productModel.getProductById(id);
       if (!product) {
         throw new Error("Product not found");
       } else {
@@ -45,7 +45,7 @@ export const productController = {
   async update (req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const updatedProduct = await productModel.updateById(parseInt(id), req.body);
+      const updatedProduct = await productModel.updateById(id, req.body);
       APIResponse(res, updatedProduct, "Product updated");
     } catch (error: any) {
       APIResponse(res, null, error.message, 500);
@@ -55,7 +55,7 @@ export const productController = {
   async delete (request: Request, response: Response) {
     try {
       const { id } = request.params;
-      const deletedProduct = await productModel.deleteById(parseInt(id));
+      const deletedProduct = await productModel.deleteById(id);
       APIResponse(response, deletedProduct, "Product deleted");
     } catch (error: any) {
       APIResponse(response, null, error.message, 500);
