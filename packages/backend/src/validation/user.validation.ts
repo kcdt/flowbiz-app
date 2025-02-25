@@ -2,6 +2,11 @@ import { z } from "zod";
 
 const userRoleSchema = z.enum(["seller", "supplier"]).default("seller");
 
+export const loginSchema = z.object({
+  email: z.string().email("Email invalide"),
+  password: z.string()
+});
+
 export const createUserSchema = z.object({
   email: z
     .string()
@@ -66,3 +71,5 @@ export const updateUserSchema = z.object({
 export const uuidSchema = z
   .string()
   .uuid({ message: "Format d'identifiant invalide" });
+
+export type UserInput = z.infer<typeof createUserSchema>;
