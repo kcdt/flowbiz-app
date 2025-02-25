@@ -13,7 +13,6 @@ export const productModel = {
           description: true,
           quantity: true,
           imageUrl: true,
-          status: true,
           price: true
         }
       });
@@ -22,14 +21,15 @@ export const productModel = {
     }
   },
 
-  getProductById (id: number) {
+  getProductById (id: string) {
     try {
       return db.query.products.findFirst({
         where: eq(products.id, id),
         columns: {
           id: true,
           name: true,
-          price: true
+          price: true,
+          userId: true,
         },
       });
     } catch (err) {
@@ -45,7 +45,7 @@ export const productModel = {
     }
   },
 
-  async updateById (id: number, updatedProduct: Partial<NewProduct>) {
+  async updateById (id: string, updatedProduct: Partial<NewProduct>) {
     try {
       const existingProduct = await db.query.products.findFirst({
         where: eq(products.id, id),
@@ -68,7 +68,7 @@ export const productModel = {
     }
   },
 
-  async deleteById (id: number) {
+  async deleteById (id: string) {
     try {
       const existingProduct = await db.query.products.findFirst({
         where: eq(products.id, id),

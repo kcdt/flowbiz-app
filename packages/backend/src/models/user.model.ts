@@ -1,7 +1,8 @@
 import { db } from "../config/db";
 import { eq } from "drizzle-orm";
 import { users } from "../schemas/users.schema";
-import { NewUser, User } from "../entities/user.entitie";
+import { products } from "../schemas/products.schema";
+import { NewUser } from "../entities/user.entitie";
 
 export const userModel = {
   createUser (product: NewUser) {
@@ -20,7 +21,7 @@ export const userModel = {
           id: true,
           name: true,
           email: true,
-          status: true,
+          role: true,
           phone: true,
           createdAt: true,
           updatedAt: true,
@@ -31,7 +32,7 @@ export const userModel = {
     }
   },
 
-  getUserById (id: string) {
+  getById (id: string) {
     try {
       return db.query.users.findFirst({
         where: eq(users.id, id),
@@ -39,7 +40,7 @@ export const userModel = {
           id: true,
           name: true,
           email: true,
-          status: true,
+          role: true,
           phone: true,
           createdAt: true,
           updatedAt: true,
@@ -47,6 +48,25 @@ export const userModel = {
       });
     } catch (err) {
       throw new Error("Impossible de récupérer l'utilisateur")
+    }
+  },
+
+  getUserProducts (id: string) {
+    try {
+      return db.query.products.findMany({
+        where: eq(products.userId, id),
+        columns: {
+          id: true,
+          name: true,
+          description: true,
+          price: true,
+          quantity: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+    } catch (err) {
+      throw new Error("Impossible de récupérer les produits de l'utilisateur")
     }
   },
 
