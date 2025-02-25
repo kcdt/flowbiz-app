@@ -15,7 +15,3 @@ export const validateRequest = <T extends z.ZodTypeAny>(schema: T, req: Request,
     return APIResponse(res, null, "Internal server error during validation", 500);
   }
 }
-
-// Exemple d'utilisation dans une route
-// app.post('/users', (req, res, next) => validateRequest(createUserSchema, req, res, next), createUserHandler);
-// app.put('/users/:id', (req, res, next) => validateRequest(updateUserSchema, req, res, next), updateUserHandler);

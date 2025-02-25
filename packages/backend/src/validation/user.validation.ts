@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const userRoleSchema = z.enum(["seller", "supplier"]).default("seller");
+const userRoleSchema = z.enum(["admin_seller", "standard_seller", "supplier"]).default("admin_seller");
 
 export const loginSchema = z.object({
   email: z.string().email("Email invalide"),
