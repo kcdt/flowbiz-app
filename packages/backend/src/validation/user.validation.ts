@@ -7,6 +7,11 @@ export const loginSchema = z.object({
   password: z.string()
 });
 
+export const loginSchema = z.object({
+  email: z.string().email("Email invalide"),
+  password: z.string()
+});
+
 export const createUserSchema = z.object({
   email: z
     .string()
