@@ -5,9 +5,9 @@ import { products } from "../schemas/products.schema";
 import { NewUser } from "../entities/user.entitie";
 
 export const userModel = {
-  createUser (product: NewUser) {
+  createUser (user: NewUser) {
     try {
-        return db.insert(users).values(product).returning({ id: users.id }).execute();
+        return db.insert(users).values(user).returning({ id: users.id }).execute();
     } catch (err) {
         throw new Error("Impossible de créer l'utilisateur")
     }
