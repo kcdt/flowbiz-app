@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { productController } from "../controllers/product.controller";
-import { validateProductSchema } from "../middleware/validateSchema";
+import { validateRequest } from "../middleware/validateSchema";
+import { ProductSchema } from "../validation/product.validation";
 
 const router = Router();
 
 // [POST] http://localhost:3000/product
-router.post('/', validateProductSchema, productController.create);
+router.post('/', (req, res, next) => validateRequest(ProductSchema, req, res, next), productController.create);
 
 // [GET] http://localhost:3000/product
 router.get('/', productController.getAll);
@@ -14,7 +15,7 @@ router.get('/', productController.getAll);
 router.get('/:id', productController.getById);
 
 // [PATCH] http://localhost:3000/product/:id
-router.patch('/:id', validateProductSchema, productController.update);
+router.patch('/:id', (req, res, next) => validateRequest(ProductSchema, req, res, next), productController.update);
 
 // [DELETE] http://localhost:3000/product/:id
 router.delete('/:id', productController.delete);
