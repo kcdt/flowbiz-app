@@ -45,17 +45,19 @@ export const productModel = {
     }
   },
 
+  async existingProduct (id: string) {
+    const product = await db.query.products.findFirst({ // passer en fonction pour la réutiliser
+      where: eq(products.id, id),
+      columns: { id: true },
+    });
+  
+    if (!product) {
+      throw new Error("Produit non trouvé");
+    }
+  },
+
   async updateById (id: string, updatedProduct: Partial<NewProduct>) {
     try {
-      const existingProduct = await db.query.products.findFirst({
-        where: eq(products.id, id),
-        columns: { id: true },
-      });
-
-      if (!existingProduct) {
-        throw new Error("Produit non trouvé");
-      }
-
       const result = await db.update(products)
         .set(updatedProduct)
         .where(eq(products.id, id))
@@ -70,15 +72,6 @@ export const productModel = {
 
   async deleteById (id: string) {
     try {
-      const existingProduct = await db.query.products.findFirst({
-        where: eq(products.id, id),
-        columns: { id: true },
-      });
-
-      if (!existingProduct) {
-        throw new Error("Produit non trouvé");
-      }
-
       const result = await db.delete(products)
         .where(eq(products.id, id))
         .returning({ id: products.id })

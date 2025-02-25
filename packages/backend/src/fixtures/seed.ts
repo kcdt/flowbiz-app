@@ -2,19 +2,23 @@ import { db } from '../config/db';
 import { users, products } from '../schemas';
 import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcryptjs';
+import { User } from '../entities/user.entitie';
 
 async function seed() {
   const userIds = [uuidv4(), uuidv4(), uuidv4(), uuidv4()];
   const companyIds = [uuidv4(), uuidv4()];
   
   const passwordHash = await bcrypt.hash('password123', 10);
+
+    // Insertion des produits
+    const userData: User[] = [];
   
-  await db.insert(users).values([
+    userData.push(
     {
       id: userIds[0],
       email: 'john.doe@example.com',
       name: 'John Doe',
-      role: 'seller',
+      role: 'admin_seller',
       phone: '+33612345678',
       passwordHash,
       companyId: companyIds[0],
@@ -25,7 +29,7 @@ async function seed() {
       id: userIds[1],
       email: 'jane.smith@example.com',
       name: 'Jane Smith',
-      role: 'seller',
+      role: 'standard_seller',
       phone: '+33687654321',
       passwordHash,
       companyId: companyIds[0],
@@ -54,8 +58,9 @@ async function seed() {
       createdAt: new Date(),
       updatedAt: new Date()
     }
-  ]);
+  );
 
+  await db.insert(users).values(userData);
   console.log('Utilisateurs insérés avec succès');
 
   // Insertion des produits

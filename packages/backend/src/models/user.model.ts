@@ -70,46 +70,26 @@ export const userModel = {
     }
   },
 
-  async updateById (id: string, updatedUser: Partial<NewUser>) {
+  updateById (id: string, updatedUser: Partial<NewUser>) {
     try {
-      const existingUser = await db.query.users.findFirst({
-        where: eq(users.id, id),
-        columns: { id: true },
-      });
-
-      if (!existingUser) {
-        throw new Error("Utilisateur non trouvé");
-      }
-
-      const result = await db.update(users)
+      return db.update(users)
         .set(updatedUser)
         .where(eq(users.id, id))
         .returning({ id: users.id })
         .execute();
 
-      return result;
     } catch (err) {
       throw new Error("Impossible de mettre à jour l'utilisateur");
     }
   },
 
-  async deleteById (id: string) {
+  deleteById (id: string) {
     try {
-      const existingUser = await db.query.users.findFirst({
-        where: eq(users.id, id),
-        columns: { id: true },
-      });
-
-      if (!existingUser) {
-        throw new Error("Utilisateur non trouvé");
-      }
-
-      const result = await db.delete(users)
+      return db.delete(users)
         .where(eq(users.id, id))
         .returning({ id: users.id })
         .execute();
 
-      return result;
     } catch (err) {
       throw new Error("Impossible de supprimer l'utilisateur");
     }
