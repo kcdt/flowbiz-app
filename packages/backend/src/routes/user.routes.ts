@@ -6,8 +6,11 @@ const router = Router();
 // [POST] http://localhost:3000/user
 router.post('/', userController.create);
 
-// [GET] http://localhost:3000/user/:name
-router.get('/', userController.getByName);
+// [GET] http://localhost:3000/user/:id
+router.get('/:id', userController.getById);
+
+// [GET] http://localhost:3000/user/:id/products
+router.get('/:id/products', userController.getUserProducts);
 
 // [PATCH] http://localhost:3000/user/:id
 router.patch('/:id', userController.update);
