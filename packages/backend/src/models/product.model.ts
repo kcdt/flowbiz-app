@@ -126,7 +126,7 @@ export const productModel = {
   },
 
   async existingProduct (id: string) {
-    const product = await db.query.products.findFirst({ // passer en fonction pour la réutiliser
+    const product = await db.query.products.findFirst({
       where: eq(products.id, id),
       columns: { id: true },
     });

@@ -50,7 +50,7 @@
           "name": "category_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "company_id": {
           "name": "company_id",
