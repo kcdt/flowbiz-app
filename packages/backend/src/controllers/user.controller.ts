@@ -1,20 +1,8 @@
 import { Request, Response } from 'express';
-import APIResponse from '../utils/response';
+import APIResponse from '../utils/response.utils';
 import { userModel } from '../models/user.model';
 
 export const userController = {
-  async create(req: Request, res: Response) {
-    try {
-      const { name, email, role, phone, passwordHash, companyId } = req.body;
-      const newUser = { name, email, role, phone, passwordHash, companyId };
-
-      const createdUser = await userModel.createUser(newUser);
-      return APIResponse(res, { id: createdUser[0].id, ...newUser }, "User created", 201);
-    } catch (error: any) {
-      return APIResponse(res, null, error.message, 400);
-    }
-  },
-
   async getById(req: Request, res: Response) {
     try {
       const { id } = req.params;
@@ -37,7 +25,7 @@ export const userController = {
       if (!products) {
         throw new Error("Products not found");
       }
-      
+
       return APIResponse(res, products, "Products found", 201);
     } catch (error: any) {
       return APIResponse(res, null, error.message, 400);

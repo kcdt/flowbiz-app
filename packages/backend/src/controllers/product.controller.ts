@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import APIResponse from '../utils/response';
+import APIResponse from '../utils/response.utils';
 import { productModel } from '../models/product.model';
+import { AuthRequest } from '../types/auth.types';
 
 export const productController = {
   async getAll(req: Request, res: Response) {
@@ -14,14 +15,18 @@ export const productController = {
 
   async create(req: Request, res: Response) {
     try {
-      const { name, description, quantity, imageUrl, price, status } = req.body; // Validation à faire
-      const newProduct = { name, description, quantity, imageUrl, price, status };
-
+      const authReq = req as AuthRequest;
+      if (!authReq.user) {
+        throw new Error("User not authenticated");
+      }
+      const userId = authReq.user.id;
+      const { name, description, quantity, imageUrl, price, status } = req.body;
+      const newProduct = { name, description, quantity, imageUrl, price, status, userId };
       if (!quantity) {
         newProduct.quantity = 1;
       }
 
-      const createdProduct = await productModel.createProduct(newProduct);
+      const createdProduct = await productModel.create(newProduct);
       APIResponse(res, { id: createdProduct[0].id, ...newProduct }, "Product created", 201);
     } catch (error: any) {
       APIResponse(res, null, error.message, 400);
@@ -31,7 +36,7 @@ export const productController = {
   async getById(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const product = await productModel.getProductById(id);
+      const product = await productModel.getById(id);
       if (!product) {
         throw new Error("Product not found");
       } else {

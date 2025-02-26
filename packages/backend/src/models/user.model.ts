@@ -5,14 +5,6 @@ import { products } from "../schemas/products.schema";
 import { NewUser } from "../entities/user.entitie";
 
 export const userModel = {
-  createUser (user: NewUser) {
-    try {
-        return db.insert(users).values(user).returning({ id: users.id }).execute();
-    } catch (err) {
-        throw new Error("Impossible de créer l'utilisateur")
-    }
-  },
-
   getByName (name: string) {
     try {
       return db.query.users.findFirst({
@@ -42,6 +34,7 @@ export const userModel = {
           email: true,
           role: true,
           phone: true,
+          refreshToken: true,
           createdAt: true,
           updatedAt: true,
         },
@@ -93,5 +86,26 @@ export const userModel = {
     } catch (err) {
       throw new Error("Impossible de supprimer l'utilisateur");
     }
-  }
+  },
+
+  getCompanyId (id: string) {
+    try {
+      return db.query.users.findFirst({
+        where: eq(users.id, id),
+        columns: {
+          companyId: true,
+        }
+      });
+    } catch(err) {
+      throw new Error(`Impossible de récupérer l'entreprise de l'utilisateur ${id}`)
+    }
+  },
+
+  async getByEmail(email: string) {
+    const foundUsers = await db.select()
+      .from(users)
+      .where(eq(users.email, email));
+    
+    return foundUsers.length > 0 ? foundUsers[0] : null;
+  },
 };

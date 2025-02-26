@@ -5,8 +5,9 @@ import { createUserSchema, loginSchema } from "../validation/user.validation";
 
 const router = Router();
 
-router.post("/register", (req, res, next) => validateRequest(createUserSchema, req, res, next), authController.register);
-router.post("/login", (req, res, next) => validateRequest(loginSchema, req, res, next), authController.login);
+router.post("/register", validateRequest(createUserSchema), authController.register);
+router.post("/login", validateRequest(loginSchema), authController.login);
+router.post("/logout", authController.logout);
 router.post("/refresh-token", authController.refreshToken);
 
 export default router;
