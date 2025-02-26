@@ -1,5 +1,5 @@
 {
-  "id": "2aa90b71-0d57-415c-a009-2bffadddb7ec",
+  "id": "5fe37877-0843-4701-adc9-4d9c675b38f5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -50,7 +50,7 @@
           "name": "user_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -118,7 +118,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
-          "default": "'seller'"
+          "default": "'standard_seller'"
         },
         "phone": {
           "name": "phone",
@@ -131,6 +131,12 @@
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
+        },
+        "refresh_token": {
+          "name": "refresh_token",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
         },
         "company_id": {
           "name": "company_id",
@@ -175,7 +181,8 @@
       "name": "user_role",
       "schema": "public",
       "values": [
-        "seller",
+        "admin_seller",
+        "standard_seller",
         "supplier"
       ]
     }
