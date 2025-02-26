@@ -10,7 +10,6 @@ async function seed() {
   
   const passwordHash = await bcrypt.hash('password123', 10);
 
-    // Insertion des produits
     const userData: User[] = [];
   
     userData.push(
@@ -21,6 +20,7 @@ async function seed() {
       role: 'admin_seller',
       phone: '+33612345678',
       passwordHash,
+      refreshToken: null,
       companyId: companyIds[0],
       createdAt: new Date(),
       updatedAt: new Date()
@@ -32,6 +32,7 @@ async function seed() {
       role: 'standard_seller',
       phone: '+33687654321',
       passwordHash,
+      refreshToken: null,
       companyId: companyIds[0],
       createdAt: new Date(),
       updatedAt: new Date()
@@ -43,6 +44,7 @@ async function seed() {
       role: 'supplier',
       phone: '+33601020304',
       passwordHash,
+      refreshToken: null,
       companyId: companyIds[1],
       createdAt: new Date(),
       updatedAt: new Date()
@@ -54,6 +56,7 @@ async function seed() {
       role: 'supplier',
       phone: '+33605060708',
       passwordHash,
+      refreshToken: null,
       companyId: companyIds[1],
       createdAt: new Date(),
       updatedAt: new Date()
@@ -63,10 +66,8 @@ async function seed() {
   await db.insert(users).values(userData);
   console.log('Utilisateurs insérés avec succès');
 
-  // Insertion des produits
   const productData = [];
   
-  // Produits pour John Doe (vendeur)
   productData.push(
     {
       id: uuidv4(),
@@ -103,7 +104,6 @@ async function seed() {
     }
   );
   
-  // Produits pour Jane Smith (vendeur)
   productData.push(
     {
       id: uuidv4(),
@@ -182,7 +182,7 @@ async function seed() {
       name: 'Protection écran universel',
       description: 'Film de protection en verre trempé ajustable',
       price: '14.99',
-      quantity: 0, // Produit en rupture de stock
+      quantity: 0,
       imageUrl: 'https://example.com/images/protection.jpg',
       userId: userIds[3],
       createdAt: new Date(),
