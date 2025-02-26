@@ -21,7 +21,7 @@ export const productModel = {
     }
   },
 
-  getProductById (id: string) {
+  getById (id: string) {
     try {
       return db.query.products.findFirst({
         where: eq(products.id, id),
@@ -37,7 +37,7 @@ export const productModel = {
     }
   },
 
-  createProduct (product: NewProduct) {
+  create (product: NewProduct) {
     try {
         return db.insert(products).values(product).returning({ id: products.id }).execute();
     } catch (err) {
@@ -46,7 +46,7 @@ export const productModel = {
   },
 
   async existingProduct (id: string) {
-    const product = await db.query.products.findFirst({ // passer en fonction pour la réutiliser
+    const product = await db.query.products.findFirst({
       where: eq(products.id, id),
       columns: { id: true },
     });
