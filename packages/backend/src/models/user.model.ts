@@ -88,24 +88,31 @@ export const userModel = {
     }
   },
 
-  getCompanyId (id: string) {
+  async getCompanyId (id: string): Promise<string | null> {
     try {
-      return db.query.users.findFirst({
+      const result = await db.query.users.findFirst({
         where: eq(users.id, id),
         columns: {
           companyId: true,
         }
       });
+
+      return result?.companyId || null;
     } catch(err) {
       throw new Error(`Impossible de récupérer l'entreprise de l'utilisateur ${id}`)
     }
   },
 
-  async getByEmail(email: string) {
-    const foundUsers = await db.select()
-      .from(users)
-      .where(eq(users.email, email));
-    
-    return foundUsers.length > 0 ? foundUsers[0] : null;
+  async getByEmail (email: string) {
+    try {
+      const foundUsers = await db.select()
+        .from(users)
+        .where(eq(users.email, email));
+      
+      return foundUsers.length > 0 ? foundUsers[0] : null;
+    }
+    catch (err) {
+      throw new Error("Impossible de récupérer l'utilisateur");
+    }
   },
 };
