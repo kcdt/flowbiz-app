@@ -44,6 +44,9 @@ router.use('/company',
   companyRoutes
 );
 
+// http://localhost:3000/sale
+router.use('/sale', saleRoutes);
+
 router.get('/', (req: Request, res: Response) => {
   res.send(`DB connectée`);
 });

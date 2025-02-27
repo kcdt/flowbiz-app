@@ -52,4 +52,28 @@ export const invoicesRelations = relations(invoices, ({ one }) => ({
     fields: [invoices.saleId],
     references: [sales.id],
   }),
+  saleItems: many(saleItems),
+}));
+
+export const saleItemsRelations = relations(saleItems, ({ one }) => ({
+  sale: one(sales, {
+    fields: [saleItems.saleId],
+    references: [sales.id],
+  }),
+  product: one(products, {
+    fields: [saleItems.productId],
+    references: [products.id],
+  }),
+}));
+
+export const salesRelations = relations(sales, ({ one, many }) => ({
+  user: one(users, {
+    fields: [sales.userId],
+    references: [users.id],
+  }),
+  // company: one(companies, {
+  //   fields: [sales.companyId],
+  //   references: [companies.id],
+  // }),
+  items: many(saleItems),
 }));

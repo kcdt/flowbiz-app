@@ -88,7 +88,7 @@ export const userModel = {
 
   async getCompany (id: string) {
     try {
-      return db.query.users.findFirst({
+      const result = await db.query.users.findFirst({
         where: eq(users.id, id),
         columns: {
           companyId: true
