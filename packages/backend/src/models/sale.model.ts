@@ -30,6 +30,22 @@ export const saleModel = {
         .values(saleItemsData)
         .returning();
 
+      // Vérication de la quantité de produit en stock
+      for (const item of items) {
+        const product = await tx.select()
+          .from(products)
+          .where(eq(products.id, item.productId))
+          .limit(1);
+        
+        if (product.length === 0) {
+          throw new Error("Impossible de récupérer le produit, id incorrect");
+        }
+        
+        if (product[0].quantity < item.quantity) {
+          throw new Error("Quantité de produit insuffisante en stock");
+        }
+      }
+
       for (const item of items) {
         await tx.update(products)
           .set({
@@ -52,14 +68,10 @@ export const saleModel = {
     
     const conditions: SQL[] = [];
 
-    if (!filters.companyId && !filters.userId) {
-      throw new Error("Impossible de récupérer les commandes sans companyId ou userId");
+    if (!filters.companyId) {
+      throw new Error("Impossible de récupérer les commandes sans companyId");
     } else {
-      if (filters.companyId) {
-        conditions.push(eq(sales.companyId, filters.companyId));
-      } else if (filters.userId) {
-        conditions.push(eq(sales.userId, filters.userId));
-      }
+      conditions.push(eq(sales.companyId, filters.companyId));
     }
     
     if (filters.status) {
@@ -81,10 +93,10 @@ export const saleModel = {
     return await query;
   },
   
-  async getById(id: string) {
+  async getById(id: string, companyId: string) {
     const sale = await db.select()
       .from(sales)
-      .where(eq(sales.id, id))
+      .where(and(eq(sales.id, id), eq(products.companyId, companyId)))
       .limit(1);
     
     if (sale.length === 0) {
@@ -102,70 +114,26 @@ export const saleModel = {
     .from(saleItems)
     .leftJoin(products, eq(saleItems.productId, products.id))
     .where(eq(saleItems.saleId, id));
-
-    if (!sale[0].companyId && !sale[0].userId) {
-      throw new Error("Impossible de récupérer l'id de la company ou de l'utilisateur")
-    }
-    
-    let seller: {        
-      id: string,
-      name: string,
-      email: string,
-      companyId: string | null
-    } | null = null
-
-    if (sale[0].userId) {
-      const sellerResult = await db.select({
-        id: users.id,
-        name: users.name,
-        email: users.email,
-        companyId: users.companyId
-      })
-      .from(users)
-      .where(eq(users.id, sale[0].userId))
-      .limit(1);
-      
-      if (sellerResult.length > 0) {
-        seller = sellerResult[0];
-      }
-    } 
-    else if (!seller && sale[0].companyId) {
-      const companyUsers = await db.select({
-        id: users.id,
-        name: users.name,
-        email: users.email,
-        companyId: users.companyId
-      })
-      .from(users)
-      .where(eq(users.companyId, sale[0].companyId))
-      .limit(1);
-      
-      if (companyUsers.length > 0) {
-        seller = companyUsers[0];
-      }
-    }
     
     return {
       ...sale[0],
-      items,
-      seller: seller
+      items
     };
   },
 
-  async getOwnerById (id: string) {
+  async verifySaleOwner (saleId: string, companyId: string) {
     const sale = await db.select({
-      userId: sales.userId,
       companyId: sales.companyId
     })
       .from(sales)
-      .where(eq(sales.id, id))
+      .where(and(eq(sales.id, saleId), eq(products.companyId, companyId)))
       .limit(1);
     
     if (sale.length === 0) {
       throw new Error("Impossible de récupérer la commande, id incorrect");
     }
     
-    if (!sale[0].companyId && !sale[0].userId) {
+    if (!sale[0].companyId) {
       throw new Error("Impossible de récupérer l'id de la company ou de l'utilisateur")
     }
     
@@ -174,13 +142,13 @@ export const saleModel = {
     };
   },
   
-  async updateStatus(id: string, status: string) {
+  async updateStatus(id: string, companyId: string, status: string) {
     const updated = await db.update(sales)
       .set({
         status: status as 'pending' | 'completed' | 'cancelled' | 'refunded',
         updatedAt: new Date()
       })
-      .where(eq(sales.id, id))
+      .where(and(eq(sales.id, id), eq(products.companyId, companyId)))
       .returning();
       
     return updated[0];
