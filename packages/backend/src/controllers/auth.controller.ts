@@ -24,8 +24,8 @@ export const authController = {
       const newUser = await authModel.createUser(userWithHashedPassword);
       if (!newUser) {
         return APIResponse(res, null, "Erreur lors de la création de l'utilisateur", 500);
-      } 
-      const tokens = AuthService.generateTokens({ id: newUser.id, email: newUser.email });
+      }
+      const tokens = AuthService.generateTokens({ id: newUser.id, email: newUser.email, role: newUser.role });
 
       await authModel.updateRefreshToken(newUser.id, tokens.refreshToken);
     
@@ -37,7 +37,7 @@ export const authController = {
       });
       
       return APIResponse(res, { 
-        user: { id: newUser.id, email: newUser.email }, 
+        user: { id: newUser.id, email: newUser.email, role: newUser.role }, 
         accessToken: tokens.accessToken 
       }, "User register", 201);
     } catch (error: any) {
@@ -59,7 +59,7 @@ export const authController = {
         return APIResponse(res, null, "Email ou mot de passe incorrect", 401);
       }
   
-      const tokens = AuthService.generateTokens({ id: user.id, email: user.email });
+      const tokens = AuthService.generateTokens({ id: user.id, email: user.email, role: user.role });
       
       await authModel.updateRefreshToken(user.id, tokens.refreshToken);
       
@@ -71,7 +71,7 @@ export const authController = {
       });
       
       return APIResponse(res, { 
-        user: { id: user.id, email: user.email }, 
+        user: { id: user.id, email: user.email, role: user.role }, 
         accessToken: tokens.accessToken 
       }, "User logged", 200);
     } catch (error: any) {
@@ -112,7 +112,7 @@ export const authController = {
         return APIResponse(res, null, "Token de rafraîchissement invalide", 401);
       }
       
-      const tokens = AuthService.generateTokens({ id: user.id, email: user.email });
+      const tokens = AuthService.generateTokens({ id: user.id, email: user.email, role: user.role });
       
       await authModel.updateRefreshToken(userId, tokens.refreshToken);
       

@@ -13,8 +13,8 @@ export const saleController = {
         return APIResponse(res, null, "La commande doit contenir au moins un article", 400);
       }
 
-      if (!authReq.user?.id || !authReq.user?.companyId) {
-        return APIResponse(res, null, "Utilisateur non authentifié", 401);
+      if (!authReq.user?.id && !authReq.user?.companyId) {
+        return APIResponse(res, authReq.user, "Utilisateur non authentifié 1", 401);
       }
       
       const saleData = {
@@ -38,7 +38,7 @@ export const saleController = {
       const { status, startDate, endDate } = req.query;
       const authReq = req as AuthRequest;
 
-      if (!authReq.user?.id || !authReq.user?.companyId) {
+      if (!authReq.user?.id && !authReq.user?.companyId) {
         return APIResponse(res, null, "Utilisateur non authentifié", 401);
       }
       
@@ -66,7 +66,7 @@ export const saleController = {
         return APIResponse(res, null, "Commande non trouvée", 404);
       }
 
-      if (sale.userId !== authReq.user?.id || sale.companyId !== authReq.user?.companyId) {
+      if (sale.userId !== authReq.user?.id && sale.companyId !== authReq.user?.companyId) {
         return APIResponse(res, null, "Vous n'êtes pas autorisé à accéder à cette commande", 403);
       }
       
