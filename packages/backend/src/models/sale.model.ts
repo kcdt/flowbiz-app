@@ -46,16 +46,7 @@ export const saleModel = {
   },
   
   async getAll(filters: SaleFilters = {}) {
-    let query = db.select({
-      id: sales.id,
-      date: sales.date,
-      price: sales.price,
-      status: sales.status,
-      buyerName: sales.buyerName,
-      buyerAddress: sales.buyerAddress,
-      companyId: sales.companyId,
-      createdAt: sales.createdAt
-    })
+    let query = db.select()
     .from(sales)
     .orderBy(desc(sales.date)) as any;
     
@@ -112,24 +103,74 @@ export const saleModel = {
     .leftJoin(products, eq(saleItems.productId, products.id))
     .where(eq(saleItems.saleId, id));
 
-    if (!sale[0].companyId) {
-      throw new Error("Impossible de récupérer l'id de la company")
+    if (!sale[0].companyId && !sale[0].userId) {
+      throw new Error("Impossible de récupérer l'id de la company ou de l'utilisateur")
     }
     
-    const seller = await db.select({
-      id: users.id,
-      name: users.name,
-      email: users.email,
-      companyId: users.companyId
-    })
-    .from(users)
-    .where(eq(users.companyId, sale[0].companyId))
-    .limit(1);
+    let seller: {        
+      id: string,
+      name: string,
+      email: string,
+      companyId: string | null
+    } | null = null
+
+    if (sale[0].userId) {
+      const sellerResult = await db.select({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        companyId: users.companyId
+      })
+      .from(users)
+      .where(eq(users.id, sale[0].userId))
+      .limit(1);
+      
+      if (sellerResult.length > 0) {
+        seller = sellerResult[0];
+      }
+    } 
+    else if (!seller && sale[0].companyId) {
+      const companyUsers = await db.select({
+        id: users.id,
+        name: users.name,
+        email: users.email,
+        companyId: users.companyId
+      })
+      .from(users)
+      .where(eq(users.companyId, sale[0].companyId))
+      .limit(1);
+      
+      if (companyUsers.length > 0) {
+        seller = companyUsers[0];
+      }
+    }
     
     return {
       ...sale[0],
       items,
-      seller: seller[0] || null
+      seller: seller
+    };
+  },
+
+  async getOwnerById (id: string) {
+    const sale = await db.select({
+      userId: sales.userId,
+      companyId: sales.companyId
+    })
+      .from(sales)
+      .where(eq(sales.id, id))
+      .limit(1);
+    
+    if (sale.length === 0) {
+      throw new Error("Impossible de récupérer la commande, id incorrect");
+    }
+    
+    if (!sale[0].companyId && !sale[0].userId) {
+      throw new Error("Impossible de récupérer l'id de la company ou de l'utilisateur")
+    }
+    
+    return {
+      ...sale[0],
     };
   },
   
@@ -149,8 +190,6 @@ export const saleModel = {
     const items = await db.select()
       .from(saleItems)
       .where(eq(saleItems.saleId, id));
-
-    console.log(items);
       
     return await db.transaction(async (tx) => {
       for (const item of items) {
