@@ -16,7 +16,7 @@ export const createUserSchema = z.object({
     .string()
     .min(2, { message: "Le nom doit contenir au moins 2 caractères" })
     .max(255, { message: "Le nom ne peut pas dépasser 255 caractères" }),
-  role: userRoleSchema.optional(),
+  role: userRoleSchema,
   phone: z
     .string()
     .regex(/^(\+\d{1,3})?[\s.-]?\(?\d{1,4}\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9}$/, {
@@ -47,7 +47,7 @@ export const updateUserSchema = z.object({
     .min(2, { message: "Le nom doit contenir au moins 2 caractères" })
     .max(255, { message: "Le nom ne peut pas dépasser 255 caractères" })
     .optional(),
-  role: userRoleSchema.optional(),
+  role: userRoleSchema,
   phone: z
     .string()
     .regex(/^(\+\d{1,3})?[\s.-]?\(?\d{1,4}\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9}$/, {

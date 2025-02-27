@@ -3,13 +3,14 @@ import bcrypt from 'bcryptjs';
 import { env } from '../config/env';
 
 export const AuthService = {
-  generateTokens(user: { id: string; email: string }) {
+  generateTokens(user: { id: string; email: string; role: string }) {
+
     const accessToken = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, email: user.email, role: user.role },
       env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "1d" }
     );
-    
+
     const refreshToken = jwt.sign(
       { id: user.id },
       env.JWT_SECRET_REFRESH,
