@@ -1,12 +1,15 @@
 import { Request, Response } from 'express';
 import APIResponse from '../utils/response.utils';
 import { productModel } from '../models/product.model';
-import { AuthRequest } from '../types/auth.types';
+import { VerifiedAuthRequest } from '../types/auth.types';
 
 export const productController = {
   async getAll(req: Request, res: Response) {
     try {
-      const allProduct = await productModel.getAll();
+      const authReq = req as VerifiedAuthRequest;
+      const userCompanyId = authReq.user.companyId;
+
+      const allProduct = await productModel.getAll(userCompanyId);
       APIResponse(res, allProduct, "Products fetched", 200);
     } catch (error: any) {
       APIResponse(res, null, error.message, 500);
@@ -15,13 +18,11 @@ export const productController = {
 
   async create(req: Request, res: Response) {
     try {
-      const authReq = req as AuthRequest;
-      if (!authReq.user) {
-        throw new Error("User not authenticated");
-      }
-      const userId = authReq.user.id;
+      const authReq = req as VerifiedAuthRequest;
+      const userCompanyId = authReq.user.companyId;
+
       const { name, description, quantity, imageUrl, price, status } = req.body;
-      const newProduct = { name, description, quantity, imageUrl, price, status, userId };
+      const newProduct = { name, description, quantity, imageUrl, price, status, companyId: userCompanyId };
       if (!quantity) {
         newProduct.quantity = 1;
       }
@@ -36,6 +37,7 @@ export const productController = {
   async getById(req: Request, res: Response) {
     try {
       const { id } = req.params;
+    
       const product = await productModel.getById(id);
       if (!product) {
         throw new Error("Product not found");
@@ -50,6 +52,7 @@ export const productController = {
   async update (req: Request, res: Response) {
     try {
       const { id } = req.params;
+
       await productModel.existingProduct(id);
       const updatedProduct = await productModel.updateById(id, req.body);
       APIResponse(res, updatedProduct, "Product updated");
@@ -58,14 +61,15 @@ export const productController = {
     }
   },
 
-  async delete (request: Request, response: Response) {
+  async delete (req: Request, res: Response) {
     try {
-      const { id } = request.params;
+      const { id } = req.params;
+
       await productModel.existingProduct(id);
       const deletedProduct = await productModel.deleteById(id);
-      APIResponse(response, deletedProduct, "Product deleted");
+      APIResponse(res, deletedProduct, "Product deleted");
     } catch (error: any) {
-      APIResponse(response, null, error.message, 500);
+      APIResponse(res, null, error.message, 500);
     }
   },
 };

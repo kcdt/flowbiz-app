@@ -1,20 +1,16 @@
 import { Request, Response } from 'express';
 import { saleModel } from '../models/sale.model';
 import APIResponse from '../utils/response.utils';
-import { AuthRequest } from '../types/auth.types';
+import { AuthRequest, VerifiedAuthRequest } from '../types/auth.types';
 
 export const saleController = {
   async createSale(req: Request, res: Response) {
     try {
-      const authReq = req as AuthRequest;
+      const authReq = req as VerifiedAuthRequest;
       const { price, buyerName, buyerAddress, items } = req.body;
       
       if (!items || !Array.isArray(items) || items.length === 0) {
         return APIResponse(res, null, "La commande doit contenir au moins un article", 400);
-      }
-
-      if (!authReq.user?.id && !authReq.user?.companyId) {
-        return APIResponse(res, authReq.user, "Utilisateur non authentifié 1", 401);
       }
       
       const saleData = {
@@ -36,17 +32,13 @@ export const saleController = {
   async getSales(req: Request, res: Response) {
     try {
       const { status, startDate, endDate } = req.query;
-      const authReq = req as AuthRequest;
-
-      if (!authReq.user?.id && !authReq.user?.companyId) {
-        return APIResponse(res, null, "Utilisateur non authentifié", 401);
-      }
+      const authReq = req as VerifiedAuthRequest;
       
       const sales = await saleModel.getAll({
         status: status as string,
         startDate: startDate as string,
         endDate: endDate as string,
-        userId: authReq.user?.id as string,
+        userId: authReq.user.id as string,
         companyId: authReq.user.companyId as string
       });
       
@@ -58,15 +50,16 @@ export const saleController = {
   
   async getSaleById(req: Request, res: Response) {
     try {
-      const authReq = req as AuthRequest;
+      const authReq = req as VerifiedAuthRequest;
+      const userCompanyId = authReq.user.companyId;
       const { id } = req.params;
       
-      const sale = await saleModel.getById(id);
+      const sale = await saleModel.getById(id, userCompanyId);
       if (!sale) {
         return APIResponse(res, null, "Commande non trouvée", 404);
       }
 
-      if (sale.userId !== authReq.user?.id && sale.companyId !== authReq.user?.companyId) {
+      if (sale.companyId !== authReq.user.companyId) {
         return APIResponse(res, null, "Vous n'êtes pas autorisé à accéder à cette commande", 403);
       }
       
@@ -78,10 +71,12 @@ export const saleController = {
   
   async updateSaleStatus(req: Request, res: Response) {
     try {
+      const authReq = req as VerifiedAuthRequest;
+      const userCompanyId = authReq.user.companyId;
       const { id } = req.params;
       const { status } = req.body;
       
-      const updatedSale = await saleModel.updateStatus(id, status);
+      const updatedSale = await saleModel.updateStatus(id, userCompanyId, status);
       
       return APIResponse(res, updatedSale, "Statut de la commande mis à jour", 200);
     } catch (error: any) {

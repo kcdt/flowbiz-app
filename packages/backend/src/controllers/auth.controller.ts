@@ -4,7 +4,6 @@ import { AuthService } from '../services/auth.service';
 import { UserInput } from '../validation/user.validation';
 import APIResponse from '../utils/response.utils';
 import { userModel } from '../models/user.model';
-import { AuthRequest } from '../types/auth.types';
 
 export const authController = {
   async register(req: Request, res: Response) {
@@ -25,7 +24,7 @@ export const authController = {
       if (!newUser) {
         return APIResponse(res, null, "Erreur lors de la création de l'utilisateur", 500);
       }
-      const tokens = AuthService.generateTokens({ id: newUser.id, email: newUser.email, role: newUser.role });
+      const tokens = AuthService.generateTokens({ id: newUser.id, email: newUser.email, role: newUser.role, companyId: newUser.companyId });
 
       await authModel.updateRefreshToken(newUser.id, tokens.refreshToken);
     
@@ -59,7 +58,7 @@ export const authController = {
         return APIResponse(res, null, "Email ou mot de passe incorrect", 401);
       }
   
-      const tokens = AuthService.generateTokens({ id: user.id, email: user.email, role: user.role });
+      const tokens = AuthService.generateTokens({ id: user.id, email: user.email, role: user.role, companyId: user.companyId });
       
       await authModel.updateRefreshToken(user.id, tokens.refreshToken);
       
@@ -80,14 +79,7 @@ export const authController = {
   },
 
   async logout(req: Request, res: Response) {
-    try {
-      const authReq = req as AuthRequest;
-      const userId = authReq.user?.id;
-      
-      if (userId) {
-        await authModel.updateRefreshToken(userId, null);
-      }
-      
+    try {      
       res.clearCookie('refreshToken');
       
       return APIResponse(res, null, "Déconnexion réussie", 200);
@@ -112,7 +104,7 @@ export const authController = {
         return APIResponse(res, null, "Token de rafraîchissement invalide", 401);
       }
       
-      const tokens = AuthService.generateTokens({ id: user.id, email: user.email, role: user.role });
+      const tokens = AuthService.generateTokens({ id: user.id, email: user.email, role: user.role, companyId: user.companyId });
       
       await authModel.updateRefreshToken(userId, tokens.refreshToken);
       

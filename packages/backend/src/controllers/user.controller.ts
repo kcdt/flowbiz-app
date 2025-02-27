@@ -17,22 +17,6 @@ export const userController = {
     }
   },
 
-
-  async getUserProducts (req: Request, res: Response) {
-    try {
-      const { id } = req.params;
-      const products = await userModel.getUserProducts(id);
-      if (!products) {
-        throw new Error("Products not found");
-      }
-
-      return APIResponse(res, products, "Products found", 201);
-    } catch (error: any) {
-      return APIResponse(res, null, error.message, 400);
-    }
-  },
-
-
   async update (req: Request, res: Response) {
     try {
       const { id } = req.params;
