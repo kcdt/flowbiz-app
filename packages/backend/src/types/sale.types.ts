@@ -21,3 +21,16 @@ export interface SaleFilters {
   userId?: string;
   companyId?: string;
 }
+
+export interface CompletedSale {
+  price: string;
+  status: 'pending' | 'completed' | 'cancelled' | 'refunded';
+  buyerName: string;
+  buyerAddress: string;
+  companyId?: string;
+  userId: string;
+  date?: Date;
+  id: string,
+  createdAt: Date,
+  updatedAt: Date
+}
