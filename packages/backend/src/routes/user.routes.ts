@@ -8,9 +8,6 @@ const router = Router();
 // [GET] http://localhost:3000/user/:id
 router.get('/:id', userController.getById);
 
-// [GET] http://localhost:3000/user/:id/products
-router.get('/:id/products', userController.getUserProducts);
-
 // [PATCH] http://localhost:3000/user/:id
 router.patch('/:id', validateRequest(updateUserSchema), userController.update);
 
