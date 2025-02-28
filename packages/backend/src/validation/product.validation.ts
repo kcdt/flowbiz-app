@@ -16,8 +16,8 @@ export const ProductSchema = z.object({
     .max(255, { message: "L'URL de l'image ne doit pas dépasser 255 caractères" })
     .url({ message: "L'URL de l'image doit être une URL valide" })
     .optional(),
-  userId: z.string().uuid()
-    .uuid({ message: "L'ID utilisateur doit être un uuid valide" })
+  companyId: z.string().uuid()
+    .uuid({ message: "L'ID company doit être un uuid valide" })
 });
 
 export const NewProductSchema = z.object({
