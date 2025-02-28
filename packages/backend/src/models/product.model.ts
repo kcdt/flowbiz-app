@@ -1,19 +1,27 @@
 import { db } from "../config/db";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { products } from "../schemas/products.schema";
 import { NewProduct, Product } from "../entities/product.entitie";
 
 export const productModel = {
-  getAll (): Promise< Partial<Product>[]> {
+  create (product: NewProduct) {
+    try {
+        return db.insert(products).values(product).returning({ id: products.id }).execute();
+    } catch (err) {
+        throw new Error("Impossible de créer le produit")
+    }
+  },
+
+  getAll (companyId: string): Promise< Partial<Product>[]> {
     try {
       return db.query.products.findMany({
+        where: eq(products.companyId, companyId),
         columns: {
           id: true,
           name: true,
           description: true,
           quantity: true,
           imageUrl: true,
-          status: true,
           price: true
         }
       });
@@ -22,14 +30,17 @@ export const productModel = {
     }
   },
 
-  getProductById (id: number) {
+  getById (id: string) {
     try {
       return db.query.products.findFirst({
         where: eq(products.id, id),
         columns: {
           id: true,
           name: true,
-          price: true
+          description: true,
+          quantity: true,
+          imageUrl: true,
+          price: true,
         },
       });
     } catch (err) {
@@ -37,25 +48,40 @@ export const productModel = {
     }
   },
 
-  createProduct (product: NewProduct) {
-    try {
-        return db.insert(products).values(product).returning({ id: products.id }).execute();
-    } catch (err) {
-        throw new Error("Impossible de créer le produit")
+    async verifyProductOwner (productId: string, companyId: string) {
+      const product = await db.select({
+        companyId: products.companyId
+      })
+        .from(products)
+        .where(and(eq(products.id, productId), eq(products.companyId, companyId)))
+        .limit(1);
+      
+      if (product.length === 0) {
+        throw new Error("Impossible de récupérer le produit, id incorrect");
+      }
+      
+      if (!product[0].companyId) {
+        throw new Error("Impossible de récupérer l'id de la company")
+      }
+      
+      return {
+        ...product[0],
+      };
+    },
+
+  async existingProduct (id: string) {
+    const product = await db.query.products.findFirst({
+      where: eq(products.id, id),
+      columns: { id: true },
+    });
+  
+    if (!product) {
+      throw new Error("Produit non trouvé");
     }
   },
 
-  async updateById (id: number, updatedProduct: Partial<NewProduct>) {
+  async updateById (id: string, updatedProduct: Partial<NewProduct>) {
     try {
-      const existingProduct = await db.query.products.findFirst({
-        where: eq(products.id, id),
-        columns: { id: true },
-      });
-
-      if (!existingProduct) {
-        throw new Error("Produit non trouvé");
-      }
-
       const result = await db.update(products)
         .set(updatedProduct)
         .where(eq(products.id, id))
@@ -68,17 +94,8 @@ export const productModel = {
     }
   },
 
-  async deleteById (id: number) {
+  async deleteById (id: string) {
     try {
-      const existingProduct = await db.query.products.findFirst({
-        where: eq(products.id, id),
-        columns: { id: true },
-      });
-
-      if (!existingProduct) {
-        throw new Error("Produit non trouvé");
-      }
-
       const result = await db.delete(products)
         .where(eq(products.id, id))
         .returning({ id: products.id })
