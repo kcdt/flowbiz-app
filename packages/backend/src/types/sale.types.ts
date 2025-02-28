@@ -4,7 +4,6 @@ export interface SaleInput {
   buyerName: string;
   buyerAddress: string;
   companyId?: string;
-  userId: string;
   date?: Date;
 }
 
@@ -18,7 +17,6 @@ export interface SaleFilters {
   status?: string;
   startDate?: string;
   endDate?: string;
-  userId?: string;
   companyId?: string;
 }
 
@@ -28,7 +26,6 @@ export interface CompletedSale {
   buyerName: string;
   buyerAddress: string;
   companyId?: string;
-  userId: string;
   date?: Date;
   id: string,
   createdAt: Date,

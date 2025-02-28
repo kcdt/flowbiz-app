@@ -15,8 +15,7 @@ export const userModel = {
           email: true,
           role: true,
           phone: true,
-          createdAt: true,
-          updatedAt: true,
+          companyId: true
         }
       });
     } catch(err) {
@@ -34,32 +33,12 @@ export const userModel = {
           email: true,
           role: true,
           phone: true,
-          refreshToken: true,
-          createdAt: true,
-          updatedAt: true,
+          companyId: true,
+          refreshToken: true
         },
       });
     } catch (err) {
       throw new Error("Impossible de récupérer l'utilisateur")
-    }
-  },
-
-  getUserProducts (id: string) {
-    try {
-      return db.query.products.findMany({
-        where: eq(products.userId, id),
-        columns: {
-          id: true,
-          name: true,
-          description: true,
-          price: true,
-          quantity: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      });
-    } catch (err) {
-      throw new Error("Impossible de récupérer les produits de l'utilisateur")
     }
   },
 
@@ -85,21 +64,6 @@ export const userModel = {
 
     } catch (err) {
       throw new Error("Impossible de supprimer l'utilisateur");
-    }
-  },
-
-  async getCompanyId (id: string): Promise<string | null> {
-    try {
-      const result = await db.query.users.findFirst({
-        where: eq(users.id, id),
-        columns: {
-          companyId: true,
-        }
-      });
-
-      return result?.companyId || null;
-    } catch(err) {
-      throw new Error(`Impossible de récupérer l'entreprise de l'utilisateur ${id}`)
     }
   },
 

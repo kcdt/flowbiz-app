@@ -18,6 +18,7 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
         id: string;
         email: string;
         role: string;
+        companyId: string;
       };
       
       (req as AuthRequest).user = decoded;

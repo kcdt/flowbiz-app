@@ -12,7 +12,7 @@ const router = Router();
 router.post('/', validateRequest(NewProductSchema), authMiddleware, productController.create);
 
 // [GET] http://localhost:3000/product
-router.get('/', authMiddleware, checkProductOwner, productController.getAll);
+router.get('/', authMiddleware, productController.getAll);
 
 // [GET] http://localhost:3000/product/:id
 router.get('/:id', authMiddleware, checkProductOwner, productController.getById);
@@ -21,6 +21,6 @@ router.get('/:id', authMiddleware, checkProductOwner, productController.getById)
 router.patch('/:id', validateRequest(ProductSchema), authMiddleware, adminSellerOnly, checkProductOwner, productController.update);
 
 // [DELETE] http://localhost:3000/product/:id
-router.delete('/:id', authMiddleware, checkProductOwner, adminSellerOnly, productController.delete);
+router.delete('/:id', authMiddleware, adminSellerOnly, checkProductOwner, productController.delete);
 
 export default router;

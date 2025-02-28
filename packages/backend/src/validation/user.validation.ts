@@ -33,7 +33,6 @@ export const createUserSchema = z.object({
   companyId: z
     .string()
     .uuid({ message: "Format d'identifiant de société invalide" })
-    .optional(),
 });
 
 export const updateUserSchema = z.object({
@@ -65,7 +64,6 @@ export const updateUserSchema = z.object({
   companyId: z
     .string()
     .uuid({ message: "Format d'identifiant de société invalide" })
-    .optional(),
 });
 
 export const uuidSchema = z
