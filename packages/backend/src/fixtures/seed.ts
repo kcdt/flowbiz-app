@@ -366,7 +366,7 @@ async function seed() {
   
   console.log('Base de données initialisée avec succès!');
 }
-
+  
 seed()
   .then(() => process.exit(0))
   .catch((error) => {

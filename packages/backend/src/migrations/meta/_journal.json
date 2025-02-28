@@ -8,6 +8,13 @@
       "when": 1740647996829,
       "tag": "0000_cloudy_doctor_spectrum",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1740693534577,
+      "tag": "0001_bored_supernaut",
+      "breakpoints": true
     }
   ]
 }
