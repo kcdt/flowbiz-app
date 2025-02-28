@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { saleModel } from '../models/sale.model';
 import APIResponse from '../utils/response.utils';
-import { AuthRequest, VerifiedAuthRequest } from '../types/auth.types';
+import { VerifiedAuthRequest } from '../types/auth.types';
 
 export const saleController = {
   async createSale(req: Request, res: Response) {
@@ -17,7 +17,6 @@ export const saleController = {
         price,
         buyerName,
         buyerAddress,
-        userId: authReq.user.id,
         companyId: authReq.user.companyId
       };
       
@@ -38,7 +37,6 @@ export const saleController = {
         status: status as string,
         startDate: startDate as string,
         endDate: endDate as string,
-        userId: authReq.user.id as string,
         companyId: authReq.user.companyId as string
       });
       

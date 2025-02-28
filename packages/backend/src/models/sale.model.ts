@@ -1,5 +1,5 @@
 import { db } from '../config/db';
-import { sales, saleItems, products, users } from '../schemas';
+import { sales, saleItems, products } from '../schemas';
 import { eq, and, gte, lte, desc, SQL, sql } from 'drizzle-orm';
 import { SaleFilters, SaleInput, SaleItemInput } from '../types/sale.types';
 
@@ -11,8 +11,7 @@ export const saleModel = {
         status: saleData.status as 'pending' | 'completed' | 'cancelled' | 'refunded' || 'pending',
         buyerName: saleData.buyerName,
         buyerAddress: saleData.buyerAddress,
-        companyId: saleData.companyId,
-        userId: saleData.userId
+        companyId: saleData.companyId
       };
       
       const [newSale] = await tx.insert(sales)
@@ -46,6 +45,7 @@ export const saleModel = {
         }
       }
 
+      // Gestion de la quantité de produit en stock
       for (const item of items) {
         await tx.update(products)
           .set({
