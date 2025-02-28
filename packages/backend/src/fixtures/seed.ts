@@ -48,7 +48,11 @@ async function seed() {
   const userData: User[] = []
 
   
-    userData.push(
+  await db.insert(companies).values(companyData);
+  console.log('Entreprises insérées avec succès');
+
+  // 2. Création des utilisateurs
+  const userData: User[] = [
     {
       id: userIds[0],
       email: 'john.doe@example.com',
@@ -97,7 +101,7 @@ async function seed() {
       createdAt: new Date(),
       updatedAt: new Date()
     }
-  );
+  ];
 
   await db.insert(users).values(userData);
   console.log('Utilisateurs insérés avec succès');
@@ -197,10 +201,7 @@ async function seed() {
       categoryId: categoryIds[2],
       createdAt: new Date(),
       updatedAt: new Date()
-    }
-  );
-  
-  productData.push(
+    },
     {
       id: productIds[3],
       name: 'Montre connectée Sport',
@@ -223,10 +224,7 @@ async function seed() {
       categoryId: categoryIds[3],
       createdAt: new Date(),
       updatedAt: new Date()
-    }
-  );
-  
-  productData.push(
+    },
     {
       id: productIds[5],
       name: 'Batterie externe 20000mAh',
@@ -248,10 +246,7 @@ async function seed() {
       companyId: companyIds[0],
       createdAt: new Date(),
       updatedAt: new Date()
-    }
-  );
-  
-  productData.push(
+    },
     {
       id: productIds[7],
       name: 'Support téléphone voiture',
@@ -288,7 +283,7 @@ async function seed() {
       createdAt: new Date(),
       updatedAt: new Date()
     }
-  );
+  ];
   
   await db.insert(products).values(productData);
   console.log('Produits insérés avec succès');

@@ -56,6 +56,7 @@ export const productController = {
   async update (req: Request, res: Response) {
     try {
       const { id } = req.params;
+
       await productModel.existingProduct(id);
       const updatedProduct = await productModel.updateById(id, req.body);
       return APIResponse(res, updatedProduct, "Produit mis à jour", 200);
