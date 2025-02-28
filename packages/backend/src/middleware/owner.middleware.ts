@@ -29,7 +29,7 @@ export const checkSaleOwner = async (req: Request, res: Response, next: NextFunc
   try {
     const authReq = req as VerifiedAuthRequest;
     const userCompanyId = authReq.user.companyId;
-    const sale = await saleModel.verifySaleOwner(req.params.id, userCompanyId);
+    const sale = await saleModel.verifySaleOwner(req.params.id);
     if (!sale) {
       return APIResponse(res, null, "Impossible de récupérer la commande, id incorrect", 400);
     }
@@ -39,8 +39,20 @@ export const checkSaleOwner = async (req: Request, res: Response, next: NextFunc
     }
 
     return APIResponse(res, null, "Vous n'êtes pas autorisé à accéder à cette vente", 403);
-  } catch (error) {
-  
-    return APIResponse(res, error, "Erreur lors de la vérification de la vente", 500);
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error 
+      ? `${error.message}\n${error.stack}` 
+      : 'Erreur inconnue';
+    
+    console.error("Détails de l'erreur dans checkSaleOwner:", errorMessage);
+    
+    const isDev = process.env.NODE_ENV === 'development';
+    
+    return APIResponse(
+      res, 
+      isDev ? { error: errorMessage } : null, 
+      "Erreur lors de la vérification de la vente", 
+      500
+    );
   }
 };

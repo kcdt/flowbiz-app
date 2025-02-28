@@ -96,7 +96,7 @@ export const saleModel = {
   async getById(id: string, companyId: string) {
     const sale = await db.select()
       .from(sales)
-      .where(and(eq(sales.id, id), eq(products.companyId, companyId)))
+      .where(and(eq(sales.id, id), eq(sales.companyId, companyId)))
       .limit(1);
     
     if (sale.length === 0) {
@@ -121,25 +121,22 @@ export const saleModel = {
     };
   },
 
-  async verifySaleOwner (saleId: string, companyId: string) {
-    const sale = await db.select({
-      companyId: sales.companyId
-    })
-      .from(sales)
-      .where(and(eq(sales.id, saleId), eq(products.companyId, companyId)))
-      .limit(1);
-    
-    if (sale.length === 0) {
-      throw new Error("Impossible de récupérer la commande, id incorrect");
+  async verifySaleOwner(saleId: string) {
+    try {
+      const sale = await db.select({ companyId: sales.companyId })
+        .from(sales)
+        .where(eq(sales.id, saleId))
+        .limit(1);
+      
+      if (sale.length === 0) {
+        throw new Error("Impossible de récupérer la commande, id incorrect");
+      }
+      
+      return sale[0];
+    } catch (error) {
+      console.error("Erreur dans verifySaleOwner détaillée:", error);
+      throw error;
     }
-    
-    if (!sale[0].companyId) {
-      throw new Error("Impossible de récupérer l'id de la company ou de l'utilisateur")
-    }
-    
-    return {
-      ...sale[0],
-    };
   },
   
   async updateStatus(id: string, companyId: string, status: string) {
@@ -148,7 +145,7 @@ export const saleModel = {
         status: status as 'pending' | 'completed' | 'cancelled' | 'refunded',
         updatedAt: new Date()
       })
-      .where(and(eq(sales.id, id), eq(products.companyId, companyId)))
+      .where(and(eq(sales.id, id), eq(sales.companyId, companyId)))
       .returning();
       
     return updated[0];
@@ -167,6 +164,9 @@ export const saleModel = {
           })
           .where(eq(products.id, item.productId));
       }
+
+      // await tx.delete(invoices)
+      //   .where(eq(invoices.saleId, saleId));
       
       await tx.delete(saleItems)
         .where(eq(saleItems.saleId, id));

@@ -1,5 +1,5 @@
 import { db } from '../config/db';
-import { users, products, companies, sales, saleItems, invoices } from '../schemas';
+import { users, products, companies, sales, saleItems } from '../schemas';
 import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../entities/user.entitie';

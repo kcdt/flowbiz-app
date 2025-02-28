@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import APIResponse from "../utils/response"
+import APIResponse from "../utils/response.utils"
 import { ProductSchema } from "../validation/product.validation";
 
 export const validateProductSchema = (request: Request, response: Response, next: NextFunction) => {

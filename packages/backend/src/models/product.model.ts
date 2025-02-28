@@ -48,26 +48,26 @@ export const productModel = {
     }
   },
 
-    async verifyProductOwner (productId: string, companyId: string) {
-      const product = await db.select({
-        companyId: products.companyId
-      })
-        .from(products)
-        .where(and(eq(products.id, productId), eq(products.companyId, companyId)))
-        .limit(1);
-      
-      if (product.length === 0) {
-        throw new Error("Impossible de récupérer le produit, id incorrect");
-      }
-      
-      if (!product[0].companyId) {
-        throw new Error("Impossible de récupérer l'id de la company")
-      }
-      
-      return {
-        ...product[0],
-      };
-    },
+  async verifyProductOwner (productId: string, companyId: string) {
+    const product = await db.select({
+      companyId: products.companyId
+    })
+      .from(products)
+      .where(and(eq(products.id, productId), eq(products.companyId, companyId)))
+      .limit(1);
+    
+    if (product.length === 0) {
+      throw new Error("Impossible de récupérer le produit, id incorrect");
+    }
+    
+    if (!product[0].companyId) {
+      throw new Error("Impossible de récupérer l'id de la company")
+    }
+    
+    return {
+      ...product[0],
+    };
+  },
 
   async existingProduct (id: string) {
     const product = await db.query.products.findFirst({
