@@ -1,4 +1,5 @@
 import { db } from '../config/db';
+import { users, products, sales, saleItems, invoices, companies } from '../schemas';
 import { users, products, companies, sales, saleItems } from '../schemas';
 import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcryptjs';
@@ -45,7 +46,10 @@ async function seed() {
   console.log('Entreprises insérées avec succès');
 
   // 2. Création des utilisateurs
-  const userData: User[] = [
+  const userData: User[] = []
+
+  
+    userData.push(
     {
       id: userIds[0],
       email: 'john.doe@example.com',
@@ -94,15 +98,16 @@ async function seed() {
       createdAt: new Date(),
       updatedAt: new Date()
     }
-  ];
+  );
 
   await db.insert(users).values(userData);
   console.log('Utilisateurs insérés avec succès');
 
-  // 3. Création des produits
-  const productData = [
+  const productData = [];
+  
+  productData.push(
     {
-      id: productIds[0],
+      id: uuidv4(),
       name: 'Smartphone XYZ Pro',
       description: 'Le dernier smartphone avec caméra 108MP et processeur ultra-rapide',
       price: '899.99',
@@ -113,7 +118,7 @@ async function seed() {
       updatedAt: new Date()
     },
     {
-      id: productIds[1],
+      id: uuidv4(),
       name: 'Laptop Ultra-fin',
       description: 'Ordinateur portable léger avec 16Go RAM et SSD 512Go',
       price: '1299.99',
@@ -124,7 +129,7 @@ async function seed() {
       updatedAt: new Date()
     },
     {
-      id: productIds[2],
+      id: uuidv4(),
       name: 'Écouteurs sans fil',
       description: 'Écouteurs Bluetooth avec annulation de bruit active',
       price: '149.99',
@@ -133,9 +138,12 @@ async function seed() {
       companyId: companyIds[0],
       createdAt: new Date(),
       updatedAt: new Date()
-    },
+    }
+  );
+  
+  productData.push(
     {
-      id: productIds[3],
+      id: uuidv4(),
       name: 'Montre connectée Sport',
       description: 'Montre intelligente avec GPS et suivi de la fréquence cardiaque',
       price: '249.99',
@@ -146,7 +154,7 @@ async function seed() {
       updatedAt: new Date()
     },
     {
-      id: productIds[4],
+      id: uuidv4(),
       name: 'Enceinte Bluetooth',
       description: 'Enceinte portable avec son stéréo et 20h d\'autonomie',
       price: '79.99',
@@ -155,9 +163,12 @@ async function seed() {
       companyId: companyIds[1],
       createdAt: new Date(),
       updatedAt: new Date()
-    },
+    }
+  );
+  
+  productData.push(
     {
-      id: productIds[5],
+      id: uuidv4(),
       name: 'Batterie externe 20000mAh',
       description: 'Batterie de secours haute capacité avec charge rapide',
       price: '49.99',
@@ -168,7 +179,7 @@ async function seed() {
       updatedAt: new Date()
     },
     {
-      id: productIds[6],
+      id: uuidv4(),
       name: 'Câble USB-C Premium',
       description: 'Câble tressé ultra-résistant avec transfert rapide',
       price: '19.99',
@@ -177,9 +188,12 @@ async function seed() {
       companyId: companyIds[0],
       createdAt: new Date(),
       updatedAt: new Date()
-    },
+    }
+  );
+  
+  productData.push(
     {
-      id: productIds[7],
+      id: uuidv4(),
       name: 'Support téléphone voiture',
       description: 'Support magnétique pour tableau de bord',
       price: '24.99',
@@ -190,7 +204,7 @@ async function seed() {
       updatedAt: new Date()
     },
     {
-      id: productIds[8],
+      id: uuidv4(),
       name: 'Chargeur sans fil',
       description: 'Chargeur à induction compatible avec tous smartphones récents',
       price: '34.99',
@@ -201,7 +215,7 @@ async function seed() {
       updatedAt: new Date()
     },
     {
-      id: productIds[9],
+      id: uuidv4(),
       name: 'Protection écran universel',
       description: 'Film de protection en verre trempé ajustable',
       price: '14.99',
@@ -211,7 +225,7 @@ async function seed() {
       createdAt: new Date(),
       updatedAt: new Date()
     }
-  ];
+  );
   
   await db.insert(products).values(productData);
   console.log('Produits insérés avec succès');
@@ -364,9 +378,49 @@ async function seed() {
   await db.insert(saleItems).values(saleItemData);
   console.log('Éléments de vente insérés avec succès');
   
+  // 6. Création des factures
+  const invoiceData = [
+    {
+      id: invoiceIds[0],
+      invoiceNumber: 'INV-2024-001',
+      issuedDate: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), // Un jour après la vente
+      totalAmount: '1049.98',
+      status: 'paid' as const,
+      saleId: saleIds[0],
+      companyId: companyIds[0],
+      createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
+      updatedAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000) // Marquée comme payée 2 jours après
+    },
+    {
+      id: invoiceIds[1],
+      invoiceNumber: 'INV-2024-002',
+      issuedDate: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000), // Un jour après la vente
+      totalAmount: '1299.99',
+      status: 'issued' as const,
+      saleId: saleIds[1],
+      companyId: companyIds[0],
+      createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000),
+      updatedAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000)
+    },
+    {
+      id: invoiceIds[2],
+      invoiceNumber: 'INV-2024-003',
+      issuedDate: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), // Un jour après la vente
+      totalAmount: '384.97',
+      status: 'draft' as const,
+      saleId: saleIds[2],
+      companyId: companyIds[1],
+      createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
+      updatedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000)
+    }
+  ];
+  
+  await db.insert(invoices).values(invoiceData);
+  console.log('Factures insérées avec succès');
+  
   console.log('Base de données initialisée avec succès!');
 }
-  
+
 seed()
   .then(() => process.exit(0))
   .catch((error) => {
