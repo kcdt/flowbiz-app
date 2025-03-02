@@ -1,6 +1,5 @@
 import { db } from '../config/db';
 import { users, products, sales, saleItems, invoices, companies } from '../schemas';
-import { users, products, companies, sales, saleItems } from '../schemas';
 import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../entities/user.entitie';
@@ -107,7 +106,7 @@ async function seed() {
   
   productData.push(
     {
-      id: uuidv4(),
+      id: productIds[0],
       name: 'Smartphone XYZ Pro',
       description: 'Le dernier smartphone avec caméra 108MP et processeur ultra-rapide',
       price: '899.99',
@@ -118,7 +117,7 @@ async function seed() {
       updatedAt: new Date()
     },
     {
-      id: uuidv4(),
+      id: productIds[1],
       name: 'Laptop Ultra-fin',
       description: 'Ordinateur portable léger avec 16Go RAM et SSD 512Go',
       price: '1299.99',
@@ -129,7 +128,7 @@ async function seed() {
       updatedAt: new Date()
     },
     {
-      id: uuidv4(),
+      id: productIds[2],
       name: 'Écouteurs sans fil',
       description: 'Écouteurs Bluetooth avec annulation de bruit active',
       price: '149.99',
@@ -143,7 +142,7 @@ async function seed() {
   
   productData.push(
     {
-      id: uuidv4(),
+      id: productIds[3],
       name: 'Montre connectée Sport',
       description: 'Montre intelligente avec GPS et suivi de la fréquence cardiaque',
       price: '249.99',
@@ -154,7 +153,7 @@ async function seed() {
       updatedAt: new Date()
     },
     {
-      id: uuidv4(),
+      id: productIds[4],
       name: 'Enceinte Bluetooth',
       description: 'Enceinte portable avec son stéréo et 20h d\'autonomie',
       price: '79.99',
@@ -168,7 +167,7 @@ async function seed() {
   
   productData.push(
     {
-      id: uuidv4(),
+      id: productIds[5],
       name: 'Batterie externe 20000mAh',
       description: 'Batterie de secours haute capacité avec charge rapide',
       price: '49.99',
@@ -179,7 +178,7 @@ async function seed() {
       updatedAt: new Date()
     },
     {
-      id: uuidv4(),
+      id: productIds[6],
       name: 'Câble USB-C Premium',
       description: 'Câble tressé ultra-résistant avec transfert rapide',
       price: '19.99',
@@ -193,7 +192,7 @@ async function seed() {
   
   productData.push(
     {
-      id: uuidv4(),
+      id: productIds[7],
       name: 'Support téléphone voiture',
       description: 'Support magnétique pour tableau de bord',
       price: '24.99',
@@ -204,7 +203,7 @@ async function seed() {
       updatedAt: new Date()
     },
     {
-      id: uuidv4(),
+      id: productIds[8],
       name: 'Chargeur sans fil',
       description: 'Chargeur à induction compatible avec tous smartphones récents',
       price: '34.99',
@@ -215,7 +214,7 @@ async function seed() {
       updatedAt: new Date()
     },
     {
-      id: uuidv4(),
+      id: productIds[9],
       name: 'Protection écran universel',
       description: 'Film de protection en verre trempé ajustable',
       price: '14.99',
@@ -420,7 +419,7 @@ async function seed() {
   
   console.log('Base de données initialisée avec succès!');
 }
-
+  
 seed()
   .then(() => process.exit(0))
   .catch((error) => {
