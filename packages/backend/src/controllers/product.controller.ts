@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import APIResponse from '../utils/response.utils';
 import { productModel } from '../models/product.model';
 import { VerifiedAuthRequest } from '../types/auth.types';
+import APIResponse from '../utils/response.utils';
 
 export const productController = {
   async getAll(req: Request, res: Response) {
@@ -10,9 +10,9 @@ export const productController = {
       const userCompanyId = authReq.user.companyId;
 
       const allProduct = await productModel.getAll(userCompanyId);
-      APIResponse(res, allProduct, "Products fetched", 200);
+      return APIResponse(res, allProduct, "Produits récupérés", 200);
     } catch (error: any) {
-      APIResponse(res, null, error.message, 500);
+      return APIResponse(res, null, error.message, 500);
     }
   },
 
@@ -28,9 +28,9 @@ export const productController = {
       }
 
       const createdProduct = await productModel.create(newProduct);
-      APIResponse(res, { id: createdProduct[0].id, ...newProduct }, "Product created", 201);
+      return APIResponse(res, { id: createdProduct[0].id, ...newProduct }, "Produit créé", 201);
     } catch (error: any) {
-      APIResponse(res, null, error.message, 400);
+      return APIResponse(res, null, error.message, 400);
     }
   },
 
@@ -40,12 +40,12 @@ export const productController = {
     
       const product = await productModel.getById(id);
       if (!product) {
-        throw new Error("Product not found");
+        throw new Error("Aucun produit trouvé");
       } else {
-        APIResponse(res, product, "Product fetch", 200);
+        return APIResponse(res, product, "Produit récupéré", 200);
       }
     } catch (error: any) {
-      APIResponse(res, null, error.message, 404);
+      return APIResponse(res, null, error.message, 404);
     }
   },
 
@@ -55,9 +55,9 @@ export const productController = {
 
       await productModel.existingProduct(id);
       const updatedProduct = await productModel.updateById(id, req.body);
-      APIResponse(res, updatedProduct, "Product updated");
+      return APIResponse(res, updatedProduct, "Produit mis à jour");
     } catch (error: any) {
-      APIResponse(res, null, error.message, 500);
+      return APIResponse(res, null, error.message, 500);
     }
   },
 
@@ -65,11 +65,17 @@ export const productController = {
     try {
       const { id } = req.params;
 
+      const isUsed = await productModel.isProductUsedInSales(id);
+
+      if (isUsed) {
+        return APIResponse(res, null, "Impossible de supprimer ce produit car il est utilisé dans une ou plusieurs ventes");
+      }
+
       await productModel.existingProduct(id);
       const deletedProduct = await productModel.deleteById(id);
-      APIResponse(res, deletedProduct, "Product deleted");
+      return APIResponse(res, deletedProduct, "Produit supprimer");
     } catch (error: any) {
-      APIResponse(res, null, error.message, 500);
+      return APIResponse(res, null, error.message, 500);
     }
   },
 };

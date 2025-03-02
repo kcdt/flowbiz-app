@@ -47,7 +47,7 @@ export const userModel = {
       return db.update(users)
         .set(updatedUser)
         .where(eq(users.id, id))
-        .returning({ id: users.id })
+        .returning({ id: users.id, name: users.name, email: users.email, company: users.companyId })
         .execute();
 
     } catch (err) {
@@ -79,4 +79,18 @@ export const userModel = {
       throw new Error("Impossible de récupérer l'utilisateur");
     }
   },
+
+  async getCompany (id: string) {
+    try {
+      return db.query.users.findFirst({
+        where: eq(users.id, id),
+        columns: {
+          companyId: true
+        }
+      });
+    }
+    catch (err) {
+      throw new Error("Impossible de récupérer l'entreprise de l'utilisateur");
+    }
+  }
 };

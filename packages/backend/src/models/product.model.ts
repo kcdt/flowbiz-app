@@ -1,15 +1,19 @@
 import { db } from "../config/db";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { products } from "../schemas/products.schema";
 import { NewProduct, Product } from "../entities/product.entitie";
+import { saleItems } from "../schemas";
 
 export const productModel = {
   create (product: NewProduct) {
     try {
         return db.insert(products).values(product).returning({ id: products.id }).execute();
     } catch (err) {
-        throw new Error("Impossible de créer le produit")
-    }
+      if (err instanceof Error) {
+        throw new Error(`Impossible de créer le produit: ${err.message}`);
+      } else {
+        throw new Error("Impossible de créer le produit: erreur inconnue");
+      }    }
   },
 
   getAll (companyId: string): Promise< Partial<Product>[]> {
@@ -26,8 +30,11 @@ export const productModel = {
         }
       });
     } catch(err) {
-      throw new Error("Impossible de récupérer les produits")
-    }
+      if (err instanceof Error) {
+        throw new Error(`Impossible de récupérer les produits: ${err.message}`);
+      } else {
+        throw new Error("Impossible de récupérer les produits: erreur inconnue");
+      }    }
   },
 
   getById (id: string) {
@@ -44,12 +51,34 @@ export const productModel = {
         },
       });
     } catch (err) {
-      throw new Error("Impossible de récupérer le produit")
+      if (err instanceof Error) {
+        throw new Error(`Impossible de récupérer le produit: ${err.message}`);
+      } else {
+        throw new Error("Impossible de récupérer le produit: erreur inconnue");
+      }
+    }
+  },
+
+  getPrice (id: string) {
+    try {
+      return db.query.products.findFirst({
+        where: eq(products.id, id),
+        columns: {
+          price: true,
+        },
+      });
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(`Impossible de récupérer le prix du produit: ${err.message}`);
+      } else {
+        throw new Error("Impossible de récupérer le prix du produit: erreur inconnue");
+      }
     }
   },
 
   async verifyProductOwner (productId: string, companyId: string) {
-    const product = await db.select({
+    try {
+          const product = await db.select({
       companyId: products.companyId
     })
       .from(products)
@@ -67,6 +96,13 @@ export const productModel = {
     return {
       ...product[0],
     };
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(`Impossible de récupérer le companyId du produit: ${err.message}`);
+      } else {
+        throw new Error("Impossible de récupérer le companyId du produit: erreur inconnue");
+      }
+    }
   },
 
   async existingProduct (id: string) {
@@ -103,7 +139,44 @@ export const productModel = {
 
       return result;
     } catch (err) {
-      throw new Error("Impossible de supprimer le produit");
+      if (err instanceof Error) {
+        throw new Error(`Impossible de supprimer le produit: ${err.message}`);
+      } else {
+        throw new Error("Impossible de supprimer à jour le produit: erreur inconnue");
+      }
+    }
+  },
+
+  async isProductUsedInSales(productId: string) {
+    try {
+      const saleItem = await db.query.saleItems.findFirst({
+        where: eq(saleItems.productId, productId)
+      });
+      
+      return !!saleItem;
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(`Impossible de récupérer le produit dans les ventes: ${err.message}`);
+      } else {
+        throw new Error("Impossible de récupérer le produit dans les ventes: erreur inconnue");
+      }
+    }
+  },
+
+  async getProductsByIds (productIds: string[], companyId: string) {
+    try {
+          return await db.query.products.findMany({
+      where: and(
+        inArray(products.id, productIds),
+        eq(products.companyId, companyId)
+      )
+    });
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(`Impossible de récupérer les produits: ${err.message}`);
+      } else {
+        throw new Error("Impossible de récupérer les produits: erreur inconnue");
+      }
     }
   }
 };

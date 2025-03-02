@@ -5,9 +5,26 @@ import { createUserSchema, loginSchema } from "../validation/user.validation";
 
 const router = Router();
 
-router.post("/register", validateRequest(createUserSchema), authController.register);
-router.post("/login", validateRequest(loginSchema), authController.login);
-router.post("/logout", authController.logout);
-router.post("/refresh-token", authController.refreshToken);
+// [POST] http://localhost:3000/register
+router.post("/register", 
+  validateRequest(createUserSchema), 
+  authController.register
+);
+
+// [POST] http://localhost:3000/login
+router.post("/login", 
+  validateRequest(loginSchema), 
+  authController.login
+);
+
+// [POST] http://localhost:3000/logout
+router.post("/logout", 
+  authController.logout
+);
+
+// [POST] http://localhost:3000/refresh-token
+router.post("/refresh-token", 
+  authController.refreshToken
+);
 
 export default router;

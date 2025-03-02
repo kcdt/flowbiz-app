@@ -35,3 +35,40 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
     return APIResponse(res, null, "Erreur serveur lors de l'authentification", 500);
   }
 };
+
+export const isCurrentUser = (req: AuthRequest, res: Response, next: NextFunction): void => {
+  try {
+    const { id } = req.params;
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return APIResponse(res, null, "Accès refusé. Token manquant", 401);
+    }
+
+    const token = authHeader.split(' ')[1];
+    
+    try {
+      const decoded = jwt.verify(token, env.JWT_SECRET) as {
+        id: string;
+        email: string;
+        role: string;
+        companyId: string;
+      };
+      
+      (req as AuthRequest).user = decoded;
+
+      if (id !== decoded.id) {
+        return APIResponse(res, null, "Vous n'êtes pas autorisé à accéder à cet utilisateur", 401);
+      }
+      next();
+    } catch (error) {
+      if (error instanceof jwt.TokenExpiredError) {
+        return APIResponse(res, null, "Token expiré. Veuillez vous reconnecter", 401);
+      }
+      
+      return APIResponse(res, null, "Token invalide", 401);
+    }
+  } catch (error) {
+    console.error("Erreur d'authentification:", error);
+    return APIResponse(res, null, "Erreur serveur lors de l'authentification", 500);
+  }
+};
