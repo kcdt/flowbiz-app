@@ -24,7 +24,7 @@ router.use('/products',
   productRoutes
 );
 
-// http://localhost:3000/product
+// http://localhost:3000/product-categories
 router.use('/product-categories', 
   productCategoriesRoutes
 );
@@ -43,9 +43,6 @@ router.use('/invoice',
 router.use('/company', 
   companyRoutes
 );
-
-// http://localhost:3000/sale
-router.use('/sale', saleRoutes);
 
 router.get('/', (req: Request, res: Response) => {
   res.send(`DB connectée`);
