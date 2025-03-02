@@ -2,25 +2,26 @@ import { Request, Response } from 'express';
 import { saleModel } from '../models/sale.model';
 import APIResponse from '../utils/response.utils';
 import { VerifiedAuthRequest } from '../types/auth.types';
+import { salesService } from '../services/sales.service';
 
 export const saleController = {
-  async createSale(req: Request, res: Response) {
+  async createSale (req: Request, res: Response) {
     try {
       const authReq = req as VerifiedAuthRequest;
-      const { price, buyerName, buyerAddress, items } = req.body;
+      const { buyerName, buyerAddress, items } = req.body;
       
       if (!items || !Array.isArray(items) || items.length === 0) {
         return APIResponse(res, null, "La commande doit contenir au moins un article", 400);
       }
       
-      const saleData = {
-        price,
-        buyerName,
-        buyerAddress,
-        companyId: authReq.user.companyId
-      };
-      
-      const newSale = await saleModel.create(saleData, items);
+      const newSale = await salesService.createWithItems(
+        authReq.user.companyId,
+        {
+          buyerName,
+          buyerAddress,
+          items
+        }
+      );
       
       return APIResponse(res, newSale, "Commande créée avec succès", 201);
     } catch (error: any) {
