@@ -11,11 +11,11 @@ export const invoiceStatusEnum = pgEnum('invoice_status', [
 
 export const invoices = pgTable('invoices', {
   id: uuid('id').defaultRandom().primaryKey(),
-  invoiceNumber: varchar('invoice_number', { length: 20 }).notNull().unique(),
+  invoiceNumber: varchar('invoice_number').notNull().unique(),
   issuedDate: timestamp('issued_date').defaultNow().notNull(),
   totalAmount: decimal('total_amount', { precision: 10, scale: 2 }).notNull(),
-  status: invoiceStatusEnum('status').default("draft"),
-  companyId: uuid('company_id').notNull().references(() => companies.id),
+  status: invoiceStatusEnum('status').default("draft").notNull(),
+  companyId: uuid('company_id').notNull().references(() => companies.id).notNull(),
   saleId: uuid('sale_id').notNull().references(() => sales.id),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull()
