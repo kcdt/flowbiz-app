@@ -1,5 +1,5 @@
 import { db } from '../config/db';
-import { users, products, companies, sales, saleItems } from '../schemas';
+import { users, products, sales, saleItems, invoices, companies } from '../schemas';
 import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../entities/user.entitie';
@@ -45,7 +45,10 @@ async function seed() {
   console.log('Entreprises insérées avec succès');
 
   // 2. Création des utilisateurs
-  const userData: User[] = [
+  const userData: User[] = []
+
+  
+    userData.push(
     {
       id: userIds[0],
       email: 'john.doe@example.com',
@@ -94,13 +97,14 @@ async function seed() {
       createdAt: new Date(),
       updatedAt: new Date()
     }
-  ];
+  );
 
   await db.insert(users).values(userData);
   console.log('Utilisateurs insérés avec succès');
 
-  // 3. Création des produits
-  const productData = [
+  const productData = [];
+  
+  productData.push(
     {
       id: productIds[0],
       name: 'Smartphone XYZ Pro',
@@ -133,7 +137,10 @@ async function seed() {
       companyId: companyIds[0],
       createdAt: new Date(),
       updatedAt: new Date()
-    },
+    }
+  );
+  
+  productData.push(
     {
       id: productIds[3],
       name: 'Montre connectée Sport',
@@ -155,7 +162,10 @@ async function seed() {
       companyId: companyIds[1],
       createdAt: new Date(),
       updatedAt: new Date()
-    },
+    }
+  );
+  
+  productData.push(
     {
       id: productIds[5],
       name: 'Batterie externe 20000mAh',
@@ -177,7 +187,10 @@ async function seed() {
       companyId: companyIds[0],
       createdAt: new Date(),
       updatedAt: new Date()
-    },
+    }
+  );
+  
+  productData.push(
     {
       id: productIds[7],
       name: 'Support téléphone voiture',
@@ -211,7 +224,7 @@ async function seed() {
       createdAt: new Date(),
       updatedAt: new Date()
     }
-  ];
+  );
   
   await db.insert(products).values(productData);
   console.log('Produits insérés avec succès');
@@ -364,9 +377,49 @@ async function seed() {
   await db.insert(saleItems).values(saleItemData);
   console.log('Éléments de vente insérés avec succès');
   
+  // 6. Création des factures
+  const invoiceData = [
+    {
+      id: invoiceIds[0],
+      invoiceNumber: 'INV-2024-001',
+      issuedDate: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000), // Un jour après la vente
+      totalAmount: '1049.98',
+      status: 'paid' as const,
+      saleId: saleIds[0],
+      companyId: companyIds[0],
+      createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000),
+      updatedAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000) // Marquée comme payée 2 jours après
+    },
+    {
+      id: invoiceIds[1],
+      invoiceNumber: 'INV-2024-002',
+      issuedDate: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000), // Un jour après la vente
+      totalAmount: '1299.99',
+      status: 'issued' as const,
+      saleId: saleIds[1],
+      companyId: companyIds[0],
+      createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000),
+      updatedAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000)
+    },
+    {
+      id: invoiceIds[2],
+      invoiceNumber: 'INV-2024-003',
+      issuedDate: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000), // Un jour après la vente
+      totalAmount: '384.97',
+      status: 'draft' as const,
+      saleId: saleIds[2],
+      companyId: companyIds[1],
+      createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
+      updatedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000)
+    }
+  ];
+  
+  await db.insert(invoices).values(invoiceData);
+  console.log('Factures insérées avec succès');
+  
   console.log('Base de données initialisée avec succès!');
 }
-
+  
 seed()
   .then(() => process.exit(0))
   .catch((error) => {

@@ -1,66 +1,42 @@
 import { db } from '../config/db';
-import { sales, saleItems, products } from '../schemas';
+import { sales, saleItems, products, invoices } from '../schemas';
 import { eq, and, gte, lte, desc, SQL, sql } from 'drizzle-orm';
-import { SaleFilters, SaleInput, SaleItemInput } from '../types/sale.types';
+import { SaleFilters } from '../types/sale.types';
 
 export const saleModel = {
-  async create(saleData: SaleInput, items: SaleItemInput[]) {
+  async createWithItems (saleData: any, items: any[]) {
     return await db.transaction(async (tx) => {
-      const saleValues = {
-        price: saleData.price.toString(),
-        status: saleData.status as 'pending' | 'completed' | 'cancelled' | 'refunded' || 'pending',
-        buyerName: saleData.buyerName,
-        buyerAddress: saleData.buyerAddress,
-        companyId: saleData.companyId
-      };
-      
       const [newSale] = await tx.insert(sales)
-        .values(saleValues)
+        .values(saleData)
         .returning();
-
+      
       const saleItemsData = items.map(item => ({
-        quantity: item.quantity,
-        unitPrice: item.unitPrice.toString(),
         saleId: newSale.id,
-        productId: item.productId
+        productId: item.productId,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice
       }));
-
-      const saleItemsResult = await tx.insert(saleItems)
+      
+      const newItems = await tx.insert(saleItems)
         .values(saleItemsData)
         .returning();
-
-      // Vérication de la quantité de produit en stock
-      for (const item of items) {
-        const product = await tx.select()
-          .from(products)
-          .where(eq(products.id, item.productId))
-          .limit(1);
-        
-        if (product.length === 0) {
-          throw new Error("Impossible de récupérer le produit, id incorrect");
-        }
-        
-        if (product[0].quantity < item.quantity) {
-          throw new Error("Quantité de produit insuffisante en stock");
-        }
-      }
-
-      // Gestion de la quantité de produit en stock
+      
       for (const item of items) {
         await tx.update(products)
           .set({
-            quantity: sql`${products.quantity} - ${item.quantity}`
+            quantity: sql`${products.quantity} - ${item.quantity}`,
+            updatedAt: new Date()
           })
           .where(eq(products.id, item.productId));
       }
-
+      
       return {
         ...newSale,
-        items: saleItemsResult
+        items: newItems
       };
     });
   },
-  
+
   async getAll(filters: SaleFilters = {}) {
     let query = db.select()
     .from(sales)
@@ -165,8 +141,8 @@ export const saleModel = {
           .where(eq(products.id, item.productId));
       }
 
-      // await tx.delete(invoices)
-      //   .where(eq(invoices.saleId, saleId));
+      await tx.delete(invoices)
+        .where(eq(invoices.saleId, id));
       
       await tx.delete(saleItems)
         .where(eq(saleItems.saleId, id));
