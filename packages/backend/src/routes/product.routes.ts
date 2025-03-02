@@ -9,18 +9,38 @@ import { adminSellerOnly } from "../middleware/role.middleware";
 const router = Router();
 
 // [POST] http://localhost:3000/product
-router.post('/', validateRequest(NewProductSchema), authMiddleware, productController.create);
+router.post('/', 
+  validateRequest(NewProductSchema), 
+authMiddleware, 
+productController.create
+);
 
 // [GET] http://localhost:3000/product
-router.get('/', authMiddleware, productController.getAll);
+router.get('/', 
+  authMiddleware, 
+  productController.getAll
+);
 
 // [GET] http://localhost:3000/product/:id
-router.get('/:id', authMiddleware, checkProductOwner, productController.getById);
+router.get('/:id', 
+  authMiddleware, 
+  checkProductOwner, 
+  productController.getById
+);
 
 // [PATCH] http://localhost:3000/product/:id
-router.patch('/:id', validateRequest(ProductSchema), authMiddleware, adminSellerOnly, checkProductOwner, productController.update);
+router.patch('/:id', 
+  validateRequest(ProductSchema), 
+authMiddleware, 
+adminSellerOnly, checkProductOwner, productController.update
+);
 
 // [DELETE] http://localhost:3000/product/:id
-router.delete('/:id', authMiddleware, adminSellerOnly, checkProductOwner, productController.delete);
+router.delete('/:id', 
+  authMiddleware, 
+  adminSellerOnly, 
+  checkProductOwner, 
+  productController.delete
+);
 
 export default router;
