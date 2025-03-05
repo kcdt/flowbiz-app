@@ -8,27 +8,27 @@ import invoiceRoutes from './invoices.routes';
 const router = Router();
 
 // http://localhost:3000/auth
-router.use('/auth', 
+router.use('/api/auth', 
   authRoutes
 );
 
 // http://localhost:3000/user
-router.use('/user', 
+router.use('/api/user', 
   userRoutes
 );
 
 // http://localhost:3000/product
-router.use('/product', 
+router.use('/api/product', 
   productRoutes
 );
 
 // http://localhost:3000/sale
-router.use('/sale', 
+router.use('/api/sale', 
   saleRoutes
 );
 
 // http://localhost:3000/invoice
-router.use('/invoice', 
+router.use('/api/invoice', 
   invoiceRoutes
 );
 
