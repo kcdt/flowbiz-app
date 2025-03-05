@@ -1,0 +1,51 @@
+@use '../variables' as vars;
+
+.cta {
+  &-container {
+    display: flex;
+    flex-direction: column;
+    
+    @media (min-width: vars.$breakpoint-md) {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  &-primary {
+    background-color: vars.$primary-color;
+    color: vars.$text-color;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  &-secondary {
+    background-color: vars.$secondary-color;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: ease-in-out 200ms;
+
+    &:hover {
+      box-shadow: vars.$shadow-lg;
+    }
+  }
+
+  &-outline {
+    background-color: white;
+    color: vars.$text-color;
+    padding: 0.5rem 1.5rem;
+    border: 2px solid vars.$border-color;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: ease-in-out 200ms;
+
+    &:hover {
+      box-shadow: vars.$shadow-lg;
+    }
+  }
+}

@@ -1,0 +1,82 @@
+// Variables
+@use './variables';
+
+// Base styles
+@use './base/btn';
+// @import './base/typography';
+
+// Components
+@use './components/header';
+// @import './components/buttons';
+// @import './components/forms';
+
+// Layouts
+// @import './layouts/grid';
+
+// Pages
+@use './pages/home';
+// @import './pages/dashboard';
+
+// Utilities
+// @import './utilities/helpers';
+
+/* Styles globaux */
+:root {
+  --primary-color: #4f46e5;
+  --secondary-color: #818cf8;
+  --text-color: #1f2937;
+  --background-color: #fafafa;
+  --sidebar-width: 250px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', 'Avenir', Helvetica, Arial, sans-serif;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  line-height: 1.6;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-container {
+  display: flex;
+  flex: 1;
+  max-width: 100%;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  margin-left: var(--sidebar-width);
+  max-width: 100%;
+}
+
+.full-width {
+  margin-left: 0;
+}
+
+/* Si on est sur une page d'authentification, prendre toute la largeur */
+#app:has(.auth-page) .content {
+  margin-left: 0;
+}
+
+/* Animation de transition entre les pages */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
