@@ -4,11 +4,24 @@ import { AuthService } from '../services/auth.service';
 import { UserInput } from '../validation/user.validation';
 import APIResponse from '../utils/response.utils';
 import { userModel } from '../models/user.model';
+import { AuthRequest } from '../types/auth.types';
+import { CreateCompanyInput } from '../validation/companies.validation';
+import { companiesModel } from '../models/companies.model';
 
 export const authController = {
   async register(req: Request, res: Response) {
     try {
-      const userData: UserInput = req.body;
+      const { userEmail, userName, role, userPhone, companyName, companyAddress, companyPhone, companyEmail, taxId } = req.body;
+
+      const companyData: CreateCompanyInput = { name: companyName, address: companyAddress, phone: companyPhone, email: companyEmail, taxId }
+
+      const company = await companiesModel.createCompany(companyData);
+
+      if (!company) {
+        return APIResponse(res, null, "Erreur lors de la création de l'entreprise", 400);
+      }
+
+      const userData: UserInput = { email: userEmail, name: userName, role, password: req.body.password, companyId: company.id, phone: userPhone };
       
       const existingUser = await userModel.getByEmail(userData.email);
       if (existingUser) {
@@ -118,6 +131,27 @@ export const authController = {
       return APIResponse(res, { accessToken: tokens.accessToken }, "Token rafraîchi", 200);
     } catch (error) {
       return APIResponse(res, null, "Token de rafraîchissement invalide", 401);
+    }
+  },
+
+  async getMe(req: Request, res: Response) {
+    try {
+      const authReq = req as AuthRequest;
+
+      if (!authReq.user) {
+        return APIResponse(res, null, "Utilisateur non authentifié", 404);
+      }
+      
+      const user = await userModel.getById(authReq.user.id);
+      if (!user) {
+        return APIResponse(res, null, "Utilisateur non trouvé", 404);
+      }
+      
+      const { refreshToken, ...userData } = user;
+      
+      return APIResponse(res, userData, "Profil utilisateur récupéré", 200);
+    } catch (error: any) {
+      return APIResponse(res, null, error.message, 500);
     }
   }
 };

@@ -7,7 +7,7 @@ const app = express();
 const { PORT, FRONTEND_URL } = env;
 
 app.use(cors({
-    origin: FRONTEND_URL,
+    origin: FRONTEND_URL || 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true
 }));
