@@ -10,12 +10,12 @@ import companyRoutes from './companies.routes';
 const router = Router();
 
 // http://localhost:3000/auth
-router.use('/auth', 
+router.use('/api/auth', 
   authRoutes
 );
 
 // http://localhost:3000/user
-router.use('/user', 
+router.use('/api/user', 
   userRoutes
 );
 
@@ -35,7 +35,7 @@ router.use('/sales',
 );
 
 // http://localhost:3000/invoice
-router.use('/invoice', 
+router.use('/api/invoice', 
   invoiceRoutes
 );
 
