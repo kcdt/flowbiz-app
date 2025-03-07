@@ -2,26 +2,30 @@ import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import authService from '@/services/api/auth.service';
 import router from '@/router';
-
-interface User {
-  id: string;
-  email: string;
-  role: string;
-  companyId?: string;
-}
+import { jwtDecode } from 'jwt-decode';
 
 export const useAuthStore = defineStore('auth', () => {
-  // state
-  const user = ref<User | null>(null);
-  const accessToken = ref<string | null>(null);
+  const user = ref(null);
+  const accessToken = ref(localStorage.getItem('accessToken') || null);
   const isLoading = ref(false);
-  const error = ref<string | null>(null);
+  const error = ref(null);
   
-  // computed
-  const isAuthenticated = computed(() => !!user.value);
-  const isAdmin = computed(() => user.value?.role === 'admin_seller');
+  const isAuthenticated = computed(() => !!accessToken.value);
   
-  // actions
+  const isTokenValid = computed(() => {
+    if (!accessToken.value) return false;
+    
+    try {
+      const decodedToken = jwtDecode(accessToken.value as string);
+
+      const currentTime = Date.now() / 1000;
+      
+      return decodedToken.exp && decodedToken.exp > currentTime;
+    } catch (error) {
+      return false;
+    }
+  });
+  
   async function login(email: string, password: string) {
     isLoading.value = true;
     error.value = null;
@@ -31,38 +35,12 @@ export const useAuthStore = defineStore('auth', () => {
       accessToken.value = response.data.data.accessToken;
       user.value = response.data.data.user;
       
+      localStorage.setItem('accessToken', accessToken.value as string);
+      
       router.push({ name: 'dashboard' });
       return response.data;
-    } catch (err: any) {
-      error.value = err.response?.data?.message || 'Erreur de connexion';
-      throw err;
-    } finally {
-      isLoading.value = false;
-    }
-  }
-  
-  async function register(formData: {
-    userName: string,
-    userEmail: string,
-    userPhone: string,
-    password: string,
-    role?: 'standard_seller',
-    companyName: string,
-    companyAddress: string,
-    companyPhone: string,
-    companyEmail: string,
-    taxId?: string }) {
-    isLoading.value = true;
-    error.value = null;
-    
-    try {
-      const response = await authService.register(formData);
-      
-      // Après inscription réussie, rediriger vers connexion
-      router.push({ name: 'login' });
-      return response.data;
-    } catch (err: any) {
-      error.value = err.response?.data?.message || 'Erreur d\'inscription';
+    } catch (err) {
+      error.value = (err as any).response?.data?.message || 'Erreur de connexion';
       throw err;
     } finally {
       isLoading.value = false;
@@ -73,6 +51,9 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const response = await authService.refreshToken();
       accessToken.value = response.data.data.accessToken;
+      
+      localStorage.setItem('accessToken', accessToken.value as string);
+      
       return response.data;
     } catch (err) {
       logout();
@@ -83,16 +64,31 @@ export const useAuthStore = defineStore('auth', () => {
   function logout() {
     user.value = null;
     accessToken.value = null;
-    error.value = null;
+    localStorage.removeItem('accessToken');
     
-    authService.logout()
-      .then(() => {
-        router.push({ name: 'login' });
-      })
-      .catch((err) => {
-        console.error('Erreur lors de la déconnexion:', err);
-        router.push({ name: 'login' });
-      });
+    authService.logout().catch(() => {
+      throw error
+    });
+    
+    router.push({ name: 'login' });
+  }
+  
+  async function checkAuth() {
+    if (accessToken.value && !isTokenValid.value) {
+      try {
+        await refreshToken();
+      } catch (err) {
+        logout();
+        throw err;
+      }
+    } else if (accessToken.value && !user.value) {
+      try {
+        const response = await authService.getCurrentUser();
+        user.value = response.data.data;
+      } catch (err) {
+        logout();
+      }
+    }
   }
   
   return {
@@ -101,10 +97,10 @@ export const useAuthStore = defineStore('auth', () => {
     isLoading,
     error,
     isAuthenticated,
-    isAdmin,
+    isTokenValid,
     login,
-    register,
     refreshToken,
-    logout
+    logout,
+    checkAuth
   };
 });
