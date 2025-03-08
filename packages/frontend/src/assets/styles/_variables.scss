@@ -1,16 +1,17 @@
 // Colors
 $bg-color: #fafafa;
 $primary-color: #7ADACE;
-$secondary-color: #818cf8;
+$secondary-color: #4f46e5;
 $secondary-ligth: #c2cff3;
+$secondary-hover: #4f46e5;
 $text-color: #1E193E;
 $text-light: #4b5563;
 $primary-text-color: #65b3aa;
 $background-color: #f9fafb;
 $border-color: #e5e7eb;
-$error-color: #ef4444;
+$error-color: #f67676;
 $success-color: #10b981;
-$warning-color: #f59e0b;
+$warning-color: #ffca6e;
 
 // Typography
 $font-family: 'Inter', 'Avenir', Helvetica, Arial, sans-serif;
@@ -26,8 +27,8 @@ $spacing-xl: 2rem;     // 32px
 $spacing-2xl: 3rem;    // 48px
 
 // Layout
-$sidebar-width: 250px;
-$header-height: 70px;
+$sidebar-width: 230px;
+$header-height: 50px;
 $container-max-width: 1200px;
 
 // Breakpoints
@@ -40,6 +41,7 @@ $breakpoint-xl: 1200px;
 $shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
 $shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+$shadow-xl: 2px 4px 15px rgba(92, 65, 195, 0.14);
 
 // Animations
 $transition-fast: 0.2s ease;
