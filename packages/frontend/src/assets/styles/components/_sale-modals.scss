@@ -1,0 +1,85 @@
+@use '../variables' as vars;
+
+.sale-details {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  .sale-info {
+    width: 100%;
+
+    .sale-header {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid vars.$border-color;
+
+      @media (min-width: vars.$breakpoint-md) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0;
+      }
+
+      .info-block {
+        width: 100%;
+
+        @media (min-width: vars.$breakpoint-md) {
+          width: 50%;
+        }
+      }
+    }
+
+    .sale-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      padding-top: 1rem;
+
+      .resume-sale-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        width: 100%;
+        max-width: 100%;
+        border-bottom: 1px solid vars.$border-color;
+        padding: 10px 0;
+      
+        &:last-of-type {
+          border-bottom: none;
+        }
+      
+        .action a {
+          display: flex;
+          align-items: center;
+        }
+      
+        .sale-item-infos {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+      
+          .main-info {
+            width: 100%;
+      
+            @media (min-width: vars.$breakpoint-md) {
+              width: 50%;
+            }
+          }
+        }
+      }
+      
+      .row-item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+  }
+}
