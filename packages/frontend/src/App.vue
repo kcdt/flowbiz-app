@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import TheHeader from '@/components/layout/Header.vue';
-// import TheSidebar from '@/components/layout/TheSidebar.vue';
+import TheSidebar from '@/components/layout/SideBar.vue';
 // import TheFooter from '@/components/layout/TheFooter.vue';
 
 const route = useRoute();
@@ -14,21 +14,19 @@ const showVisitorLayout = computed(() => {
 </script>
 
 <template>
-  <div id="app">
-    <TheHeader v-if="showVisitorLayout" />
+  <TheHeader v-if="showVisitorLayout" />
+  
+  <div class="main-container">
+    <TheSidebar v-if="!showVisitorLayout" />
     
-    <div class="main-container">
-      <TheSidebar v-if="!showVisitorLayout" />
-      
-      <main class="content" :class="!showVisitorLayout ? '' : 'full-width'">
-        <router-view v-slot="{ Component }">
-          <transition name="fade" mode="out-in">
-            <component :is="Component" />
-          </transition>
-        </router-view>
-      </main>
-    </div>
-    
-    <TheFooter v-if="showVisitorLayout" />
+    <main class="content" :class="!showVisitorLayout ? 'app-content' : 'full-width'">
+      <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
+    </main>
   </div>
+  
+  <TheFooter v-if="showVisitorLayout" />
 </template>

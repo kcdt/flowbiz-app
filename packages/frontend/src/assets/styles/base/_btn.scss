@@ -1,6 +1,33 @@
 @use '../variables' as vars;
 
-.cta {
+.btn {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  color: vars.$text-color;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: ease-in-out 200ms;
+  border: 2px solid transparent;
+  cursor: pointer;
+  width: fit-content;
+
+  &:hover {
+    border: 2px solid vars.$border-color;
+    border-radius: 4px;
+    box-shadow: vars.$shadow-lg;
+  }
+
+  &.active {
+    border: 2px solid vars.$border-color;
+    border-radius: 4px;
+    box-shadow: vars.$shadow-lg;
+    color: vars.$secondary-color;
+  }
+
   &-container {
     display: flex;
     flex-direction: column;
@@ -17,7 +44,15 @@
     padding: 0.5rem 1.5rem;
     border-radius: 4px;
     text-decoration: none;
+    font-size: 1rem;
     font-weight: 600;
+    cursor: pointer;
+    width: fit-content;
+    border: none;
+
+    &:hover {
+      box-shadow: vars.$shadow-lg;
+    }
   }
 
   &-secondary {
@@ -26,8 +61,30 @@
     padding: 0.5rem 1.5rem;
     border-radius: 4px;
     text-decoration: none;
+    font-size: 1rem;
     font-weight: 600;
     transition: ease-in-out 200ms;
+    cursor: pointer;
+    width: fit-content;
+    border: none;
+
+    &:hover {
+      box-shadow: vars.$shadow-lg;
+    }
+  }
+
+  &-warning {
+    background-color: vars.$error-color;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: ease-in-out 200ms;
+    cursor: pointer;
+    width: fit-content;
+    border: none;
 
     &:hover {
       box-shadow: vars.$shadow-lg;
@@ -41,8 +98,11 @@
     border: 2px solid vars.$border-color;
     border-radius: 4px;
     text-decoration: none;
+    font-size: 1rem;
     font-weight: 600;
     transition: ease-in-out 200ms;
+    cursor: pointer;
+    width: fit-content;
 
     &:hover {
       box-shadow: vars.$shadow-lg;

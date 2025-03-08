@@ -1,15 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
 
-import useUserStore from '../../stores/useUserStore';
-
-const style: CSSStyleDeclaration = getComputedStyle(document.body);
-
-const userStore = useUserStore();
-
-const { user } = storeToRefs(userStore);
 const menuOpen = ref(false);
 
 const toggleMenu = () => {
@@ -22,38 +13,34 @@ const toggleMenu = () => {
   }
 };
 
-// const { authentication } = useAuthentication();
-
-const userInitials = computed<string>(() => {
-  return `${user.value.firstName[0]}${user.value.lastName[0]}`;
-});
-
 </script>
 
 <template>
   <header class="header">
     <div class="header-content">
+
+      <button class="burger-menu" v-on:click="toggleMenu" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
       <router-link to="/">
         <div class="logo-container">
           <img src="../../assets/images/flowbiz-logo.png" alt="FlowBiz Logo" class="logo" />
-          <button class="burger-menu" @click="toggleMenu" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
         </div>
       </router-link>
       
       <nav class="navigation" :class="{ 'active': menuOpen }">
         <ul class="nav-links">
-          <li><a href="#fonctions">Fonctionnalités</a></li>
-          <li><a href="#prices">Tarifs</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="#features" v-on:click="toggleMenu">Fonctionnalités</a></li>
+          <li><a href="#prices" v-on:click="toggleMenu">Tarifs</a></li>
+          <li><a href="#contact" v-on:click="toggleMenu">Contact</a></li>
         </ul>
         
-        <div class="cta-container">
-          <router-link to="/login" class="cta-secondary">Connexion</router-link>
-          <router-link to="/register" class="cta-primary">S'inscrire</router-link>
+        <div class="btn-container">
+          <router-link to="/login" class="btn-secondary" v-on:click="toggleMenu">Connexion</router-link>
+          <router-link to="/register" class="btn-primary" v-on:click="toggleMenu">S'inscrire</router-link>
         </div>
       </nav>
     </div>

@@ -1,11 +1,6 @@
 @use '../variables' as vars;
 
-.home-content {
-  max-width: 1400px;
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-
+.public-content {
   @media (min-width: vars.$breakpoint-md) {
     gap: 20px;
   }
