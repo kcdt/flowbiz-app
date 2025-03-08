@@ -101,6 +101,18 @@ export const saleController = {
       return APIResponse(res, null, error.message, statusCode);
     }
   },
+
+  async updateSale(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      
+      const updatedSale = await saleModel.updateById(id, req.body);
+      
+      return APIResponse(res, updatedSale, "Statut de la commande mis à jour", 200);
+    } catch (error: any) {
+      return APIResponse(res, null, error.message, 500);
+    }
+  },
   
   async updateSaleStatus(req: Request, res: Response) {
     try {
