@@ -1,5 +1,5 @@
 import { db } from '../config/db';
-import { users, products, sales, saleItems, invoices, companies } from '../schemas';
+import { users, products, sales, saleItems, invoices, companies, productCategories } from '../schemas';
 import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../entities/user.entitie';
@@ -102,6 +102,63 @@ async function seed() {
   await db.insert(users).values(userData);
   console.log('Utilisateurs insérés avec succès');
 
+  const categoryIds = [uuidv4(), uuidv4(), uuidv4(), uuidv4(), uuidv4(), uuidv4()];
+
+  const categoryData = [
+    {
+      id: categoryIds[0],
+      name: 'Smartphones',
+      description: 'Téléphones mobiles et accessoires',
+      companyId: companyIds[0],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: categoryIds[1],
+      name: 'Ordinateurs',
+      description: 'Ordinateurs portables et de bureau',
+      companyId: companyIds[0],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: categoryIds[2],
+      name: 'Périphériques',
+      description: 'Claviers, souris et autres périphériques informatiques',
+      companyId: companyIds[0],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    
+    {
+      id: categoryIds[3],
+      name: 'Accessoires Audio',
+      description: 'Écouteurs, casques et enceintes',
+      companyId: companyIds[1],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: categoryIds[4],
+      name: 'Accessoires Mobiles',
+      description: 'Coques, protections d\'écran et supports',
+      companyId: companyIds[1],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: categoryIds[5],
+      name: 'Chargeurs et Câbles',
+      description: 'Chargeurs, câbles et adaptateurs',
+      companyId: companyIds[1],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
+  ];
+
+  await db.insert(productCategories).values(categoryData);
+  console.log('Catégories de produits insérées avec succès');
+
   const productData = [];
   
   productData.push(
@@ -113,6 +170,7 @@ async function seed() {
       quantity: 15,
       imageUrl: 'https://example.com/images/smartphone-xyz.jpg',
       companyId: companyIds[0],
+      categoryId: categoryIds[0],
       createdAt: new Date(),
       updatedAt: new Date()
     },
@@ -124,6 +182,7 @@ async function seed() {
       quantity: 8,
       imageUrl: 'https://example.com/images/laptop-ultrafin.jpg',
       companyId: companyIds[0],
+      categoryId: categoryIds[1],
       createdAt: new Date(),
       updatedAt: new Date()
     },
@@ -135,6 +194,7 @@ async function seed() {
       quantity: 30,
       imageUrl: 'https://example.com/images/ecouteurs.jpg',
       companyId: companyIds[0],
+      categoryId: categoryIds[2],
       createdAt: new Date(),
       updatedAt: new Date()
     }
@@ -160,6 +220,7 @@ async function seed() {
       quantity: 25,
       imageUrl: 'https://example.com/images/enceinte.jpg',
       companyId: companyIds[1],
+      categoryId: categoryIds[3],
       createdAt: new Date(),
       updatedAt: new Date()
     }
@@ -199,6 +260,7 @@ async function seed() {
       quantity: 40,
       imageUrl: 'https://example.com/images/support.jpg',
       companyId: companyIds[1],
+      categoryId: categoryIds[4],
       createdAt: new Date(),
       updatedAt: new Date()
     },
@@ -210,6 +272,7 @@ async function seed() {
       quantity: 35,
       imageUrl: 'https://example.com/images/chargeur.jpg',
       companyId: companyIds[1],
+      categoryId: categoryIds[5],
       createdAt: new Date(),
       updatedAt: new Date()
     },
@@ -221,6 +284,7 @@ async function seed() {
       quantity: 0,
       imageUrl: 'https://example.com/images/protection.jpg',
       companyId: companyIds[1],
+      categoryId: categoryIds[4],
       createdAt: new Date(),
       updatedAt: new Date()
     }

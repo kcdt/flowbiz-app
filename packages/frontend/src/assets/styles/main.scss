@@ -1,5 +1,5 @@
 // Variables
-@use './variables';
+@use './variables' as vars;
 
 // Base styles
 @use './base/btn';
@@ -7,8 +7,11 @@
 
 // Components
 @use './components/header';
+@use './components/sidebar';
+@use './components/category-badge';
+@use './components/product-list-item';
+@use './components/product-modals';
 // @import './components/buttons';
-// @import './components/forms';
 
 // Layouts
 // @import './layouts/grid';
@@ -27,7 +30,6 @@
   --secondary-color: #818cf8;
   --text-color: #1f2937;
   --background-color: #fafafa;
-  --sidebar-width: 250px;
 }
 
 * {
@@ -51,15 +53,39 @@ body {
 
 .main-container {
   display: flex;
-  flex: 1;
-  max-width: 100%;
+  flex-direction: column;
+  height: 100vh;
+
+  @media (min-width: vars.$breakpoint-lg) {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 1rem 1rem 1rem 0;
+  }
+}
+
+.public-content {
+  max-width: 1400px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
 }
 
 .content {
   flex: 1;
-  padding: 20px;
-  margin-left: var(--sidebar-width);
+  padding: 10px;
   max-width: 100%;
+
+  @media (min-width: vars.$breakpoint-md) {
+    padding: 20px;
+  }
+}
+
+.app-content {
+  background-color: white;
+  box-shadow: vars.$shadow-lg;
+  border-radius: 10px;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .full-width {

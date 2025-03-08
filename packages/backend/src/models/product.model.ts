@@ -20,10 +20,14 @@ export const productModel = {
     try {
       return db.query.products.findMany({
         where: eq(products.companyId, companyId),
+        with: {
+          category: true
+        },    
         columns: {
           id: true,
           name: true,
           description: true,
+          categoryId: true,
           quantity: true,
           imageUrl: true,
           price: true
@@ -45,9 +49,12 @@ export const productModel = {
           id: true,
           name: true,
           description: true,
+          categoryId: true,
           quantity: true,
           imageUrl: true,
           price: true,
+          createdAt: true,
+          updatedAt: true
         },
       });
     } catch (err) {
