@@ -13,10 +13,12 @@
 @use './components/common-modals';
 @use './components/product-modals';
 @use './components/sale-modals';
+@use './components/search-and-filters';
 
 // Pages
 @use './pages/home';
 @use './pages/register-login';
+@use './pages/list-views';
 
 
 /* Styles globaux */

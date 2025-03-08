@@ -7,7 +7,7 @@
   gap: 10px;
   width: 100%;
   max-width: 100%;
-  border-bottom: 1px solid vars.$border-color;
+  border-top: 1px solid vars.$border-color;
   padding: 4px 0;
 
   &:last-of-type {
@@ -95,6 +95,7 @@
       .inner-details {
         display: flex;
         flex-direction: column;
+        justify-content: space-around;
         
         &:last-of-type {
           align-items: flex-end;
@@ -122,6 +123,16 @@
 
         &:last-of-type {
           width: 75%;
+        }
+      }
+    }
+
+    .sale-details .inner-details {
+      @media (min-width: vars.$breakpoint-md) {
+
+        &:first-of-type {
+          width: 50%;
+          min-width: 220px;
         }
       }
     }
