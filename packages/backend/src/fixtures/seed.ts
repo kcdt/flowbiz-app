@@ -297,7 +297,7 @@ async function seed() {
   const saleData = [
     {
       id: saleIds[0],
-      date: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), // Il y a 15 jours
+      date: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toString(), // Il y a 15 jours
       price: '1049.98',
       status: 'completed' as "pending" | "completed" | "cancelled" | "refunded",
       buyerName: 'Martin Dupont',
@@ -308,7 +308,7 @@ async function seed() {
     },
     {
       id: saleIds[1],
-      date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // Il y a 10 jours
+      date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toString(), // Il y a 10 jours
       price: '1299.99',
       status: 'completed' as "pending" | "completed" | "cancelled" | "refunded",
       buyerName: 'Sophie Martin',
@@ -319,7 +319,7 @@ async function seed() {
     },
     {
       id: saleIds[2],
-      date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // Il y a 5 jours
+      date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toString(), // Il y a 5 jours
       price: '384.97',
       status: 'pending' as "pending" | "completed" | "cancelled" | "refunded",
       buyerName: 'Pierre Leroy',
@@ -330,7 +330,7 @@ async function seed() {
     },
     {
       id: saleIds[3],
-      date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // Il y a 2 jours
+      date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toString(), // Il y a 2 jours
       price: '924.98',
       status: 'pending' as "pending" | "completed" | "cancelled" | "refunded",
       buyerName: 'Lucie Dubois',
@@ -341,7 +341,7 @@ async function seed() {
     },
     {
       id: saleIds[4],
-      date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // Hier
+      date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toString(), // Hier
       price: '74.97',
       status: 'cancelled' as "pending" | "completed" | "cancelled" | "refunded",
       buyerName: 'Thomas Bernard',

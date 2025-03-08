@@ -8,18 +8,24 @@ export const saleController = {
   async createSale (req: Request, res: Response) {
     try {
       const authReq = req as VerifiedAuthRequest;
-      const { buyerName, buyerAddress, items } = req.body;
+      const { buyerName, buyerAddress, items, date, price } = req.body;
       
       if (!items || !Array.isArray(items) || items.length === 0) {
         return APIResponse(res, null, "La commande doit contenir au moins un article", 400);
-      }
+      };
+
+      if (!date) {
+        date.value = new Date(Date.now());
+      };
       
       const newSale = await salesService.createWithItems(
         authReq.user.companyId,
         {
           buyerName,
           buyerAddress,
-          items
+          date,
+          items,
+          price
         }
       );
       
@@ -63,6 +69,18 @@ export const saleController = {
       }
       
       return APIResponse(res, sale, "Commande récupérée avec succès", 200);
+    } catch (error: any) {
+      return APIResponse(res, null, error.message, 500);
+    }
+  },
+
+  async updateSale(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      
+      const updatedSale = await saleModel.updateById(id, req.body);
+      
+      return APIResponse(res, updatedSale, "Statut de la commande mis à jour", 200);
     } catch (error: any) {
       return APIResponse(res, null, error.message, 500);
     }

@@ -1,11 +1,13 @@
 @use '../variables' as vars;
 
-.product-item {
+.product-item, .sale-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
+  width: 100%;
   max-width: 100%;
-  border-bottom: 1px solid vars.$border-color;
+  border-top: 1px solid vars.$border-color;
   padding: 4px 0;
 
   &:last-of-type {
@@ -14,15 +16,15 @@
 
   @media (min-width: vars.$breakpoint-lg) {
     gap: 20px;
-    padding: 10px 0;
+    padding: 12px 0;
   }
 
   .product-img {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 90px;
     border-radius: 4px;
     overflow: hidden;
 
@@ -42,7 +44,7 @@
     }
   }
 
-  .product-infos {
+  .product-infos, .sale-infos {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -51,29 +53,35 @@
     @media (min-width: vars.$breakpoint-md) {
       flex-direction: row;
 
+      .main-info {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 50%;
+      }
+
+      .xs-col {
+        width: 30%;
+      }
+
       .sm-col {
         width: 50%;
       }
 
       .md-col {
-        width: 75%;
+        width: 70%;
       }
 
       .lg-col {
-        width: 100%;
+        width: 85%;
       }
 
       .xl-col {
-        width: 50%;
+        width: 100%;
       }
     }
 
-    h3 {
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    .product-details {
+    .product-details, .sale-details {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -87,18 +95,20 @@
       .inner-details {
         display: flex;
         flex-direction: column;
+        justify-content: space-around;
+        
+        &:last-of-type {
+          align-items: flex-end;
+        }
 
         @media (min-width: vars.$breakpoint-md) {
           flex-direction: row;
+          align-items: center;
           width: 100%;
 
           &:last-of-type {
-            width: 75%;
+            align-items: center;
           }
-        }
-
-        &:last-of-type {
-          align-items: flex-end;
         }
 
         span {
@@ -108,13 +118,27 @@
       }
     }
 
-    h4 {
-      font-size: 14px;
-      font-weight: 400;
+    .product-details .inner-details {
+      @media (min-width: vars.$breakpoint-md) {
+
+        &:last-of-type {
+          width: 75%;
+        }
+      }
+    }
+
+    .sale-details .inner-details {
+      @media (min-width: vars.$breakpoint-md) {
+
+        &:first-of-type {
+          width: 50%;
+          min-width: 220px;
+        }
+      }
     }
   }
 
-  .product-actions {
+  .product-actions, .sale-actions {
     display: none;
 
     @media (min-width: vars.$breakpoint-md) {
