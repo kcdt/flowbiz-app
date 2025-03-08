@@ -3,10 +3,8 @@
 </script>
 
 <template>
-  <div class="home-content">
-    <div class="hero-background">
-
-    </div>
+  <div class="public-content">
+    <div class="hero-background"></div>
     <section class="hero">
       <div class="hero-content">
         <h1 class="hero-title">
@@ -18,8 +16,8 @@
           générez vos factures <span class="hero-subtitle-highlight">en quelques clics</span>
         </p>
         <div class="hero-buttons">
-          <router-link to="/register" class="btn cta-primary">S'inscrire</router-link>
-          <a href="#features" class="btn cta-outline">Fonctionnalités</a>
+          <router-link to="/register" class="btn-primary">S'inscrire</router-link>
+          <a href="#features" class="btn-outline">Fonctionnalités</a>
         </div>
       </div>
     </section>
