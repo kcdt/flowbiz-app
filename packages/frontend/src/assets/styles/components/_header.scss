@@ -46,7 +46,6 @@
   border: none;
   cursor: pointer;
   padding: 0;
-  margin-left: 20px;
   
   @media (min-width: vars.$breakpoint-md) {
     display: none;
@@ -126,7 +125,7 @@
   }
 }
 
-.cta-container {
+.btn-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -138,9 +137,5 @@
     justify-content: flex-end;
     flex-direction: row;
     gap: 20px;
-  }
-
-  .cta-secondary, .cta-primary {
-    width: fit-content;
   }
 }
