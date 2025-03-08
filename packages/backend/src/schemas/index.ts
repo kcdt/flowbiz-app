@@ -1,4 +1,5 @@
 export * from "./products.schema"
+export * from "./product.categories.schema"
 export * from "./users.schema"
 export * from "./companies.schema"
 export * from "./sales.schema"
