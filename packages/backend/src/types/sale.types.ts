@@ -8,12 +8,15 @@ export interface SaleInput {
 }
 
 export interface CreateSaleInput {
-  buyerName?: string;
-  buyerAddress?: string;
+  buyerName: string;
+  buyerAddress: string;
+  date: string;
   items: SaleItemInput[];
+  price: string;
 }
 
 export interface SaleItemInput {
+  id: string;
   quantity: number;
   unitPrice: number;
   productId: string;
@@ -31,8 +34,8 @@ export interface CompletedSale {
   status: 'pending' | 'completed' | 'cancelled' | 'refunded';
   buyerName: string;
   buyerAddress: string;
-  companyId?: string;
-  date?: Date;
+  companyId: string;
+  date: string;
   id: string;
   createdAt: Date;
   updatedAt: Date
@@ -72,7 +75,7 @@ export interface Company {
 
 export interface Sale {
   id: string;
-  date: Date;
+  date: string;
   price: string;
   status: 'pending' | 'completed' | 'cancelled' | 'refunded';
   buyerName: string;
