@@ -1,7 +1,8 @@
 import { db } from '../config/db';
 import { sales, saleItems, products, invoices } from '../schemas';
 import { eq, and, gte, lte, desc, SQL, sql } from 'drizzle-orm';
-import { SaleFilters } from '../types/sale.types';
+import { CreateSaleInput, SaleFilters } from '../types/sale.types';
+import { updateSaleItems } from '../services/sale.item.service';
 
 export const saleModel = {
   async createWithItems (saleData: any, items: any[]) {
@@ -55,11 +56,11 @@ export const saleModel = {
     }
     
     if (filters.startDate) {
-      conditions.push(gte(sales.date, new Date(filters.startDate)));
+      conditions.push(gte(sales.date, new Date(filters.startDate).toISOString()));
     }
     
     if (filters.endDate) {
-      conditions.push(lte(sales.date, new Date(filters.endDate)));
+      conditions.push(lte(sales.date, new Date(filters.endDate).toISOString()));
     }
     
     if (conditions.length > 0) {
@@ -112,6 +113,80 @@ export const saleModel = {
     } catch (error) {
       console.error("Erreur dans verifySaleOwner détaillée:", error);
       throw error;
+    }
+  },
+
+  async updateById(id: string, updatedSale: Partial<CreateSaleInput>) {
+    try {
+      console.log(`Tentative de mise à jour de la vente avec ID: ${id}`, updatedSale);
+      
+      const currentSale = await db.select()
+        .from(sales)
+        .where(eq(sales.id, id))
+        .limit(1);
+      
+      if (currentSale.length === 0) {
+        throw new Error(`Vente avec l'ID ${id} non trouvée`);
+      }
+  
+      const { items, ...saleUpdateData } = updatedSale;
+      
+      const changedFields: Record<string, any> = {};
+      
+      Object.keys(saleUpdateData).forEach(key => {
+        const value = saleUpdateData[key as keyof typeof saleUpdateData];
+        
+        if (key === 'date' && value) {
+          if (typeof value === 'string') {
+            const currentDate = currentSale[0].date;
+            if (currentDate !== value) {
+              changedFields[key] = value;
+            }
+          }
+        } 
+        else if (value !== undefined && value !== null && value !== currentSale[0][key as keyof typeof currentSale[0]]) {
+          changedFields[key] = value;
+        }
+      });
+      
+      if (Object.keys(changedFields).length === 0) {
+        console.log('Aucun changement détecté, mise à jour non nécessaire');
+        return [{ id: currentSale[0].id }];
+      }
+      
+      if (changedFields.price !== undefined) {
+        changedFields.price = changedFields.price.toString();
+      }
+      
+      console.log('Champs modifiés à mettre à jour:', changedFields);
+      
+      const result = await db.update(sales)
+        .set(changedFields)
+        .where(eq(sales.id, id))
+        .returning({ id: sales.id })
+        .execute();
+  
+      if (items && items.length > 0) {
+        await updateSaleItems(id, items);
+      }
+      
+      return result;
+    } catch (err) {
+      console.error('Erreur lors de la mise à jour de la vente:', {
+        saleId: id,
+        updateData: updatedSale,
+        error: err instanceof Error ? {
+          name: err.name,
+          message: err.message,
+          stack: err.stack
+        } : err
+      });
+      
+      if (err instanceof Error) {
+        throw new Error(`Impossible de mettre à jour la vente: ${err.message}`);
+      } else {
+        throw new Error("Impossible de mettre à jour la vente: erreur inconnue");
+      }
     }
   },
   

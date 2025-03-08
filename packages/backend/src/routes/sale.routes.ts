@@ -31,6 +31,14 @@ router.get('/:id',
   saleController.getSaleById
 );
 
+// [PATCH] http://localhost:3000/sale/:id
+router.patch('/:id', 
+  authMiddleware, 
+  sellerOnly, 
+  checkSaleOwner, 
+  saleController.updateSale
+);
+
 // [PATCH] http://localhost:3000/sale/:id/status
 router.patch('/:id/status', 
   authMiddleware, 
