@@ -3,26 +3,21 @@
 
 // Base styles
 @use './base/btn';
-// @import './base/typography';
+@use './base/typography';
 
 // Components
 @use './components/header';
 @use './components/sidebar';
 @use './components/category-badge';
-@use './components/product-list-item';
+@use './components/list-item';
+@use './components/common-modals';
 @use './components/product-modals';
-// @import './components/buttons';
-
-// Layouts
-// @import './layouts/grid';
+@use './components/sale-modals';
 
 // Pages
 @use './pages/home';
 @use './pages/register-login';
-// @import './pages/dashboard';
 
-// Utilities
-// @import './utilities/helpers';
 
 /* Styles globaux */
 :root {

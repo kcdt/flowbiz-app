@@ -1,0 +1,103 @@
+@use '../variables' as vars;
+
+h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: vars.$text-color;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: vars.$text-color;
+}
+
+h3 {
+  margin: 0;
+  font-size: 1.10rem;
+  font-weight: 500;
+  color: vars.$text-color;
+}
+
+h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: vars.$text-color;
+}
+
+.text-legend {
+  font-size: 1rem;
+  font-weight: 400;
+  color: vars.$text-light;
+}
+
+.sold-out, .low-stock, .in-stock, .pending, .completed, .cancelled, .refunded {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;
+
+  &::before {
+    display: flex;
+    content: " ";
+    border-radius: 6px;
+    width: 10px;
+    height: 10px;
+  }
+}
+
+.sold-out, .cancelled {
+  color: vars.$error-color;
+
+  h4 {
+    color: vars.$error-color;
+  }
+
+  &::before {
+    background-color: vars.$error-color;
+  }
+}
+
+.low-stock, .pending {
+  color: vars.$warning-color;
+
+  h4 {
+    color: vars.$warning-color;
+  }
+
+  &::before {
+    background-color: vars.$warning-color;
+  }
+}
+
+.in-stock, .completed {
+  color: vars.$success-color;
+
+  h4 {
+    color: vars.$success-color;
+  }
+
+  &::before {
+    background-color: vars.$success-color;
+  }
+}
+
+.refunded {
+  color: vars.$grey-color;
+
+  h4 {
+    color: vars.$grey-color;
+  }
+
+  &::before {
+    background-color: vars.$grey-color;
+  }
+}
+
+.highligth-info {
+  color: vars.$secondary-color;
+}
