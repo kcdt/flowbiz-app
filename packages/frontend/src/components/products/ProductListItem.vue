@@ -21,6 +21,16 @@ const getProductStatus = computed<string>(() => {
   }
 });
 
+const getProductStatusClass = computed<string>(() => {
+  if (props.product.quantity <= 0) {
+    return 'sold-out';
+  } else if (props.product.quantity <= 5) {
+    return 'low-stock';
+  } else {
+    return 'in-stock';
+  }
+});
+
 const openProductDetails = () => {
   productStore.openProductDetail(props.product.id);
 };
@@ -38,7 +48,7 @@ const openProductDetails = () => {
       </div>
     </div>
     <div class="product-infos" v-on:click="openProductDetails">
-      <h3 class="xl-col">{{ props.product.name }}</h3>
+      <h3 class="main-info">{{ props.product.name }}</h3>
       <div class="product-details">
         <div class="inner-details">
           <h4 class="sm-col">HGS2354</h4>
@@ -47,13 +57,12 @@ const openProductDetails = () => {
           </div>
         </div>
         <div class="inner-details">
-          <h4 class="md-col">{{ props.product.price }}</h4>
-          <h4 class="lg-col">{{ getProductStatus }}</h4>
+          <div class="lg-col" :class="getProductStatusClass">
+            <h4>{{ getProductStatus }}</h4>
+          </div>
+          <h3 class="sm-col highligth-info">{{ props.product.price }} €</h3>
         </div>
       </div>
-    </div>
-    <div class="product-actions">
-      <Icon name="EllipsisVertical" :size="24" />
     </div>
   </div>
 </template>
