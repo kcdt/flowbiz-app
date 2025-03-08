@@ -55,6 +55,14 @@ export const invoicesRelations = relations(invoices, ({ one }) => ({
   saleItems: many(saleItems),
 }));
 
+export const productCategoriesRelations = relations(productCategories, ({ one, many }) => ({
+  company: one(companies, {
+    fields: [productCategories.companyId],
+    references: [companies.id],
+  }),
+  products: many(products)
+}));
+
 export const saleItemsRelations = relations(saleItems, ({ one }) => ({
   sale: one(sales, {
     fields: [saleItems.saleId],
