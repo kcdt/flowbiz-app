@@ -1,5 +1,6 @@
 import { pgTable, varchar, integer, decimal, timestamp, uuid } from "drizzle-orm/pg-core";
 import { companies } from "./companies.schema";
+import { productCategories } from "./product.categories.schema";
 
 export const products = pgTable('products', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -8,6 +9,7 @@ export const products = pgTable('products', {
   price: decimal('price', { precision: 10, scale: 2 }).notNull(),
   quantity: integer('quantity').notNull().default(0),
   imageUrl: varchar('image_url', { length: 255 }),
+  categoryId: uuid('category_id').references(() => productCategories.id),
   companyId: uuid('company_id').references(() => companies.id).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
