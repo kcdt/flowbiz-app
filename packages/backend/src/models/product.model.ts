@@ -83,31 +83,33 @@ export const productModel = {
     }
   },
 
-  async verifyProductOwner (productId: string, companyId: string) {
+  async verifyProductOwner(productId: string, companyId: string) {
     try {
-          const product = await db.select({
-      companyId: products.companyId
-    })
-      .from(products)
-      .where(and(eq(products.id, productId), eq(products.companyId, companyId)))
-      .limit(1);
-    
-    if (product.length === 0) {
-      throw new Error("Impossible de récupérer le produit, id incorrect");
-    }
-    
-    if (!product[0].companyId) {
-      throw new Error("Impossible de récupérer l'id de la company")
-    }
-    
-    return {
-      ...product[0],
-    };
+      const productExists = await db.select({
+        id: products.id,
+        productCompanyId: products.companyId
+      })
+        .from(products)
+        .where(eq(products.id, productId))
+        .limit(1);
+      
+      if (productExists.length === 0) {
+        throw new Error(`Le produit avec l'ID ${productId} n'existe pas`);
+      }
+      
+      if (productExists[0].productCompanyId !== companyId) {
+        throw new Error(`Le produit avec l'ID ${productId} n'appartient pas à cette entreprise`);
+      }
+      
+      return {
+        ...productExists[0],
+      };
     } catch (err) {
       if (err instanceof Error) {
-        throw new Error(`Impossible de récupérer le companyId du produit: ${err.message}`);
+        console.log(`Erreur pour le produit ID: ${productId}, Company ID: ${companyId}`);
+        throw new Error(`Vérification du propriétaire du produit échouée: ${err.message}`);
       } else {
-        throw new Error("Impossible de récupérer le companyId du produit: erreur inconnue");
+        throw new Error("Vérification du propriétaire du produit échouée: erreur inconnue");
       }
     }
   },
