@@ -25,7 +25,7 @@ export interface Product {
   price: string;
   quantity: number;
   imageUrl?: string;
-  categoryId?: string;
+  categoryId: string | null;
   companyId: string;
   createdAt: string;
   updatedAt: string;
@@ -38,7 +38,7 @@ export interface ProductCreateInput {
   price: number | string;
   quantity: number;
   imageUrl?: string;
-  categoryId?: string;
+  categoryId: string | null;
 }
 
 export interface ProductUpdateInput {
@@ -47,19 +47,7 @@ export interface ProductUpdateInput {
   price?: number | string;
   quantity?: number;
   imageUrl?: string;
-  categoryId?: string;
-}
-
-export interface Sale {
-  id: string;
-  date: string;
-  price: string;
-  status: string;
-  buyerName: string;
-  buyerAddress: string;
-  companyId: string;
-  createdAt: string;
-  updatedAt: string;
+  categoryId: string | null;
 }
 
 export interface detailedSale {
@@ -82,7 +70,6 @@ export interface detailedSale {
   }[];
 }
 
-// Définition des interfaces pour les items d'une vente
 export interface SaleItemInput {
   productId: string;
   productName: string;
@@ -90,7 +77,6 @@ export interface SaleItemInput {
   unitPrice: number | string;
 }
 
-// Interface pour la création d'une vente
 export interface SaleCreateInput {
   date: string;
   buyerName: string;
@@ -100,7 +86,6 @@ export interface SaleCreateInput {
   status?: string;
 }
 
-// Interface pour la mise à jour d'une vente
 export interface SaleUpdateInput {
   date?: string;
   buyerName?: string;
@@ -110,7 +95,6 @@ export interface SaleUpdateInput {
   status?: string;
 }
 
-// Modification de l'interface Sale existante pour inclure les items
 export interface Sale {
   id: string;
   date: string;
@@ -132,3 +116,21 @@ export interface Sale {
 }
 
 export type SaleStatus = 'draft' | 'issued' | 'paid' | 'cancelled' | 'overdue';
+
+
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  phone?: string;
+  companyId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UserUpdateInput {
+  name: string;
+  email: string;
+  phone: string;
+}
