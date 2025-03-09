@@ -233,5 +233,27 @@ export const authController = {
       logger.error('Erreur lors de la récupération du profil', { error: error.message, stack: error.stack });
       return APIResponse(res, null, ERROR_MESSAGES.INTERNAL_SERVER_ERROR, 500);
     }
+  },
+
+  async getMe(req: Request, res: Response) {
+    try {
+      const authReq = req as VerifiedAuthRequest;
+      const userId = authReq.user.id;
+      
+      if (!userId) {
+        return APIResponse(res, null, "Utilisateur non authentifié", 401);
+      }
+      
+      const user = await userModel.getById(userId);
+      if (!user) {
+        return APIResponse(res, null, "Utilisateur non trouvé", 404);
+      }
+      
+      const { refreshToken, ...userWithoutSensitiveInfo } = user;
+      
+      return APIResponse(res, userWithoutSensitiveInfo, "Informations utilisateur récupérées", 200);
+    } catch (error: any) {
+      return APIResponse(res, null, error.message, 500);
+    }
   }
 };
