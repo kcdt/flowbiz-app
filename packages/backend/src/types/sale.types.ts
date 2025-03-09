@@ -1,3 +1,5 @@
+import { updateSaleItems } from "../services/sale.item.service";
+
 export interface SaleInput {
   price: number;
   status?: string;
@@ -62,6 +64,12 @@ export interface SaleItem {
   product: Product;
 }
 
+export interface updateSaleItemsInput { 
+  productId: string; 
+  quantity: number; 
+  unitPrice?: string | number 
+}
+
 export interface Company {
   id: string;
   name: string;
@@ -85,6 +93,19 @@ export interface Sale {
   updatedAt: Date;
   items: SaleItem[];
   company: Company;
+}
+
+export interface UpdateSaleInput {
+  buyerName?: string;
+  buyerAddress?: string;
+  status?: 'pending' | 'completed' | 'cancelled' | 'refunded';
+  date?: string | Date;
+  items?: {
+    productId: string;
+    quantity: number;
+    unitPrice?: number;
+  }[];
+  price?: number;
 }
 
 export interface Invoice {
