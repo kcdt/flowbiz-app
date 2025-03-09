@@ -3,10 +3,11 @@ import { computed, onMounted, ref } from 'vue';
 import { useProductStore } from '@/stores/product.store';
 import ProductListItem from '@/components/products/ProductListItem.vue';
 import Icon from '@/components/common/Icon.vue';
-import ProductDetailModal from '@/components/layout/Modal/ProductDetailModal.vue';
-import ProductEditModal from '@/components/layout/Modal/ProductEditModal.vue';
+import ProductDetailModal from '@/components/layout/modal/ProductDetailModal.vue';
+import ProductEditModal from '@/components/layout/modal/ProductEditModal.vue';
 import { Product } from '@/types/models';
 import { useCategoryStore } from '@/stores/product.category.store';
+import ProductCategoriesModal from '@/components/layout/modal/ProductCategoriesModal.vue';
 
 const productStore = useProductStore();
 const productCategorystore = useCategoryStore();
@@ -16,10 +17,8 @@ const searchQuery = ref<any>('');
 
 const filteredSales = computed(() => {
   let result = productStore.products;
-  console.log(result);
   
   if (selectedStatusFilter.value !== 'all') {
-    console.log(selectedStatusFilter.value);
     result = result.filter(product => product.categoryId === selectedStatusFilter.value);
   }
   
@@ -37,13 +36,17 @@ const openEditModal = () => {
   productStore.isEditModalOpen = true;
 };
 
-const openNewProductModal = () => {
-  productStore.currentProduct = null;
-  productStore.isEditModalOpen = true;
+const createNewCategory = () => {
+  productCategorystore.openProductCategoriesModal();
 };
 
 const handleProductSaved = (product: Product) => {
   console.log('Produit sauvegardé:', product);
+};
+
+const openNewProductModal = () => {
+  productStore.currentProduct = null;
+  productStore.isEditModalOpen = true;
 };
 
 onMounted(async () => {
@@ -58,7 +61,11 @@ onMounted(async () => {
       <h1>Catalogue</h1>
     </div>
     <div v-if="productStore.isLoading">Chargement...</div>
-    <div v-else-if="productStore.error" class="error">{{ productStore.error }}</div>
+    <div v-else-if="productStore.error" class="error">
+      <p class="warning-message">
+        {{ productStore.error }}
+      </p>
+    </div>
     <div v-else class="list-view-content">
       <h3>Valeur totale du stock : {{ productStore.totalInventoryValue.toFixed(2) }} €</h3>
       <div class="filter-container">
@@ -85,7 +92,7 @@ onMounted(async () => {
             </div>
           </div>
         </div>
-        <div class="rigth-filter-part">
+        <div class="right-filter-part">
           <div class="filter-group">
             <label for="status-filter">Filtres</label>
             <select 
@@ -93,7 +100,7 @@ onMounted(async () => {
               v-model="selectedStatusFilter" 
               class="status-filter"
             >
-              <option value="all">Tous les statuts</option>
+              <option value="all">Toutes les catégories</option>
               <option 
                 v-for="(category, value) in productCategorystore.categories" 
                 :key="value" 
@@ -103,7 +110,10 @@ onMounted(async () => {
               </option>
             </select>
           </div>
-          <div class="btn-secondary" v-on:click="openNewProductModal">Ajouter un produit</div>
+          <div class="actions">
+            <div class="btn-secondary" v-on:click="createNewCategory">Gérer les catégories</div>
+            <div class="btn-primary" v-on:click="openNewProductModal">Ajouter un produit</div>
+          </div>
         </div>
       </div>
       <div class="product-list">
@@ -116,12 +126,14 @@ onMounted(async () => {
       </div>
       <ProductDetailModal 
         :is-open="productStore.isDetailModalOpen" 
-        @close="productStore.closeProductDetail" 
         @edit="openEditModal"
       />
       <ProductEditModal
         :is-open="productStore.isEditModalOpen"
         @save="handleProductSaved"
+      />
+      <ProductCategoriesModal 
+        :is-open="productCategorystore.isModalOpen" 
       />
     </div>
   </section>
