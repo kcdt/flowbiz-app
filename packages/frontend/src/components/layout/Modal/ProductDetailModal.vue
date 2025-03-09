@@ -10,7 +10,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['close', 'edit']);
+const emit = defineEmits(['edit']);
 
 const productStore = useProductStore();
 const categoryStore = useCategoryStore();
@@ -39,7 +39,7 @@ const getCategoryName = (categoryId: string) => {
 };
 
 const close = () => {
-  emit('close');
+  productStore.closeProductDetail();
 };
 
 const openProductEdit = () => {
@@ -52,10 +52,10 @@ const openProductEdit = () => {
   }
 };
 
-const deleteProduct = () => {
+const deleteProduct = async () => {
   try {
     if (product.value) {
-      productStore.deleteProduct(product.value.id);
+      await productStore.deleteProduct(product.value.id);
       close();
     }
   } catch (err: any) {

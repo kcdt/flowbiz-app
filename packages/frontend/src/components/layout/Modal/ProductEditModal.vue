@@ -24,13 +24,17 @@ const formData = reactive<ProductCreateInput & ProductUpdateInput>({
   description: '',
   price: 0,
   quantity: 0,
-  categoryId: '',
+  categoryId: null,
   imageUrl: ''
 });
 
 const product = ref<Product | null>(null);
 
-const isNewProduct = computed(() => product == null);
+const isNewProduct = computed(() => !product.value);
+
+const close = () => {
+  productStore.closeProductEdit();
+};
 
 watch(() => [props.isOpen, productStore.currentProduct], () => {
   if (productStore.currentProduct !== null) {
@@ -52,16 +56,16 @@ const resetForm = () => {
   formData.description = '';
   formData.price = 0;
   formData.quantity = 0;
-  formData.categoryId = '';
+  formData.categoryId = null;
   formData.imageUrl = '';
 };
 
-const resetFormWithProduct = (product: any) => {
+const resetFormWithProduct = (product: Product) => {
   formData.name = product.name || '';
   formData.description = product.description || '';
   formData.price = typeof product.price === 'string' ? parseFloat(product.price) : product.price;
   formData.quantity = product.quantity || 0;
-  formData.categoryId = product.categoryId || '';
+  formData.categoryId = product.categoryId || null;
   formData.imageUrl = product.imageUrl || '';
 };
 
@@ -75,13 +79,13 @@ const handleSubmit = async () => {
       description: formData.description || undefined,
       price: formData.price,
       quantity: formData.quantity,
-      categoryId: formData.categoryId || undefined,
+      categoryId: formData.categoryId || null,
       imageUrl: formData.imageUrl || undefined
     };
     
     let result;
     
-    if (isNewProduct) {
+    if (isNewProduct.value) {
       result = await productStore.createProduct(productData);
     } else {
       if (product.value?.id) {
@@ -92,17 +96,14 @@ const handleSubmit = async () => {
     }
 
     emit('save', result);
-    productStore.closeProductEdit();
+    close();
+    productStore.currentProduct = null;
     productStore.fetchProducts();
   } catch (err: any) {
     error.value = err.response?.data?.message || "Erreur lors de l'enregistrement du produit";
   } finally {
     isSubmitting.value = false;
   }
-};
-
-const close = () => {
-  productStore.closeProductEdit();
 };
 
 onMounted(async () => {
@@ -147,11 +148,12 @@ onMounted(async () => {
             </div>
             
             <div class="form-group">
-              <label for="product-description">Description</label>
-              <textarea 
+              <label for="product-description">Description*</label>
+              <textarea
                 id="product-description" 
                 v-model="formData.description" 
-                rows="3" 
+                rows="3"
+                required
                 placeholder="Description du produit"
               ></textarea>
             </div>
