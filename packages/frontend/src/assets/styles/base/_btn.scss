@@ -3,13 +3,14 @@
 .btn {
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 10px;
   color: vars.$text-color;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   text-decoration: none;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   transition: ease-in-out 200ms;
   border: 2px solid transparent;
   cursor: pointer;
@@ -39,7 +40,20 @@
     }
   }
 
+  &-small {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    font-size: 0.85em;
+  }
+
   &-primary {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
     background-color: vars.$primary-color;
     color: vars.$text-color;
     padding: 0.5rem 1.5rem;
@@ -58,6 +72,10 @@
   }
 
   &-secondary {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
     background-color: vars.$secondary-color;
     color: white;
     padding: 0.5rem 1.5rem;
@@ -77,6 +95,10 @@
   }
 
   &-warning {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
     background-color: vars.$error-color;
     color: white;
     padding: 0.5rem 1.5rem;
@@ -96,6 +118,10 @@
   }
 
   &-outline {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
     background-color: white;
     color: vars.$text-color;
     padding: 0.5rem 1.5rem;
