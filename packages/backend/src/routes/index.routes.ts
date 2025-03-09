@@ -5,6 +5,7 @@ import userRoutes from './user.routes';
 import authRoutes from './auth.routes';
 import saleRoutes from './sale.routes';
 import invoiceRoutes from './invoices.routes';
+import companyRoutes from './companies.routes';
 
 const router = Router();
 
@@ -36,6 +37,11 @@ router.use('/sales',
 // http://localhost:3000/invoice
 router.use('/invoice', 
   invoiceRoutes
+);
+
+// http://localhost:3000/company
+router.use('/company', 
+  companyRoutes
 );
 
 router.get('/', (req: Request, res: Response) => {
