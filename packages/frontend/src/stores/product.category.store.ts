@@ -7,6 +7,7 @@ export const useCategoryStore = defineStore('category', () => {
   const categories = ref<Category[]>([]);
   const isLoading = ref(false);
   const error = ref<string | null>(null);
+  const isModalOpen = ref<boolean>(false);
   
   async function fetchCategories() {
     isLoading.value = true;
@@ -76,14 +77,35 @@ export const useCategoryStore = defineStore('category', () => {
       isLoading.value = false;
     }
   }
+
+  const openProductCategoriesModal = async () => {
+    isLoading.value = true;
+    error.value = null;
+    
+    try {
+      await fetchCategories();
+      isModalOpen.value = true;
+    } catch (err: any) {
+      error.value = err.response?.data?.message || 'Erreur lors du chargement du produit';
+    } finally {
+      isLoading.value = false;
+    }
+  };
+  
+  const closeProductCategoriesModal = () => {
+    isModalOpen.value = false;
+  };
   
   return {
     categories,
     isLoading,
     error,
+    isModalOpen,
     fetchCategories,
     createCategory,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    openProductCategoriesModal,
+    closeProductCategoriesModal
   };
 });
