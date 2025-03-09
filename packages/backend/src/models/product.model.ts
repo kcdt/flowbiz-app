@@ -139,6 +139,39 @@ export const productModel = {
     }
   },
 
+  async updateStock(productId: string, quantityChange: number) {
+    try {
+      const product = await db.select({ quantity: products.quantity })
+        .from(products)
+        .where(eq(products.id, productId))
+        .execute()
+        .then(res => res[0]);
+      
+      if (!product) {
+        throw new Error(`Produit avec l'ID ${productId} non trouvé`);
+      }
+      
+      const newQuantity = product.quantity + quantityChange;
+      
+      if (newQuantity < 0) {
+        throw new Error(`Stock insuffisant pour le produit ${productId}. Quantité actuelle: ${product.quantity}, Changement demandé: ${quantityChange}`);
+      }
+      
+      const result = await db.update(products)
+        .set({ quantity: newQuantity })
+        .where(eq(products.id, productId))
+        .returning({ id: products.id, quantity: products.quantity })
+        .execute();
+      
+      return result[0];
+    } catch (err) {
+      if (err instanceof Error) {
+        throw err;
+      }
+      throw new Error(`Impossible de mettre à jour le stock du produit ${productId}`);
+    }
+  },
+
   async deleteById (id: string) {
     try {
       const result = await db.delete(products)

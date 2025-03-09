@@ -7,7 +7,6 @@ import { Invoice } from '../entities/invoice.entitie';
 export const invoiceService = {
   async createFromSale (saleId: string) {
     return await db.transaction(async (tx) => {
-      // Récupérer la vente avec ses éléments
       const sale = await tx.query.sales.findFirst({
         where: eq(sales.id, saleId),
         with: {
@@ -23,7 +22,6 @@ export const invoiceService = {
         throw new Error('Sale not found');
       }
       
-      // Vérifier si une facture existe déjà pour cette vente
       const existingInvoice = await tx.query.invoices.findFirst({
         where: eq(invoices.saleId, saleId)
       });
