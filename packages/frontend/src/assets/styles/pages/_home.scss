@@ -1,0 +1,318 @@
+@use '../variables' as vars;
+
+.public-content {
+  @media (min-width: vars.$breakpoint-md) {
+    gap: 20px;
+  }
+
+  .hero-background {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    height: 60vh;
+    width: 100vw;
+    background-image: linear-gradient(to right top, #dee7fe, #dce9ff, #dbecff, #daeeff, #daf0ff, #d9f0fd, #d8f0fc, #d7f0fa, #d4eef7, #d2edf3, #d0ebf0, #cee9ec);
+
+    @media (min-width: vars.$breakpoint-md) {
+      height: 70vh;
+      min-height: 700px;
+    }
+
+    @media (min-width: vars.$breakpoint-lg) {
+      height: 100vh;
+      min-height: 700px;
+    }
+  }
+
+  .hero {
+    padding-top: 1rem;
+    padding-bottom: 3rem;
+    height: 50vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    @media (min-width: vars.$breakpoint-md) {
+      height: 50vh;
+    }
+
+    @media (min-width: vars.$breakpoint-lg) {
+      padding-bottom: 4rem;
+      height: 60vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  
+    .hero-content {
+      max-width: 100%;
+      text-align: center;
+    }
+  
+    .hero-title {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: vars.$text-color;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+  
+      @media (min-width: vars.$breakpoint-md) {
+        font-size: 2rem;
+      }
+  
+      @media (min-width: vars.$breakpoint-lg) {
+        font-size: 2.5rem;
+      }
+  
+      &-colored {
+        color: vars.$secondary-color;
+      }
+    }
+  
+    &-subtitle {
+      font-size: 1rem;
+      color: vars.$text-light;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+  
+      @media (min-width: vars.$breakpoint-md) {
+        font-size: 1.25rem;
+      }
+  
+      &-highlight {
+        color: vars.$secondary-color;
+        font-weight: 500;
+      }
+    }
+  
+    &-buttons {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: baseline;
+      gap: vars.$spacing-sm;
+  
+      @media (min-width: vars.$breakpoint-md) {
+        flex-direction: row;
+        justify-content: center;
+      }
+  
+      .btn {
+        width: fit-content;
+      }
+    }
+  }
+  
+  .dashboard-preview {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+    margin-top: -7vh;
+    
+    @media (min-width: vars.$breakpoint-md) {
+      margin-top: -15vh;
+    }
+
+    @media (min-width: vars.$breakpoint-lg) {
+      margin-top: 0;
+    }
+  
+    &-image {
+      width: 100%;
+      max-width: 1200px;
+      overflow: hidden;
+  
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+    }
+  }
+
+  .section-title {
+    font-size: 1.7rem;
+    text-align: center;
+    color: #333;
+  }
+
+  .features-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    padding: 2rem 0;
+
+    h2 {
+      color: vars.$secondary-color;
+    }
+
+    @media (min-width: vars.$breakpoint-md) {
+      padding: 3rem 1rem;
+      gap: 60px;
+    }
+
+    .feature-item {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+
+      @media (min-width: vars.$breakpoint-md) {
+        gap: 40px;
+      }
+
+      @media (min-width: vars.$breakpoint-lg) {
+        display: grid;
+        align-items: start;
+        grid-template-columns: 3fr 5fr;
+        gap: 20px;
+
+        &:nth-of-type(2) {
+          grid-template-columns: 5fr 3fr;
+
+          .second-part {
+            order: -1;
+          }
+        }
+      }
+
+      .first-part {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+
+        @media (min-width: vars.$breakpoint-lg) {
+          padding-top: 2rem;
+          gap: 20px;
+        }
+
+        ul {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+
+          li {
+            list-style: none;
+
+            p {
+              color: vars.$text-light;
+
+              &::before {
+                content: "+ ";
+              }
+            }
+          }
+        }
+      }
+
+      .second-part {
+        display: flex;
+        justify-content: center;
+
+        .feature-image {
+          width: 100%;
+
+          img {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  .contact-section {
+    padding: 80px 0;
+    background-color: #f8f9fa;
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .section-title {
+      font-size: 1.7rem;
+      text-align: center;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    
+    .section-subtitle {
+      text-align: center;
+      font-size: 1rem;
+      color: #6c757d;
+      margin-bottom: 40px;
+    }
+    
+    .contact-form-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #495057;
+    }
+    
+    input, textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #4dabf7;
+    }
+    
+    .submit-button {
+      width: 100%;
+      padding: 12px;
+      background-color: #4dabf7;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .submit-button:hover {
+      background-color: #3793d5;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .contact-section {
+      padding: 60px 0;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+    }
+    
+    .contact-form-container {
+      padding: 20px;
+    }
+  }
+}

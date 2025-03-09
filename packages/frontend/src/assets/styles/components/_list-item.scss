@@ -1,0 +1,151 @@
+@use '../variables' as vars;
+
+.product-item, .sale-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  max-width: 100%;
+  border-top: 1px solid vars.$border-color;
+  padding: 4px 0;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+
+  @media (min-width: vars.$breakpoint-lg) {
+    gap: 20px;
+    padding: 12px 0;
+  }
+
+  .product-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 90px;
+    border-radius: 4px;
+    overflow: hidden;
+
+    img {
+      max-width: 100%;
+      object-fit: contain;
+    }
+
+    @media (min-width: vars.$breakpoint-md) {
+      width: 100px;
+      height: 100px;
+    }
+
+    @media (min-width: vars.$breakpoint-lg) {
+      width: 130px;
+      height: 130px;
+    }
+  }
+
+  .product-infos, .sale-infos {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    cursor: pointer;
+
+    @media (min-width: vars.$breakpoint-md) {
+      flex-direction: row;
+
+      .main-info {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 50%;
+      }
+
+      .xs-col {
+        width: 30%;
+      }
+
+      .sm-col {
+        width: 50%;
+      }
+
+      .md-col {
+        width: 70%;
+      }
+
+      .lg-col {
+        width: 85%;
+      }
+
+      .xl-col {
+        width: 100%;
+      }
+    }
+
+    .product-details, .sale-details {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      @media (min-width: vars.$breakpoint-md) {
+        flex-direction: row;
+        gap: 0;
+        width: 100%;
+      }
+
+      .inner-details {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        
+        &:last-of-type {
+          align-items: flex-end;
+        }
+
+        @media (min-width: vars.$breakpoint-md) {
+          flex-direction: row;
+          align-items: center;
+          width: 100%;
+
+          &:last-of-type {
+            align-items: center;
+          }
+        }
+
+        span {
+          font-size: 14px;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .product-details .inner-details {
+      @media (min-width: vars.$breakpoint-md) {
+
+        &:last-of-type {
+          width: 75%;
+        }
+      }
+    }
+
+    .sale-details .inner-details {
+      @media (min-width: vars.$breakpoint-md) {
+
+        &:first-of-type {
+          width: 50%;
+          min-width: 220px;
+        }
+      }
+    }
+  }
+
+  .product-actions, .sale-actions {
+    display: none;
+
+    @media (min-width: vars.$breakpoint-md) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+  }
+}

@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { UserInput } from '../validation/user.validation';
 import APIResponse from '../utils/response.utils';
 import { userModel } from '../models/user.model';
+import { VerifiedAuthRequest } from '../types/auth.types';
 
 export const authController = {
   async register(req: Request, res: Response) {
@@ -118,6 +119,28 @@ export const authController = {
       return APIResponse(res, { accessToken: tokens.accessToken }, "Token rafraîchi", 200);
     } catch (error) {
       return APIResponse(res, null, "Token de rafraîchissement invalide", 401);
+    }
+  },
+
+  async getMe(req: Request, res: Response) {
+    try {
+      const authReq = req as VerifiedAuthRequest;
+      const userId = authReq.user.id;
+      
+      if (!userId) {
+        return APIResponse(res, null, "Utilisateur non authentifié", 401);
+      }
+      
+      const user = await userModel.getById(userId);
+      if (!user) {
+        return APIResponse(res, null, "Utilisateur non trouvé", 404);
+      }
+      
+      const { refreshToken, ...userWithoutSensitiveInfo } = user;
+      
+      return APIResponse(res, userWithoutSensitiveInfo, "Informations utilisateur récupérées", 200);
+    } catch (error: any) {
+      return APIResponse(res, null, error.message, 500);
     }
   }
 };

@@ -1,0 +1,142 @@
+@use '../variables' as vars;
+
+.btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  color: vars.$text-color;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: ease-in-out 200ms;
+  border: 2px solid transparent;
+  cursor: pointer;
+  width: fit-content;
+  height: fit-content;
+
+  &:hover {
+    border: 2px solid vars.$border-color;
+    border-radius: 4px;
+    box-shadow: vars.$shadow-lg;
+  }
+
+  &.active {
+    border: 2px solid vars.$border-color;
+    border-radius: 4px;
+    box-shadow: vars.$shadow-lg;
+    color: vars.$secondary-color;
+  }
+
+  &-container {
+    display: flex;
+    flex-direction: column;
+    
+    @media (min-width: vars.$breakpoint-md) {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  &-small {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    font-size: 0.85em;
+  }
+
+  &-primary {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    background-color: vars.$primary-color;
+    color: vars.$text-color;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: fit-content;
+    height: fit-content;
+    border: none;
+
+    &:hover {
+      box-shadow: vars.$shadow-lg;
+    }
+  }
+
+  &-secondary {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    background-color: vars.$secondary-color;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: ease-in-out 200ms;
+    cursor: pointer;
+    width: fit-content;
+    height: fit-content;
+    border: none;
+
+    &:hover {
+      box-shadow: vars.$shadow-lg;
+    }
+  }
+
+  &-warning {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    background-color: vars.$error-color;
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: ease-in-out 200ms;
+    cursor: pointer;
+    width: fit-content;
+    height: fit-content;
+    border: none;
+
+    &:hover {
+      box-shadow: vars.$shadow-lg;
+    }
+  }
+
+  &-outline {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    background-color: white;
+    color: vars.$text-color;
+    padding: 0.5rem 1.5rem;
+    border: 2px solid vars.$border-color;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: ease-in-out 200ms;
+    cursor: pointer;
+    width: fit-content;
+    height: fit-content;
+
+    &:hover {
+      box-shadow: vars.$shadow-lg;
+    }
+  }
+}

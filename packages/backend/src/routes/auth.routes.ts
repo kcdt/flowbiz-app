@@ -1,13 +1,39 @@
 import { Router } from 'express';
 import { authController } from "../controllers/auth.controller";
 import { validateRequest } from "../middleware/validation.middleware";
-import { createUserSchema, loginSchema } from "../validation/user.validation";
+import { registerSchema, loginSchema } from "../validation/user.validation";
+import { authMiddleware } from '../middleware/auth.middleware';
+import { loginLimiter } from '../middleware/rate.limit.middleware';
 
 const router = Router();
 
-router.post("/register", validateRequest(createUserSchema), authController.register);
-router.post("/login", validateRequest(loginSchema), authController.login);
-router.post("/logout", authController.logout);
-router.post("/refresh-token", authController.refreshToken);
+// [GET] http://localhost:3000/auth/me
+router.get('/me', 
+  authMiddleware, 
+  authController.getMe
+);
+
+// [POST] http://localhost:3000/auth/register
+router.post("/register", 
+  validateRequest(registerSchema), 
+  authController.register
+);
+
+// [POST] http://localhost:3000/auth/login
+router.post("/login", 
+  validateRequest(loginSchema),
+  loginLimiter, 
+  authController.login
+);
+
+// [POST] http://localhost:3000/auth/logout
+router.post("/logout", 
+  authController.logout
+);
+
+// [POST] http://localhost:3000/auth/refresh-token
+router.post("/refresh-token", 
+  authController.refreshToken
+);
 
 export default router;

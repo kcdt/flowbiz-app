@@ -1,0 +1,189 @@
+@use '../variables' as vars;
+
+.sale-details {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  .sale-info {
+    width: 100%;
+
+    .sale-header {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid vars.$border-color;
+
+      @media (min-width: vars.$breakpoint-md) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0;
+      }
+
+      .info-block {
+        width: 100%;
+
+        @media (min-width: vars.$breakpoint-md) {
+          width: 50%;
+        }
+      }
+    }
+
+    .sale-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      padding-top: 1rem;
+
+      .resume-sale-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        width: 100%;
+        max-width: 100%;
+        border-bottom: 1px solid vars.$border-color;
+        padding: 10px 0;
+      
+        &:last-of-type {
+          border-bottom: none;
+        }
+      
+        .action a {
+          display: flex;
+          align-items: center;
+        }
+      
+        .sale-item-infos {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+      
+          .main-info {
+            width: 100%;
+      
+            @media (min-width: vars.$breakpoint-md) {
+              width: 50%;
+            }
+          }
+        }
+      }
+      
+      .row-item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+  }
+}
+
+.form-section {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eee;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  }
+
+  .form-row {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .form-row .form-group {
+    flex: 1;
+  }
+  
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  
+  .sale-item {
+    background-color: #f5f5f5;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .empty-items {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+  }
+  
+  .summary {
+    border: none;
+  }
+  
+  .total-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2em;
+    padding: 10px 0;
+  }
+  
+  .price {
+    color: #2563eb;
+    font-weight: bold;
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  
+  .btn-small {
+    padding: 6px 12px;
+    font-size: 0.85em;
+  }
+  
+  .btn-danger {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+    cursor: pointer;
+  }
+  
+  .btn-danger:hover {
+    background-color: #dc2626;
+  }
+}
