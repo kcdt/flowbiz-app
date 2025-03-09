@@ -7,14 +7,18 @@ export function setupRouteGuards(router: Router) {
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     
     if (requiresAuth && !authStore.isAuthenticated) {
-      return next({
+      next({
         name: 'login',
         query: { redirect: to.fullPath }
       });
+      return;
     }
     
-    if (authStore.isAuthenticated && (to.name === 'login' || to.name === 'register')) {
-      return next({ name: 'dashboard' });
+    if (to.name === 'login' || to.name === 'register') {
+      if (authStore.isAuthenticated) {
+        next({ name: 'dashboard' });
+        return;
+      }
     }
     
     next();
