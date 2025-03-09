@@ -9,7 +9,7 @@ const formData = reactive({
   userEmail: '',
   userPhone: '',
   password: '',
-  role: 'standard_seller' as 'standard_seller',
+  role: 'admin_seller' as 'admin_seller',
   companyName: '',
   companyAddress: '',
   companyPhone: '',

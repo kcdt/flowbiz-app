@@ -3,8 +3,8 @@ import { computed, onMounted, ref } from 'vue';
 import { useSalesStore } from '../../stores/sales.store';
 import Icon from '@/components/common/Icon.vue';
 import SaleListItem from '@/components/sales/SaleListItem.vue';
-import SaleDetailModal from '@/components/layout/Modal/SaleDetailModal.vue';
-import SaleEditModal from '@/components/layout/Modal/SaleEditModal.vue';
+import SaleDetailModal from '@/components/layout/modal/SaleDetailModal.vue';
+import SaleEditModal from '@/components/layout/modal/SaleEditModal.vue';
 
 const saleStore = useSalesStore();
 
@@ -13,7 +13,6 @@ const searchQuery = ref<any>('');
 
 const filteredSales = computed(() => {
   let result = saleStore.sales;
-  console.log(result);
   
   if (selectedStatusFilter.value !== 'all') {
     console.log(selectedStatusFilter.value);
@@ -39,10 +38,6 @@ const openNewSaleModal = () => {
   saleStore.isEditModalOpen = true;
 };
 
-const handleProductSaved = (sale: any) => {
-  console.log('Vente sauvegardé:', sale);
-};
-
 onMounted(async () => {
   await saleStore.fetchSales();
 });
@@ -55,7 +50,6 @@ onMounted(async () => {
       <h1>Ventes</h1>
     </div>
     <div v-if="saleStore.isLoading">Chargement...</div>
-    <div v-else-if="saleStore.error" class="error">{{ saleStore.error }}</div>
     <div v-else class="list-view-content">
       <div class="filter-container">
         <div class="search-container">
@@ -81,7 +75,7 @@ onMounted(async () => {
             </div>
           </div>
         </div>
-        <div class="rigth-filter-part">
+        <div class="right-filter-part">
           <div class="filter-group">
             <label for="status-filter">Filtres</label>
             <select 
@@ -102,6 +96,7 @@ onMounted(async () => {
           <div class="btn-secondary" v-on:click="openNewSaleModal">Ajouter une vente</div>
         </div>
       </div>
+      <div v-if="saleStore.error" class="error-message">{{ saleStore.error }}</div>
       <div class="sales-list">
         <div v-for="sale in filteredSales" :key="sale.id" class="sale-item">
           <SaleListItem :sale="sale"/>
@@ -117,7 +112,6 @@ onMounted(async () => {
       />
       <SaleEditModal
         :is-open="saleStore.isEditModalOpen"
-        @save="handleProductSaved"
       />
     </div>
   </section>

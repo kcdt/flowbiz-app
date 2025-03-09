@@ -10,7 +10,7 @@ export default {
     userEmail: string,
     userPhone: string,
     password: string,
-    role?: 'standard_seller',
+    role?: 'standard_seller' | 'admin_seller',
     companyName: string,
     companyAddress: string,
     companyPhone: string,

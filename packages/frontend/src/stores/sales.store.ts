@@ -22,7 +22,7 @@ export const useSalesStore = defineStore('sale', () => {
     };
   });
 
-  async function fetchSales() {
+  const fetchSales = async() => {
     isLoading.value = true;
     error.value = null;
     
@@ -38,7 +38,7 @@ export const useSalesStore = defineStore('sale', () => {
     }
   }
 
-  async function fetchSaleById(id: string) {
+  const fetchSaleById = async(id: string) => {
     isLoading.value = true;
     error.value = null;
     
@@ -54,7 +54,7 @@ export const useSalesStore = defineStore('sale', () => {
     }
   }
 
-  async function createSale(saleData: SaleCreateInput) {
+  const createSale = async (saleData: SaleCreateInput) => {
     isLoading.value = true;
     error.value = null;
     
@@ -90,6 +90,7 @@ export const useSalesStore = defineStore('sale', () => {
       
       return updatedSale;
     } catch (err: any) {
+      closeSaleEdit();
       error.value = err.response?.data?.message || 'Erreur lors de la mise à jour du produit';
       throw err;
     } finally {
@@ -141,7 +142,6 @@ export const useSalesStore = defineStore('sale', () => {
   };
   
   const closeSaleDetail = () => {
-    console.log('Close detail');
     isDetailModalOpen.value = false;
   };
 
@@ -155,7 +155,6 @@ export const useSalesStore = defineStore('sale', () => {
     
     try {
       if (saleId) {
-        console.log(saleId);
         currentSale.value = await fetchSaleById(saleId);
       } else {
         currentSale.value = null;
@@ -173,7 +172,6 @@ export const useSalesStore = defineStore('sale', () => {
   };
 
   const SaleStatus = {
-    DRAFT: 'draft',
     PENDING: 'pending',
     COMPLETED: 'completed',
     CANCELLED: 'cancelled',
@@ -181,7 +179,6 @@ export const useSalesStore = defineStore('sale', () => {
   };
   
   const statusLabels = {
-    [SaleStatus.DRAFT]: 'Brouillon',
     [SaleStatus.PENDING]: 'Émise',
     [SaleStatus.COMPLETED]: 'Finalisée',
     [SaleStatus.CANCELLED]: 'Annulée',

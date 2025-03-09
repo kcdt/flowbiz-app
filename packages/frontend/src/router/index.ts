@@ -2,11 +2,12 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { setupRouteGuards } from '@/router/guards';
 import authRoutes from '@/router/routes/auth.routes';
 import productRoutes from '@/router/routes/products.routes';
-import saleRoutes from '@/router/routes/sales.routes';
+import salesRoutes from '@/router/routes/sales.routes';
 import invoiceRoutes from '@/router/routes/invoices.routes';
 import HomeView from '../views/HomeView.vue';
 import DashboardView from '../views/dashboard/DashboardView.vue';
 import NotFoundView from '../views/NotFoundView.vue';
+import usersRoutes from './routes/users.routes';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -23,8 +24,9 @@ const routes: Array<RouteRecordRaw> = [
   },
   ...authRoutes,
   ...productRoutes,
-  ...saleRoutes,
+  ...salesRoutes,
   ...invoiceRoutes,
+  ...usersRoutes,
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
