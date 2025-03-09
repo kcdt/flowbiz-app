@@ -19,6 +19,7 @@ export const ProductSchema = z.object({
     .optional(),
   categoryId: z.string()
     .uuid({ message: "L'ID de catégorie doit être un UUID valide" })
+    .nullable()
     .optional(),
   companyId: z.string()
     .uuid({ message: "L'ID de l'entreprise doit être un UUID valide" })
@@ -43,6 +44,7 @@ export const NewProductSchema = z.object({
     .optional(),
   categoryId: z.string()
     .uuid({ message: "L'ID de catégorie doit être un UUID valide" })
+    .nullable()
     .optional()
 });
 
@@ -66,6 +68,7 @@ export const EditProductSchema = z.object({
     .optional(),
   categoryId: z.string()
     .uuid({ message: "L'ID de catégorie doit être un UUID valide" })
+    .nullable()
     .optional(),
 });
 
