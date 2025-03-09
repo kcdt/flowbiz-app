@@ -6,13 +6,13 @@ const authRoutes: Array<RouteRecordRaw> = [
   {
     path: '/login',
     name: 'login',
-    component: () => LoginView,
+    component: LoginView,
     meta: { requiresAuth: false }
   },
   {
     path: '/register',
     name: 'register',
-    component: () => RegisterView,
+    component: RegisterView,
     meta: { requiresAuth: false }
   }
 ];

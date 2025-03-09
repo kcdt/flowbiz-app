@@ -1,5 +1,5 @@
 import apiClient from '@/config/axios';
-import type { Category, CategoryCreateInput, CategoryUpdateInput } from '@/types/models';
+import type { CategoryCreateInput, CategoryUpdateInput } from '@/types/models';
 
 export default {
   getAll() {

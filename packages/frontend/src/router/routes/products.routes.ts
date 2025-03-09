@@ -5,7 +5,7 @@ const productRoutes: Array<RouteRecordRaw> = [
   {
     path: '/products',
     name: 'products',
-    component: () => ProductListView,
+    component: ProductListView,
     meta: { requiresAuth: true }
   }
 ];

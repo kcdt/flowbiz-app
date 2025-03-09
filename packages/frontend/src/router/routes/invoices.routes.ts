@@ -6,13 +6,13 @@ const invoiceRoutes: Array<RouteRecordRaw> = [
   {
     path: '/invoices',
     name: 'invoices',
-    component: () => InvoiceListView,
+    component: InvoiceListView,
     meta: { requiresAuth: true }
   },
   {
     path: '/invoices/:id',
     name: 'invoice-detail',
-    component: () => InvoiceDetailView,
+    component: InvoiceDetailView,
     meta: { requiresAuth: true }
   }
 ];
