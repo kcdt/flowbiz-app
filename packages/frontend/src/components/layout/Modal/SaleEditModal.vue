@@ -39,7 +39,6 @@ watch(() => [props.isOpen, saleStore.currentSale], () => {
   if (saleStore.currentSale !== null) {
     try {
       sale.value = saleStore.currentSale;
-      console.log(sale.value.date);
       resetFormWithSale(sale.value);
     } catch (error: any) {
       error.value = "Vente non trouvée";
@@ -54,7 +53,7 @@ const resetForm = () => {
   formData.buyerName = '';
   formData.buyerAddress = '';
   formData.status = 'pending';
-  formData.date = new Date().toISOString();
+  formData.date = getInputFormatedDate(new Date().toISOString());
   formData.items = [];
   formData.price = 0;
 };
@@ -62,8 +61,8 @@ const resetForm = () => {
 const resetFormWithSale = (sale: Sale) => {
   formData.buyerName = sale.buyerName || '';
   formData.buyerAddress = sale.buyerAddress || '';
-  formData.buyerAddress = sale.status || 'pending';
-  formData.date = getInputFormatedDate(sale.date) || new Date().toISOString();
+  formData.status = sale.status || 'pending';
+  formData.date = getInputFormatedDate(sale.date) || getInputFormatedDate(new Date().toISOString());
   formData.items = [...sale.items];
   formData.price = typeof sale.price === 'string' ? parseFloat(sale.price) : sale.price;
 };
@@ -88,38 +87,32 @@ watch(() => formData.items, () => {
 const handleSubmit = async () => {
   try {
     isSubmitting.value = true;
-    error.value = null;
     
     const saleData = {
       buyerName: formData.buyerName,
       buyerAddress: formData.buyerAddress,
       status: formData.status,
-      date: formData.date,
+      date: typeof formData.date === 'string' ? parseFormattedDate(formData.date) : formData.date,
       items: formData.items,
       price: formData.price
-    };
-
-    if (typeof saleData.date === 'string') {
-      saleData.date = parseFormattedDate(saleData.date);
     };
     
     let result;
     
     if (isNewSale.value) {
       result = await saleStore.createSale(saleData);
+    } else if (sale.value?.id) {
+      result = await saleStore.updateSale(sale.value.id, saleData);
     } else {
-      if (sale.value?.id) {
-        result = await saleStore.updateSale(sale.value.id, saleData);
-      } else {
-        throw new Error("ID de vente manquant");
-      }
+      throw new Error("ID de vente manquant");
     }
-
-    emit('save', result);
+    
     saleStore.closeSaleEdit();
-    saleStore.fetchSales();
-  } catch (err: any) {
-    error.value = err.response?.data?.message || "Erreur lors de l'enregistrement de la vente";
+    
+    saleStore.fetchSales().catch(console.error);
+    
+  } catch (err) {
+
   } finally {
     isSubmitting.value = false;
   }
@@ -155,6 +148,10 @@ const selectProduct = async (index: number, productId: string) => {
   }
 };
 
+const openDatePicker = (event: any) => {
+  event.target.showPicker ? event.target.showPicker() : null;
+};
+
 onMounted(async () => {
   if (productStore.products.length === 0) {
     await productStore.fetchProducts();
@@ -177,12 +174,6 @@ onMounted(async () => {
           <div class="spinner"></div>
           <p>Chargement...</p>
         </div>
-        
-        <div v-else-if="error" class="modal-error">
-          <p>{{ error }}</p>
-          <button class="btn-primary" @click="close">Fermer</button>
-        </div>
-        
         <div v-else class="modal-content">
           <form @submit.prevent="handleSubmit" class="sale-form">
             <div class="form-section">
@@ -230,6 +221,7 @@ onMounted(async () => {
                   v-model="formData.date" 
                   type="date"
                   required
+                  @click="openDatePicker"
                 />
               </div>
             </div>
@@ -249,8 +241,7 @@ onMounted(async () => {
               <div v-else class="items-list">
                 <div v-for="(item, index) in formData.items" :key="index" class="sale-item">
                   <div class="item-header">
-                    <h4>Produit #{{ index + 1 }}</h4>
-                    <button type="button" class="btn-danger btn-small" @click="removeItem(index)">
+                    <button type="button" class="btn-warning btn-small" @click="removeItem(index)">
                       <Icon name="Trash" />
                     </button>
                   </div>
@@ -327,161 +318,3 @@ onMounted(async () => {
     </div>
   </Transition>
 </template>
-
-<style scoped>
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-
-.modal-container {
-  background-color: white;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid #eee;
-}
-
-.close-button {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-.modal-content {
-  padding: 16px;
-}
-
-.form-section {
-  margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #eee;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.form-group {
-  margin-bottom: 16px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 500;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.form-row {
-  display: flex;
-  gap: 16px;
-}
-
-.form-row .form-group {
-  flex: 1;
-}
-
-.item-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.sale-item {
-  background-color: #f5f5f5;
-  border-radius: 6px;
-  padding: 16px;
-  margin-bottom: 16px;
-}
-
-.empty-items {
-  text-align: center;
-  padding: 20px;
-  color: #666;
-}
-
-.summary {
-  border: none;
-}
-
-.total-price {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.2em;
-  padding: 10px 0;
-}
-
-.price {
-  color: #2563eb;
-  font-weight: bold;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.btn-small {
-  padding: 6px 12px;
-  font-size: 0.85em;
-}
-
-.btn-danger {
-  background-color: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 10px;
-  cursor: pointer;
-}
-
-.btn-danger:hover {
-  background-color: #dc2626;
-}
-
-/* Animation de transition */
-.modal-fade-enter-active,
-.modal-fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.modal-fade-enter-from,
-.modal-fade-leave-to {
-  opacity: 0;
-}
-</style>

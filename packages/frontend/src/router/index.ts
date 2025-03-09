@@ -7,6 +7,7 @@ import invoiceRoutes from '@/router/routes/invoices.routes';
 import usersRoutes from './routes/users.routes';
 import HomeView from '../views/HomeView.vue';
 import NotFoundView from '../views/NotFoundView.vue';
+import usersRoutes from './routes/users.routes';
 
 const routes: Array<RouteRecordRaw> = [
   {
