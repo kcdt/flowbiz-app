@@ -11,8 +11,8 @@ const router = Router();
 // [POST] http://localhost:3000/products
 router.post('/', 
   validateRequest(NewProductSchema), 
-authMiddleware, 
-productController.create
+  authMiddleware, 
+  productController.create
 );
 
 // [GET] http://localhost:3000/products
