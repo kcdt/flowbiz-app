@@ -1,6 +1,4 @@
 import axios from 'axios';
-import { useAuthStore } from '@/stores/auth.store';
-import router from '@/router';
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/',
@@ -10,11 +8,31 @@ const apiClient = axios.create({
   withCredentials: true,
 });
 
+let authStorePromise: Promise<any> | null = null;
+let routerPromise: Promise<any> | null = null;
+
+const getAuthStore = async () => {
+  if (!authStorePromise) {
+    authStorePromise = import('@/stores/auth.store').then(module => {
+      const useAuthStore = module.useAuthStore;
+      return useAuthStore();
+    });
+  }
+  return await authStorePromise;
+};
+
+const getRouter = async () => {
+  if (!routerPromise) {
+    routerPromise = import('@/router').then(module => module.default);
+  }
+  return await routerPromise;
+};
+
 apiClient.interceptors.request.use(
   async (config) => {
-    const authStore = useAuthStore();
-        if (authStore.accessToken) {
-      config.headers.Authorization = `Bearer ${authStore.accessToken}`;
+    const store = await getAuthStore();
+    if (store.accessToken) {
+      config.headers.Authorization = `Bearer ${store.accessToken}`;
     }
     return config;
   },
@@ -56,9 +74,8 @@ apiClient.interceptors.response.use(
       isRefreshing = true;
       
       try {
-        const authStore = useAuthStore();
-        
-        const response = await authStore.refreshToken();
+        const store = await getAuthStore();
+        const response = await store.refreshToken();
         const newToken = response.data.accessToken;
         
         onTokenRefreshed(newToken);
@@ -66,9 +83,10 @@ apiClient.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return apiClient(originalRequest);
       } catch (refreshError) {
-        const authStore = useAuthStore();
-        authStore.logout();
+        const store = await getAuthStore();
+        store.logout();
         
+        const router = await getRouter();
         router.push({ name: 'login' });
         
         return Promise.reject(refreshError);
