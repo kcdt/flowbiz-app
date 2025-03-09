@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Sale } from '@/types/models';
 import { useSalesStore } from '../../stores/sales.store';
-import { computed } from 'vue';
 import { getFormatedDate } from '@/utils/dateUtils'
 
 const props = defineProps<{

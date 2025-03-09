@@ -177,7 +177,6 @@ export const useProductStore = defineStore('product', () => {
   };
   
   const closeProductDetail = () => {
-    console.log('Close detail');
     isDetailModalOpen.value = false;
   };
 
@@ -191,7 +190,6 @@ export const useProductStore = defineStore('product', () => {
     
     try {
       if (productId) {
-        console.log(productId);
         currentProduct.value = await fetchProductById(productId);
       } else {
         currentProduct.value = null;

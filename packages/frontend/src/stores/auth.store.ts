@@ -25,6 +25,34 @@ export const useAuthStore = defineStore('auth', () => {
       return false;
     }
   });
+
+  async function register(formData: {
+    userName: string,
+    userEmail: string,
+    userPhone: string,
+    password: string,
+    role?: 'admin_seller',
+    companyName: string,
+    companyAddress: string,
+    companyPhone: string,
+    companyEmail: string,
+    taxId?: string }) {
+    isLoading.value = true;
+    error.value = null;
+
+    try {
+      const response = await authService.register(formData);
+
+      router.push({ name: 'login' });
+
+      return response.data;
+    } catch (err: any) {
+      error.value = err.response?.data?.message || 'Erreur d\'inscription';
+      throw err;
+    } finally {
+      isLoading.value = false;
+    }
+  }
   
   async function login(email: string, password: string) {
     isLoading.value = true;
@@ -98,6 +126,7 @@ export const useAuthStore = defineStore('auth', () => {
     error,
     isAuthenticated,
     isTokenValid,
+    register,
     login,
     refreshToken,
     logout,

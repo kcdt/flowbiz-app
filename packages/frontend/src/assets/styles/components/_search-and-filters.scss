@@ -14,7 +14,8 @@
     gap: 0;
   }
 
-  .rigth-filter-part {
+
+  .right-filter-part {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -23,6 +24,33 @@
     @media (min-width: vars.$breakpoint-md) {
       flex-direction: row;
       align-items: flex-end;
+    }
+
+    @media (min-width: vars.$breakpoint-lg) {
+      flex-direction: row;
+      align-items: flex-end;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      width: 100%;
+
+      @media (min-width: vars.$breakpoint-md) {
+        align-items: flex-end;
+      }
+
+      @media (min-width: vars.$breakpoint-lg) {
+        align-items: flex-end;
+        width: fit-content;
+
+        .btn-primary {
+          width: 100%;
+          justify-content: center;
+        }
+      }
     }
   }
 
@@ -45,6 +73,11 @@
     .status-filter:focus {
       border-color: #3b82f6;
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    @media (min-width: vars.$breakpoint-lg) {
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 

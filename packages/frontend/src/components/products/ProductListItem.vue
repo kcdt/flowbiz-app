@@ -51,10 +51,10 @@ const openProductDetails = () => {
       <h3 class="main-info">{{ props.product.name }}</h3>
       <div class="product-details">
         <div class="inner-details">
-          <h4 class="sm-col">HGS2354</h4>
           <div class="lg-col">
             <CategoryBadge :categoryId="props.product.categoryId" />
           </div>
+          <h4 class="sm-col">{{ props.product.quantity }} pc</h4>
         </div>
         <div class="inner-details">
           <div class="lg-col" :class="getProductStatusClass">

@@ -15,6 +15,7 @@ const menuItems = ref([
   { path: '/products', label: 'Produits', icon: 'Package' },
   { path: '/sales', label: 'Ventes', icon: 'ShoppingCart' },
   { path: '/invoices', label: 'Factures', icon: 'FileText' },
+  { path: '/user', label: 'Mon compte', icon: 'User' }
 ]);
 
 const toggleMenu = () => {
