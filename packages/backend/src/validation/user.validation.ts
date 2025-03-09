@@ -60,10 +60,7 @@ export const updateUserSchema = z.object({
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/, {
       message: "Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial"
     })
-    .optional(),
-  companyId: z
-    .string()
-    .uuid({ message: "Format d'identifiant de société invalide" })
+    .optional()
 });
 
 
