@@ -3,8 +3,8 @@ import { computed, onMounted, ref } from 'vue';
 import { useSalesStore } from '../../stores/sales.store';
 import Icon from '@/components/common/Icon.vue';
 import SaleListItem from '@/components/sales/SaleListItem.vue';
-import SaleDetailModal from '@/components/layout/modal/SaleDetailModal.vue';
-import SaleEditModal from '@/components/layout/modal/SaleEditModal.vue';
+import SaleDetailModal from '@/components/layout/modals/SaleDetailModal.vue';
+import SaleEditModal from '@/components/layout/modals/SaleEditModal.vue';
 
 const saleStore = useSalesStore();
 

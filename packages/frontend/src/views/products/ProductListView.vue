@@ -3,11 +3,11 @@ import { computed, onMounted, ref } from 'vue';
 import { useProductStore } from '@/stores/product.store';
 import ProductListItem from '@/components/products/ProductListItem.vue';
 import Icon from '@/components/common/Icon.vue';
-import ProductDetailModal from '@/components/layout/modal/ProductDetailModal.vue';
-import ProductEditModal from '@/components/layout/modal/ProductEditModal.vue';
+import ProductDetailModal from '@/components/layout/modals/ProductDetailModal.vue';
+import ProductEditModal from '@/components/layout/modals/ProductEditModal.vue';
 import { Product } from '@/types/models';
 import { useCategoryStore } from '@/stores/product.category.store';
-import ProductCategoriesModal from '@/components/layout/modal/ProductCategoriesModal.vue';
+import ProductCategoriesModal from '@/components/layout/modals/ProductCategoriesModal.vue';
 
 const productStore = useProductStore();
 const productCategorystore = useCategoryStore();
