@@ -1,5 +1,27 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 
+const form = ref({
+  name: '',
+  email: '',
+  subject: '',
+  message: ''
+});
+
+const submitForm = () => {
+  const { name, email, subject, message } = form.value;
+  
+  const mailtoLink = `mailto:kcondot@gmail.com.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`De: ${name} (${email})\n\n${message}`)}`;
+  
+  window.location.href = mailtoLink;
+  
+  form.value = {
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  };
+};
 </script>
 
 <template>
@@ -29,7 +51,7 @@
       </div>
     </section>
     <section id="features" class="features-section">
-      <h2>Fonctionnalités clées</h2>
+      <h2 class="section-title">Fonctionnalités clées</h2>
       <div class="feature-item">
         <div class="first-part">
           <h3>Gestion simplifiée des stocks et produits</h3>
@@ -103,6 +125,64 @@
           <div class="feature-image">
             <img src="../assets/images/ecran-dashboard-app.webp" alt="FlowBiz product gestion" />
           </div>
+        </div>
+      </div>
+    </section>
+    <section id="contact" class="contact-section">
+      <div class="container">
+        <h2 class="section-title">Contactez-nous</h2>
+        <p class="section-subtitle">Une question ? N'hésitez pas à nous contacter !</p>
+        
+        <div class="contact-form-container">
+          <form @submit.prevent="submitForm" class="contact-form">
+            <div class="form-group">
+              <label for="name">Nom</label>
+              <input 
+                type="text" 
+                id="name" 
+                v-model="form.name" 
+                placeholder="Votre nom" 
+                required
+              />
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input 
+                type="email" 
+                id="email" 
+                v-model="form.email" 
+                placeholder="Votre email" 
+                required
+              />
+            </div>
+            
+            <div class="form-group">
+              <label for="subject">Sujet</label>
+              <input 
+                type="text" 
+                id="subject" 
+                v-model="form.subject" 
+                placeholder="Sujet de votre message" 
+                required
+              />
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea 
+                id="message" 
+                v-model="form.message" 
+                placeholder="Votre message" 
+                rows="5" 
+                required
+              ></textarea>
+            </div>
+            
+            <button type="submit" class="submit-button">
+              Envoyer
+            </button>
+          </form>
         </div>
       </div>
     </section>

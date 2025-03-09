@@ -125,11 +125,10 @@ onMounted(async () => {
       <p>Chargement...</p>
     </div>
     
-    <div v-else-if="userStore.error" class="error-message">
-      {{ userStore.error }}
-    </div>
-    
     <div v-else-if="userStore.currentUser" class="profile-content">
+      <div v-if="userStore.error" class="error-message">
+        {{ userStore.error }}
+      </div>
       <div v-if="!isEditMode" class="profile-card">
         <div class="profile-header">
           <div class="avatar">
