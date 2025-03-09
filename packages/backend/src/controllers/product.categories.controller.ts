@@ -3,6 +3,7 @@ import { categoryService } from '../services/product.categories.service';
 import { createCategorySchema, updateCategorySchema } from '../validation/product.categories.validation';
 import { VerifiedAuthRequest } from '../types/auth.types';
 import APIResponse from '../utils/response.utils';
+import logger from '../utils/logger.utils';
 
 export const categoryController = {
   async getAll(req: Request, res: Response) {
@@ -21,7 +22,8 @@ export const categoryController = {
       
       return APIResponse(res, categories, "Catégories récupérées avec succès", 200);
     } catch (error: any) {
-      return APIResponse(res, null, error.message, 500);
+      logger.error(`Erreur lors de la récupération des catégories`, { error: error.message, stack: error.stack });
+      return APIResponse(res, null, "Une erreur interne s'est produite", 500);
     }
   },
   
@@ -49,7 +51,8 @@ export const categoryController = {
       
       return APIResponse(res, category, "Catégorie récupérée avec succès", 200);
     } catch (error: any) {
-      return APIResponse(res, null, error.message, 500);
+      logger.error(`Erreur lors de la récupération de la catégorie`, { error: error.message, stack: error.stack });
+      return APIResponse(res, null, "Une erreur interne s'est produite", 500);
     }
   },
   
@@ -58,10 +61,8 @@ export const categoryController = {
       const authReq = req as VerifiedAuthRequest;
       const companyId = authReq.user.companyId;
       
-      // Valider les données
       const validatedData = createCategorySchema.parse(req.body);
       
-      // Créer la catégorie
       const newCategory = await categoryService.createCategory({
         ...validatedData,
         companyId
@@ -69,7 +70,8 @@ export const categoryController = {
       
       return APIResponse(res, newCategory, "Catégorie créée avec succès", 201);
     } catch (error: any) {
-      return APIResponse(res, null, error.message, 500);
+      logger.error(`Erreur lors de la création de la catégorie`, { error: error.message, stack: error.stack });
+      return APIResponse(res, null, "Une erreur interne s'est produite", 500);
     }
   },
   
@@ -79,11 +81,9 @@ export const categoryController = {
       const companyId = authReq.user.companyId;
       const { id } = req.params;
       
-      // Valider les données
       const validatedData = updateCategorySchema.parse(req.body);
       
       try {
-        // Mettre à jour la catégorie
         const updatedCategory = await categoryService.updateCategory(id, companyId, validatedData);
         return APIResponse(res, updatedCategory, "Catégorie mise à jour avec succès", 200);
       } catch (error: any) {
@@ -93,7 +93,8 @@ export const categoryController = {
         throw error;
       }
     } catch (error: any) {
-      return APIResponse(res, null, error.message, 500);
+      logger.error(`Erreur lors de la mise à jour de la catégorie`, { error: error.message, stack: error.stack });
+      return APIResponse(res, null, "Une erreur interne s'est produite", 500);
     }
   },
   
@@ -110,12 +111,13 @@ export const categoryController = {
         if (error.message === 'Catégorie non trouvée') {
           return APIResponse(res, null, "Catégorie non trouvée", 404);
         } else if (error.message === 'Impossible de supprimer une catégorie contenant des produits') {
-          return APIResponse(res, null, error.message, 400);
+          return APIResponse(res, null, error.message, 409);
         }
         throw error;
       }
     } catch (error: any) {
-      return APIResponse(res, null, error.message, 500);
+      logger.error(`Erreur lors de la suppression de la catégorie`, { error: error.message, stack: error.stack });
+      return APIResponse(res, null, "Une erreur interne s'est produite", 500);
     }
   }
 };

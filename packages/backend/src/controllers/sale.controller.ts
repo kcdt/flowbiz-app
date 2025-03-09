@@ -3,6 +3,7 @@ import { saleModel } from '../models/sale.model';
 import APIResponse from '../utils/response.utils';
 import { VerifiedAuthRequest } from '../types/auth.types';
 import { salesService } from '../services/sales.service';
+import logger from '../utils/logger.utils';
 
 export const saleController = {
   async createSale (req: Request, res: Response) {
@@ -11,7 +12,7 @@ export const saleController = {
       const { buyerName, buyerAddress, items, date, price } = req.body;
       
       if (!items || !Array.isArray(items) || items.length === 0) {
-        return APIResponse(res, null, "La commande doit contenir au moins un article", 400);
+        return APIResponse(res, null, "La commande doit contenir au moins un article", 409);
       };
 
       if (!date) {
@@ -31,7 +32,8 @@ export const saleController = {
       
       return APIResponse(res, newSale, "Commande créée avec succès", 201);
     } catch (error: any) {
-      return APIResponse(res, null, error.message, 500);
+      logger.error(`Erreur lors de la création de la vente`, { error: error.message, stack: error.stack });
+      return APIResponse(res, null, "Une erreur interne s'est produite", 500);
     }
   },
   
@@ -49,7 +51,8 @@ export const saleController = {
       
       return APIResponse(res, sales, "Commandes récupérées avec succès", 200);
     } catch (error: any) {
-      return APIResponse(res, null, error.message, 500);
+      logger.error(`Erreur lors de la récupération des ventes`, { error: error.message, stack: error.stack });
+      return APIResponse(res, null, "Une erreur interne s'est produite", 500);
     }
   },
   
@@ -70,19 +73,32 @@ export const saleController = {
       
       return APIResponse(res, sale, "Commande récupérée avec succès", 200);
     } catch (error: any) {
-      return APIResponse(res, null, error.message, 500);
+      logger.error(`Erreur lors de la récupération de la vente`, { error: error.message, stack: error.stack });
+      return APIResponse(res, null, "Une erreur interne s'est produite", 500);
     }
   },
 
   async updateSale(req: Request, res: Response) {
     try {
       const { id } = req.params;
+      const authReq = req as VerifiedAuthRequest;
+      const companyId = authReq.user.companyId;
       
-      const updatedSale = await saleModel.updateById(id, req.body);
+      const updatedSale = await salesService.updateWithItems(id, companyId, req.body);
       
-      return APIResponse(res, updatedSale, "Statut de la commande mis à jour", 200);
+      return APIResponse(res, updatedSale, "Vente mise à jour avec succès", 200);
     } catch (error: any) {
-      return APIResponse(res, null, error.message, 500);
+      let statusCode = 500;
+      
+      if (error.message.includes("n'existe pas") || error.message.includes("introuvable")) {
+        statusCode = 404;
+      } else if (error.message.includes("autorisé") || error.message.includes("appartient")) {
+        statusCode = 403;
+      } else if (error.message.includes("Stock insuffisant") || error.message.includes("Le produit avec l'ID")) {
+        statusCode = 400;
+      }
+      logger.error(`Erreur lors de la mise à jour de la vente`, { error: error.message, stack: error.stack });
+      return APIResponse(res, null, error.message, statusCode);
     }
   },
   
@@ -109,7 +125,8 @@ export const saleController = {
       
       return APIResponse(res, null, "Commande supprimée avec succès", 200);
     } catch (error: any) {
-      return APIResponse(res, null, error.message, 500);
+      logger.error(`Erreur lors de la suppression de la vente`, { error: error.message, stack: error.stack });
+      return APIResponse(res, null, "Une erreur interne s'est produite", 500);
     }
   }
 };
