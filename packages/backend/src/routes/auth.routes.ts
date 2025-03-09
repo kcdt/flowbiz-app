@@ -3,6 +3,7 @@ import { authController } from "../controllers/auth.controller";
 import { validateRequest } from "../middleware/validation.middleware";
 import { registerSchema, loginSchema } from "../validation/user.validation";
 import { authMiddleware } from '../middleware/auth.middleware';
+import { loginLimiter } from '../middleware/rate.limit.middleware';
 
 const router = Router();
 
@@ -20,7 +21,8 @@ router.post("/register",
 
 // [POST] http://localhost:3000/auth/login
 router.post("/login", 
-  validateRequest(loginSchema), 
+  validateRequest(loginSchema),
+  loginLimiter, 
   authController.login
 );
 
