@@ -10,7 +10,7 @@ export const validateRequest = <T extends z.ZodTypeAny>(schema: T) => {
       next();
     } catch (err) {
       if (err instanceof z.ZodError) {
-        return APIResponse(res, err.errors, "Validation failed", 400);
+        return APIResponse(res, err.errors, err.errors[0].message, 400);
       }
       
       return APIResponse(res, null, "Internal server error during validation", 500);
