@@ -4,22 +4,21 @@ import authRoutes from '@/router/routes/auth.routes';
 import productRoutes from '@/router/routes/products.routes';
 import salesRoutes from '@/router/routes/sales.routes';
 import invoiceRoutes from '@/router/routes/invoices.routes';
-import HomeView from '../views/HomeView.vue';
-import DashboardView from '../views/dashboard/DashboardView.vue';
-import NotFoundView from '../views/NotFoundView.vue';
 import usersRoutes from './routes/users.routes';
+import HomeView from '../views/HomeView.vue';
+import NotFoundView from '../views/NotFoundView.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
-    component: () => HomeView,
+    component: HomeView,
     meta: { requiresAuth: false }
   },
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => DashboardView,
+    component: () => import('../views/dashboard/DashboardView.vue'),
     meta: { requiresAuth: true },
   },
   ...authRoutes,
@@ -30,7 +29,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
-    component: () => NotFoundView
+    component: NotFoundView
   }
 ];
 

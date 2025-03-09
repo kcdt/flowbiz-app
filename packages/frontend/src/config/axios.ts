@@ -84,10 +84,10 @@ apiClient.interceptors.response.use(
         return apiClient(originalRequest);
       } catch (refreshError) {
         const store = await getAuthStore();
-        store.logout();
+        await store.logout();
         
         const router = await getRouter();
-        router.push({ name: 'login' });
+        await router.push({ name: 'login' });
         
         return Promise.reject(refreshError);
       } finally {
