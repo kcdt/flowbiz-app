@@ -1,5 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
-import UserView from '../../views/user/UserView.vue';
+
+const UserView = () => import('../../views/user/UserView.vue')
 
 const usersRoutes: Array<RouteRecordRaw> = [
   {

@@ -1,6 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
-import LoginView from '../../views/auth/LoginView.vue';
-import RegisterView from '../../views/auth/RegisterView.vue';
+
+const LoginView = () => import('../../views/auth/LoginView.vue')
+const RegisterView = () => import('../../views/auth/RegisterView.vue')
 
 const authRoutes: Array<RouteRecordRaw> = [
   {

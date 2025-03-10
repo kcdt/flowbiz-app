@@ -1,5 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
-import ProductListView from '../../views/products/ProductListView.vue';
+
+const ProductListView = () => import('../../views/products/ProductListView.vue')
 
 const productRoutes: Array<RouteRecordRaw> = [
   {

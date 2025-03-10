@@ -1,6 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
-import InvoiceListView from '../../views/invoices/InvoiceListView.vue';
-import InvoiceDetailView from '../../views/invoices/InvoiceDetailView.vue';
+
+const InvoiceListView = () => import('../../views/invoices/InvoiceListView.vue')
+const InvoiceDetailView = () => import('../../views/invoices/InvoiceDetailView.vue')
 
 const invoiceRoutes: Array<RouteRecordRaw> = [
   {
