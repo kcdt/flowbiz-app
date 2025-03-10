@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "start": "nodemon dist/server.js",
+    "start": "node dist/server.js",
     "dev": "concurrently \"tsc --watch\" \"tsnd --respawn src/server.ts\"",
     "db:test": "tsx src/scripts/testDb.ts",
     "db:start": "docker-compose up -d",

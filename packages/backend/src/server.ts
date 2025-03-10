@@ -8,7 +8,7 @@ const app = express();
 const { PORT, FRONTEND_URL } = env;
 
 app.use(cors({
-    origin: FRONTEND_URL || 'http://localhost:5173',
+    origin: FRONTEND_URL || 'https://flowbiz-app-frontend.vercel.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true
 }));

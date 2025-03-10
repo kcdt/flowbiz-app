@@ -3,7 +3,6 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import TheHeader from '@/components/layout/Header.vue';
 import TheSidebar from '@/components/layout/SideBar.vue';
-// import TheFooter from '@/components/layout/TheFooter.vue';
 
 const route = useRoute();
 
@@ -27,6 +26,4 @@ const showVisitorLayout = computed(() => {
       </router-view>
     </main>
   </div>
-  
-  <TheFooter v-if="showVisitorLayout" />
-</template>
+  </template>
