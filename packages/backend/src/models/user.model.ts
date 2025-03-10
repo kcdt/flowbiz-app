@@ -68,16 +68,21 @@ export const userModel = {
     }
   },
 
-  async getByEmail (email: string) {
+  async getByEmail(email: string) {
     try {
+      console.log('Début getByEmail, email:', email);
+      
       const foundUsers = await db.select()
         .from(users)
         .where(eq(users.email, email));
       
+      console.log('Requête DB réussie, résultats:', foundUsers.length);
+      
       return foundUsers.length > 0 ? foundUsers[0] : null;
     }
-    catch (err) {
-      throw new Error("Impossible de récupérer l'utilisateur");
+    catch (err: any) {
+      console.error('Erreur dans getByEmail:', err);
+      throw new Error(`Erreur de base de données: ${err.message}`);
     }
   },
 

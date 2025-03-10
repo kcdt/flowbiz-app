@@ -1,26 +1,48 @@
 import { Request, Response } from 'express';
 import { authModel } from '../models/auth.model';
 import { AuthService } from '../services/auth.service';
-import { UserInput } from '../validation/user.validation';
+import { RegisterInput } from '../validation/user.validation';
 import APIResponse from '../utils/response.utils';
 import { userModel } from '../models/user.model';
 import { VerifiedAuthRequest } from '../types/auth.types';
+import { CreateCompanyInput } from '../validation/companies.validation';
+import { companiesModel } from '../models/companies.model';
 
 export const authController = {
   async register(req: Request, res: Response) {
     try {
-      const userData: UserInput = req.body;
-      
-      const existingUser = await userModel.getByEmail(userData.email);
+      const formData: RegisterInput = req.body;
+
+      const companyData: CreateCompanyInput = {
+        name: formData.companyName,
+        address: formData.companyAddress,
+        phone: formData.companyPhone,
+        email: formData.companyEmail,
+        taxId: formData.taxId
+      }
+
+      const company = await companiesModel.createCompany(companyData);
+      if (!company?.id) {
+        return APIResponse(res, null, "Ereur lors de la création de l'entreprise", 400);
+      }
+
+      const existingUser = await userModel.getByEmail(formData.userEmail);
       if (existingUser) {
         return APIResponse(res, null, "Cet email est déjà utilisé", 400);
       }
       
-      const hashedPassword = await AuthService.hashPassword(userData.password);
+      const hashedPassword = await AuthService.hashPassword(formData.password);
       
-      const { password, ...userWithoutPassword } = userData;
-      const userWithHashedPassword = { ...userWithoutPassword, passwordHash: hashedPassword, refreshToken: null };
-      
+      const { password, ...userWithoutPassword } = formData;
+      const userWithHashedPassword = { 
+        ...userWithoutPassword,
+        passwordHash: hashedPassword, 
+        refreshToken: null,
+        email: formData.userEmail,
+        name: formData.userName,
+        companyId: company.id
+      };
+
       const newUser = await authModel.createUser(userWithHashedPassword);
       if (!newUser) {
         return APIResponse(res, null, "Erreur lors de la création de l'utilisateur", 500);
