@@ -13,11 +13,11 @@ const productStore = useProductStore();
 
 const getProductStatus = computed<string>(() => {
   if (props.product.quantity <= 0) {
-    return 'Out of stock';
+    return 'Épuisé';
   } else if (props.product.quantity <= 5) {
-    return 'Low stock';
+    return 'Faible stock';
   } else {
-    return 'In stock';
+    return 'En stock';
   }
 });
 
@@ -34,7 +34,6 @@ const getProductStatusClass = computed<string>(() => {
 const openProductDetails = () => {
   productStore.openProductDetail(props.product.id);
 };
-
 </script>
 
 <template>

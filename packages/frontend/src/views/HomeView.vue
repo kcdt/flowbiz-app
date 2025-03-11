@@ -46,7 +46,7 @@ const submitForm = () => {
     <section class="dashboard-preview">
       <div class="container">
         <div class="dashboard-preview-image">
-          <img src="../assets/images/ecran-dashboard-app.webp" alt="Dashboard FlowBiz" />
+          <img src="../assets/images/ecran-dashboard-app.webp" loading="lazy" alt="Application dashboard" />
         </div>
       </div>
     </section>
@@ -73,7 +73,7 @@ const submitForm = () => {
         </div>
         <div class="second-part">
           <div class="feature-image">
-            <img src="../assets/images/ecran-inventaire-feature.webp" alt="FlowBiz product gestion" />
+            <img src="../assets/images/ecran-inventaire-feature.webp" loading="lazy" alt="FlowBiz product gestion" />
           </div>
         </div>
       </div>
@@ -98,7 +98,7 @@ const submitForm = () => {
         </div>
         <div class="second-part">
           <div class="feature-image">
-            <img src="../assets/images/ecran-ventes-feature.webp" alt="FlowBiz product gestion" />
+            <img src="../assets/images/ecran-ventes-feature.webp" loading="lazy" alt="FlowBiz sales gestion" />
           </div>
         </div>
       </div>
@@ -123,7 +123,7 @@ const submitForm = () => {
         </div>
         <div class="second-part">
           <div class="feature-image">
-            <img src="../assets/images/ecran-dashboard-app.webp" alt="FlowBiz product gestion" />
+            <img src="../assets/images/ecran-dashboard-app.webp" loading="lazy" alt="FlowBiz dashboard" />
           </div>
         </div>
       </div>
