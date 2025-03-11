@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import router from '@/router';
 import { ref } from 'vue';
 const menuOpen = ref(false);
 
@@ -15,6 +16,27 @@ const toggleMenu = () => {
 const closeMenu = () => {
   menuOpen.value = false;
   document.body.style.overflow = '';
+};
+
+const scrollToSection = async (id: string) => {
+  closeMenu();
+  const isHomePage = router.currentRoute.value.name === 'home';
+  
+  if (!isHomePage) {
+    await router.push({ name: 'home', query: { scrollTo: id } });
+    
+    setTimeout(() => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 500);
+  } else {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
 };
 </script>
 
@@ -36,8 +58,8 @@ const closeMenu = () => {
       
       <nav class="navigation" :class="{ 'active': menuOpen }">
         <ul class="nav-links">
-          <li><a href="#features" v-on:click="closeMenu">Fonctionnalités</a></li>
-          <li><a href="#contact" v-on:click="closeMenu">Contact</a></li>
+          <li><a @click.prevent="scrollToSection('features')" v-on:click="closeMenu">Fonctionnalités</a></li>
+          <li><a @click.prevent="scrollToSection('contact')" v-on:click="closeMenu">Contact</a></li>
         </ul>
         
         <div class="btn-container">

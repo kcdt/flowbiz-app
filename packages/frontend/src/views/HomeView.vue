@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+
+function scrollToSection(id: string) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
+}
 
 const form = ref({
   name: '',
@@ -22,6 +30,24 @@ const submitForm = () => {
     message: ''
   };
 };
+
+const scrollToAnchor = (id: string) => {
+  if (id) {
+    setTimeout(() => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  }
+};
+const route = useRoute();
+
+onMounted(() => {
+  if (route.query.scrollTo && typeof route.query.scrollTo === 'string') {
+    scrollToAnchor(route.query.scrollTo);
+  }
+});
 </script>
 
 <template>
@@ -39,7 +65,7 @@ const submitForm = () => {
         </p>
         <div class="hero-buttons">
           <router-link to="/register" class="btn-primary">S'inscrire</router-link>
-          <a href="#features" class="btn-outline">Fonctionnalités</a>
+          <a @click.prevent="scrollToSection('features')" class="btn-outline">Fonctionnalités</a>
         </div>
       </div>
     </section>
