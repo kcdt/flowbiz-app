@@ -90,15 +90,17 @@ export const useAuthStore = defineStore('auth', () => {
   }
   
   function logout() {
-    authService.logout().catch(console.error);
-    
     user.value = null;
     accessToken.value = null;
     
-    const currentRoute = router.currentRoute.value;
-    if (currentRoute.name !== 'login') {
-      router.push({ name: 'login' });
-    }
+    authService.logout()
+      .then(() => {
+        router.push({ name: 'login' });
+      })
+      .catch((err) => {
+        console.error("Erreur lors de la déconnexion", err);
+        router.push({ name: 'login' });
+      });
   }
   
   async function checkAuth() {
