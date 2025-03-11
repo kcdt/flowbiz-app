@@ -4,7 +4,6 @@ import authRoutes from '@/router/routes/auth.routes';
 import productRoutes from '@/router/routes/products.routes';
 import salesRoutes from '@/router/routes/sales.routes';
 import invoiceRoutes from '@/router/routes/invoices.routes';
-import usersRoutes from './routes/users.routes';
 import HomeView from '../views/HomeView.vue';
 import NotFoundView from '../views/NotFoundView.vue';
 import usersRoutes from './routes/users.routes';

@@ -15,7 +15,6 @@ const filteredSales = computed(() => {
   let result = saleStore.sales;
   
   if (selectedStatusFilter.value !== 'all') {
-    console.log(selectedStatusFilter.value);
     result = result.filter(sale => sale.status === selectedStatusFilter.value);
   }
   
@@ -96,7 +95,14 @@ onMounted(async () => {
           <div class="btn-secondary" v-on:click="openNewSaleModal">Ajouter une vente</div>
         </div>
       </div>
-      <div v-if="saleStore.error" class="error-message">{{ saleStore.error }}</div>
+      <div v-if="saleStore.error" class="error-message">
+        <p>
+          {{ saleStore.error }}
+        </p>
+        <button class="btn">
+          <Icon name="X" color="black" v-on:click="saleStore.error = null"/>
+        </button>
+      </div>
       <div class="sales-list">
         <div v-for="sale in filteredSales" :key="sale.id" class="sale-item">
           <SaleListItem :sale="sale"/>

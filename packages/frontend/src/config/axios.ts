@@ -5,7 +5,7 @@ const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true,
+  withCredentials: true, // Essentiel pour les cookies
 });
 
 let authStorePromise: Promise<any> | null = null;
@@ -57,10 +57,17 @@ apiClient.interceptors.response.use(
   (response) => {
     return response;
   },
-  async (error) => {
+  async (error) => {    
     const originalRequest = error.config;
     
-    if (error.response && error.response.status === 401 && !originalRequest._retry) {
+    const isAuthRequest = originalRequest.url && (
+      originalRequest.url.includes('/auth/login') ||
+      originalRequest.url.includes('/auth/logout') ||
+      originalRequest.url.includes('/auth/refresh-token')
+    );
+    
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthRequest) {
+      
       if (isRefreshing) {
         return new Promise((resolve) => {
           subscribeTokenRefresh((token) => {
@@ -75,19 +82,34 @@ apiClient.interceptors.response.use(
       
       try {
         const store = await getAuthStore();
+        
         const response = await store.refreshToken();
-        const newToken = response.data.accessToken;
         
-        onTokenRefreshed(newToken);
-        
-        originalRequest.headers.Authorization = `Bearer ${newToken}`;
-        return apiClient(originalRequest);
+        if (response?.data?.data?.accessToken) {
+          const newToken = response.data.data.accessToken;
+          onTokenRefreshed(newToken);
+          
+          originalRequest.headers.Authorization = `Bearer ${newToken}`;
+          return apiClient(originalRequest);
+        } else {
+          throw new Error('Échec du rafraîchissement du token: mauvaise structure de réponse');
+        }
       } catch (refreshError) {
         const store = await getAuthStore();
+        const router = await getRouter();
+        const currentRoute = router.currentRoute.value;
+        
         await store.logout();
         
-        const router = await getRouter();
-        await router.push({ name: 'login' });
+        if (currentRoute.name !== 'login') {
+          await router.push({ 
+            name: 'login',
+            query: { 
+              redirect: currentRoute.fullPath,
+              session_expired: 'true'
+            }
+          });
+        }
         
         return Promise.reject(refreshError);
       } finally {

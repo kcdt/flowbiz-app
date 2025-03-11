@@ -84,7 +84,7 @@ export const authController = {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
         maxAge: 7 * 24 * 60 * 60 * 1000,
-        path: '/api/auth/refresh'
+        path: '/'
       });
       
       return APIResponse(res, { 
@@ -131,7 +131,7 @@ export const authController = {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
         maxAge: 7 * 24 * 60 * 60 * 1000,
-        path: '/api/auth/refresh'
+        path: '/'
       });      
       
       return APIResponse(res, { 
@@ -156,7 +156,7 @@ export const authController = {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        path: '/api/auth/refresh'
+        path: '/'
       });
       
       return APIResponse(res, null, SUCCESS_MESSAGES.USER_LOGGED_OUT, 200);
@@ -200,7 +200,7 @@ export const authController = {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
         maxAge: 7 * 24 * 60 * 60 * 1000,
-        path: '/api/auth/refresh'
+        path: '/'
       });
       
       return APIResponse(res, { accessToken: tokens.accessToken }, SUCCESS_MESSAGES.TOKEN_REFRESHED, 200);

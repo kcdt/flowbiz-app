@@ -6,6 +6,14 @@ export function setupRouteGuards(router: Router) {
     const authStore = useAuthStore();
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     
+    if (!authStore.isAuthenticated) {
+      try {
+        await authStore.checkAuth();
+      } catch (error) {
+        console.log("Route guard: échec du rafraîchissement silencieux");
+      }
+    }
+    
     if (requiresAuth && !authStore.isAuthenticated) {
       return next({
         name: 'login',

@@ -21,7 +21,6 @@ const formCategory = ref({
   description: ''
 });
 
-// Formatage de date
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   return new Intl.DateTimeFormat('fr-FR', {
@@ -33,7 +32,6 @@ const formatDate = (dateString: string) => {
   }).format(date);
 };
 
-// Navigation entre les modes
 const switchToList = () => {
   currentMode.value = 'list';
   currentCategory.value = null;
@@ -55,12 +53,10 @@ const switchToDelete = (category: any) => {
   currentCategory.value = category;
 };
 
-// Fermeture de la modale
 const close = () => {
   categoryStore.closeProductCategoriesModal();
 };
 
-// Actions CRUD
 const addCategory = async () => {
   try {
     isLoading.value = true;
@@ -117,7 +113,6 @@ const deleteCategory = async () => {
   }
 };
 
-// Charger les catégories quand la modale s'ouvre
 watch(() => props.isOpen, async (newValue) => {
   if (newValue) {
     try {
@@ -132,7 +127,6 @@ watch(() => props.isOpen, async (newValue) => {
   }
 });
 
-// Charger les catégories au montage du composant
 onMounted(async () => {
   if (props.isOpen && categories.value.length === 0) {
     try {

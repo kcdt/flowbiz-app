@@ -2,6 +2,7 @@
 import { computed, onMounted } from 'vue';
 import { useProductStore } from '@/stores/product.store';
 import { useCategoryStore } from '@/stores/product.category.store';
+import Icon from '@/components/common/Icon.vue';
 
 const props = defineProps({
   isOpen: {
@@ -82,6 +83,14 @@ onMounted(async () => {
         </div>
         
         <div v-if="product" class="modal-content">
+          <div v-if="productStore.error" class="error-message">
+            <p>
+              {{ productStore.error }}
+            </p>
+            <button class="btn">
+              <Icon name="X" color="black" v-on:click="productStore.resetError"/>
+            </button>
+          </div>
           <div class="product-details">
             <div class="product-image-container">
               <img 

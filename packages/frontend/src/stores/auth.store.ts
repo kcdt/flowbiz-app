@@ -71,13 +71,21 @@ export const useAuthStore = defineStore('auth', () => {
   }
   
   async function refreshToken() {
-    const response = await authService.refreshToken();
-    
-    if (response.data && response.data.data && response.data.data.accessToken) {
-      accessToken.value = response.data.data.accessToken;
-      return response.data;
-    } else {
-      throw new Error('Token refresh failed');
+    try {
+      const response = await authService.refreshToken();
+      
+      if (response && response.data && response.data.data && response.data.data.accessToken) {
+        accessToken.value = response.data.data.accessToken;
+        return response.data;
+      } else {
+        console.error('[Auth] Format de réponse refresh incorrect :', response);
+        throw new Error('Format de réponse incorrect');
+      }
+    } catch (err: any) {
+      console.error('[Auth] Erreur refresh token :', err);
+      console.error('[Auth] Status :', err.response?.status);
+      console.error('[Auth] Message :', err.response?.data?.message);
+      throw err;
     }
   }
   
@@ -94,20 +102,37 @@ export const useAuthStore = defineStore('auth', () => {
   }
   
   async function checkAuth() {
-    if (accessToken.value && !isTokenValid.value) {
-      try {
-        await refreshToken();
-      } catch (err) {
-        logout();
-      }
-    } else if (accessToken.value && !user.value) {
-      try {
+    try {
+      await refreshToken();
+      
+      if (accessToken.value && !user.value) {
         const response = await authService.getCurrentUser();
         user.value = response.data.data;
-      } catch (err) {
-        logout();
+      }
+      
+      return true;
+    } catch (err) {
+      if (accessToken.value) {
+        if (isTokenValid.value) {
+          if (!user.value) {
+            try {
+              const response = await authService.getCurrentUser();
+              user.value = response.data.data;
+              return true;
+            } catch (userErr) {
+              console.error("Erreur lors de la récupération des données utilisateur:", userErr);
+              logout();
+            }
+          } else {
+            return true;
+          }
+        } else {
+          logout();
+        }
       }
     }
+    
+    return false;
   }
   
   function resetState() {
