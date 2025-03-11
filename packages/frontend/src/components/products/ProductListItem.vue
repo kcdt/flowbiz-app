@@ -5,9 +5,16 @@ import type { Product } from '@/types/models';
 import { computed } from 'vue';
 import { useProductStore } from '@/stores/product.store';
 
-const props = defineProps<{
+const props = defineProps({
+  product: {
+    type: Object,
+    required: true
+  }
+});
+
+type PropsType = {
   product: Product;
-}>();
+};
 
 const productStore = useProductStore();
 

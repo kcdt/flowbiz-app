@@ -1,8 +1,7 @@
 import { db } from "../config/db";
 import { eq } from "drizzle-orm";
 import { users } from "../schemas/users.schema";
-import { products } from "../schemas/products.schema";
-import { NewUser, User } from "../entities/user.entitie";
+import { User } from "../entities/user.entitie";
 
 export const userModel = {
   getByName (name: string) {
@@ -94,8 +93,6 @@ export const userModel = {
           companyId: true
         }
       });
-
-      return result;
     }
     catch (err) {
       throw new Error("Impossible de récupérer l'entreprise de l'utilisateur");

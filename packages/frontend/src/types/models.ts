@@ -117,7 +117,6 @@ export interface Sale {
 
 export type SaleStatus = 'draft' | 'issued' | 'paid' | 'cancelled' | 'overdue';
 
-
 export interface User {
   id: string;
   email: string;

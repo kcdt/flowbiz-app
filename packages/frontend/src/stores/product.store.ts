@@ -183,14 +183,14 @@ export const useProductStore = defineStore('product', () => {
   const openProductEdit = async (productId: string | null) => {
     isLoading.value = true;
     error.value = null;
-
-    if (isDetailModalOpen) {
+  
+    if (isDetailModalOpen.value) {
       isDetailModalOpen.value = false;
     }
     
     try {
       if (productId) {
-        currentProduct.value = await fetchProductById(productId);
+        await fetchProductById(productId);
       } else {
         currentProduct.value = null;
       }

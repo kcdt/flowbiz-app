@@ -1,10 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import { useCategoryStore } from '@/stores/product.category.store';
 
 const props = defineProps({
   categoryId: {
-    type: String | null,
+    type: String || null,
+    required: false,
     default: null
   }
 });

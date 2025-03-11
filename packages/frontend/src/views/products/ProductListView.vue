@@ -33,7 +33,7 @@ const filteredSales = computed(() => {
 });
 
 const openEditModal = () => {
-  productStore.isEditModalOpen = true;
+  productStore.openProductEdit(productStore.currentProduct?.id || null);
 };
 
 const createNewCategory = () => {
@@ -45,12 +45,15 @@ const handleProductSaved = (product: Product) => {
 };
 
 const openNewProductModal = () => {
-  productStore.currentProduct = null;
-  productStore.isEditModalOpen = true;
+  productStore.openProductEdit(null);
 };
 
 onMounted(async () => {
-  await productStore.fetchProducts();
+  try {
+    await productStore.fetchProducts();
+  } catch (error) {
+    console.error("Erreur lors du chargement des produits:", error);
+  }
 });
 </script>
 
@@ -122,10 +125,12 @@ onMounted(async () => {
       <ProductDetailModal 
         :is-open="productStore.isDetailModalOpen"
         @edit="openEditModal"
+        @close="productStore.closeProductDetail"
       />
       <ProductEditModal
         :is-open="productStore.isEditModalOpen"
         @save="handleProductSaved"
+        @close="productStore.closeProductEdit"
       />
       <ProductCategoriesModal 
         :is-open="productCategorystore.isModalOpen" 
