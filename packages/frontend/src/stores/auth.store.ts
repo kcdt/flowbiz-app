@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null);
-  const accessToken = ref(localStorage.getItem('accessToken') || null);
+  const accessToken = ref<string | null>(null);
   const isLoading = ref(false);
   const error = ref(null);
   
@@ -17,7 +17,6 @@ export const useAuthStore = defineStore('auth', () => {
     
     try {
       const decodedToken = jwtDecode(accessToken.value as string);
-
       const currentTime = Date.now() / 1000;
       
       return decodedToken.exp && decodedToken.exp > currentTime;
@@ -42,9 +41,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     try {
       const response = await authService.register(formData);
-
       router.push({ name: 'login' });
-
       return response.data;
     } catch (err: any) {
       error.value = err.response?.data?.message || 'Erreur d\'inscription';
@@ -63,8 +60,6 @@ export const useAuthStore = defineStore('auth', () => {
       accessToken.value = response.data.data.accessToken;
       user.value = response.data.data.user;
       
-      localStorage.setItem('accessToken', accessToken.value as string);
-      
       router.push({ name: 'dashboard' });
       return response.data;
     } catch (err) {
@@ -76,29 +71,26 @@ export const useAuthStore = defineStore('auth', () => {
   }
   
   async function refreshToken() {
-    try {
-      const response = await authService.refreshToken();
+    const response = await authService.refreshToken();
+    
+    if (response.data && response.data.data && response.data.data.accessToken) {
       accessToken.value = response.data.data.accessToken;
-      
-      localStorage.setItem('accessToken', accessToken.value as string);
-      
       return response.data;
-    } catch (err) {
-      logout();
-      throw err;
+    } else {
+      throw new Error('Token refresh failed');
     }
   }
   
   function logout() {
+    authService.logout().catch(console.error);
+    
     user.value = null;
     accessToken.value = null;
-    localStorage.removeItem('accessToken');
     
-    authService.logout().catch(() => {
-      throw error
-    });
-    
-    router.push({ name: 'login' });
+    const currentRoute = router.currentRoute.value;
+    if (currentRoute.name !== 'login') {
+      router.push({ name: 'login' });
+    }
   }
   
   async function checkAuth() {
@@ -107,7 +99,6 @@ export const useAuthStore = defineStore('auth', () => {
         await refreshToken();
       } catch (err) {
         logout();
-        throw err;
       }
     } else if (accessToken.value && !user.value) {
       try {
@@ -117,6 +108,13 @@ export const useAuthStore = defineStore('auth', () => {
         logout();
       }
     }
+  }
+  
+  function resetState() {
+    user.value = null;
+    accessToken.value = null;
+    error.value = null;
+    isLoading.value = false;
   }
   
   return {
@@ -130,6 +128,7 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     refreshToken,
     logout,
-    checkAuth
+    checkAuth,
+    resetState
   };
 });
