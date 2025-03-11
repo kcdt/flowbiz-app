@@ -125,28 +125,6 @@ export const productModel = {
     }
   },
 
-  async existingProduct (id: string) {
-    const product = await db.query.products.findFirst({
-      where: eq(products.id, id),
-      columns: { id: true },
-    });
-  
-    if (!product) {
-      throw new Error("Produit non trouvé");
-    }
-  },
-
-  async existingProduct (id: string) {
-    const product = await db.query.products.findFirst({ // passer en fonction pour la réutiliser
-      where: eq(products.id, id),
-      columns: { id: true },
-    });
-  
-    if (!product) {
-      throw new Error("Produit non trouvé");
-    }
-  },
-
   async updateById (id: string, updatedProduct: Partial<NewProduct>) {
     try {
       const result = await db.update(products)

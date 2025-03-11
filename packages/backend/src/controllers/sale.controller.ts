@@ -101,30 +101,6 @@ export const saleController = {
       return APIResponse(res, null, error.message, statusCode);
     }
   },
-
-  async updateSale(req: Request, res: Response) {
-    try {
-      const { id } = req.params;
-      const authReq = req as VerifiedAuthRequest;
-      const companyId = authReq.user.companyId;
-      
-      const updatedSale = await salesService.updateWithItems(id, companyId, req.body);
-      
-      return APIResponse(res, updatedSale, "Vente mise à jour avec succès", 200);
-    } catch (error: any) {
-      let statusCode = 500;
-      
-      if (error.message.includes("n'existe pas") || error.message.includes("introuvable")) {
-        statusCode = 404;
-      } else if (error.message.includes("autorisé") || error.message.includes("appartient")) {
-        statusCode = 403;
-      } else if (error.message.includes("Stock insuffisant") || error.message.includes("Le produit avec l'ID")) {
-        statusCode = 400;
-      }
-      logger.error(`Erreur lors de la mise à jour de la vente`, { error: error.message, stack: error.stack });
-      return APIResponse(res, null, error.message, statusCode);
-    }
-  },
   
   async updateSaleStatus(req: Request, res: Response) {
     try {

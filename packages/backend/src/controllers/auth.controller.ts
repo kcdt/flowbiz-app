@@ -66,8 +66,7 @@ export const authController = {
 
       const newUser = await authModel.createUser(userWithHashedPassword);
       if (!newUser) {
-        // Si la création de l'utilisateur échoue, il faudrait idéalement supprimer l'entreprise créée
-        logger.error('Échec de la création de l\'utilisateur après création de l\'entreprise', { userEmail, companyId: company.id });
+        logger.error('Échec de la création de l\'utilisateur après création de l\'entreprise', { userEmail: formData.userEmail, companyId: company.id });
         return APIResponse(res, null, ERROR_MESSAGES.USER_CREATION, 500);
       }
 
@@ -147,7 +146,7 @@ export const authController = {
 
   async logout(req: Request, res: Response) {
     try {
-      const authReq = req as AuthRequest;
+      const authReq = req as VerifiedAuthRequest;
       
       if (authReq.user?.id) {
         await authModel.updateRefreshToken(authReq.user.id, null);
@@ -232,28 +231,6 @@ export const authController = {
     } catch (error: any) {
       logger.error('Erreur lors de la récupération du profil', { error: error.message, stack: error.stack });
       return APIResponse(res, null, ERROR_MESSAGES.INTERNAL_SERVER_ERROR, 500);
-    }
-  },
-
-  async getMe(req: Request, res: Response) {
-    try {
-      const authReq = req as VerifiedAuthRequest;
-      const userId = authReq.user.id;
-      
-      if (!userId) {
-        return APIResponse(res, null, "Utilisateur non authentifié", 401);
-      }
-      
-      const user = await userModel.getById(userId);
-      if (!user) {
-        return APIResponse(res, null, "Utilisateur non trouvé", 404);
-      }
-      
-      const { refreshToken, ...userWithoutSensitiveInfo } = user;
-      
-      return APIResponse(res, userWithoutSensitiveInfo, "Informations utilisateur récupérées", 200);
-    } catch (error: any) {
-      return APIResponse(res, null, error.message, 500);
     }
   }
 };

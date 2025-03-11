@@ -93,6 +93,8 @@ export const userModel = {
           companyId: true
         }
       });
+
+      return result;
     }
     catch (err) {
       throw new Error("Impossible de récupérer l'entreprise de l'utilisateur");
