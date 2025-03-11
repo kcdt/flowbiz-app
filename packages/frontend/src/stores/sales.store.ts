@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import salesService from '@/services/api/sales.service';
-import { detailedSale, Sale, SaleCreateInput } from '@/types/models';
+import { detailedSale, Sale, SaleCreateInput, SaleUpdateInput } from '@/types/models';
 
 export const useSalesStore = defineStore('sale', () => {
   const sales = ref<Sale[]>([]);
@@ -71,7 +71,7 @@ export const useSalesStore = defineStore('sale', () => {
     }
   }
 
-  const updateSale = async(id: string, saleData: any) => {
+  const updateSale = async(id: string, saleData: SaleUpdateInput) => {
     isLoading.value = true;
     error.value = null;
     
@@ -186,7 +186,6 @@ export const useSalesStore = defineStore('sale', () => {
   };
 
   return {
-    // State
     sales,
     currentSale,
     isLoading,
@@ -194,18 +193,15 @@ export const useSalesStore = defineStore('sale', () => {
     isDetailModalOpen,
     isEditModalOpen,
     
-    // Getters
     getSaleById,
     getSalesByStatus,
     
-    // Actions
     fetchSales,
     fetchSaleById,
     createSale,
     updateSale,
     deleteSale,
     
-    // Utilitaires
     resetState,
     openSaleDetail,
     closeSaleDetail,

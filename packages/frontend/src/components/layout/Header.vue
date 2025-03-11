@@ -12,6 +12,10 @@ const toggleMenu = () => {
   }
 };
 
+const closeMenu = () => {
+  menuOpen.value = false;
+  document.body.style.overflow = '';
+};
 </script>
 
 <template>
@@ -32,14 +36,13 @@ const toggleMenu = () => {
       
       <nav class="navigation" :class="{ 'active': menuOpen }">
         <ul class="nav-links">
-          <li><a href="#features" v-on:click="toggleMenu">Fonctionnalités</a></li>
-          <li><a href="#prices" v-on:click="toggleMenu">Tarifs</a></li>
-          <li><a href="#contact" v-on:click="toggleMenu">Contact</a></li>
+          <li><a href="#features" v-on:click="closeMenu">Fonctionnalités</a></li>
+          <li><a href="#contact" v-on:click="closeMenu">Contact</a></li>
         </ul>
         
         <div class="btn-container">
-          <router-link to="/login" class="btn-secondary" v-on:click="toggleMenu">Connexion</router-link>
-          <router-link to="/register" class="btn-primary" v-on:click="toggleMenu">S'inscrire</router-link>
+          <router-link to="/login" class="btn-secondary" v-on:click="closeMenu">Connexion</router-link>
+          <router-link to="/register" class="btn-primary" v-on:click="closeMenu">S'inscrire</router-link>
         </div>
       </nav>
     </div>
