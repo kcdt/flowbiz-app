@@ -36,9 +36,11 @@
 
     @media (min-width: vars.$breakpoint-md) {
       height: 50vh;
+      padding-bottom: 4rem;
     }
 
     @media (min-width: vars.$breakpoint-lg) {
+      padding-top: 4rem;
       padding-bottom: 4rem;
       height: 60vh;
       width: 100%;
@@ -53,18 +55,18 @@
     }
   
     .hero-title {
-      font-size: 1.7rem;
+      font-size: 1.5rem;
       font-weight: 700;
       color: vars.$text-color;
       margin-bottom: 1.5rem;
       line-height: 1.2;
   
       @media (min-width: vars.$breakpoint-md) {
-        font-size: 2rem;
+        font-size: 1.8rem;
       }
   
       @media (min-width: vars.$breakpoint-lg) {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
       }
   
       &-colored {
@@ -135,9 +137,18 @@
   }
 
   .section-title {
-    font-size: 1.7rem;
+    font-size: 1.3rem;
     text-align: center;
-    color: #333;
+    color: vars.$text-color;
+    line-height: 1.2;
+
+    @media (min-width: vars.$breakpoint-md) {
+      font-size: 1.5rem;
+    }
+
+    @media (min-width: vars.$breakpoint-lg) {
+      font-size: 1.8rem;
+    }
   }
 
   .features-section {
@@ -236,13 +247,6 @@
       padding: 0 20px;
     }
     
-    .section-title {
-      font-size: 1.7rem;
-      text-align: center;
-      margin-bottom: 10px;
-      color: #333;
-    }
-    
     .section-subtitle {
       text-align: center;
       font-size: 1rem;
@@ -305,10 +309,6 @@
   @media (max-width: 768px) {
     .contact-section {
       padding: 60px 0;
-    }
-    
-    .section-title {
-      font-size: 2rem;
     }
     
     .contact-form-container {
