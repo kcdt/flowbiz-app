@@ -112,32 +112,35 @@
           margin: 0 0 2rem 0;
           gap: 10px;
         }
-      
-        a {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: center;
-          width: 100%;
-          gap: 10px;
-          text-decoration: none;
 
+        li.btn {
+          margin: 1rem 0;
+          font-weight: 500;
+          transition: color 0.6s ease;
+          padding: 0;
+          
           @media (min-width: vars.$breakpoint-lg) {
-            justify-content: flex-start;
+            width: 100%;
+            margin: 0.5rem 0;
           }
 
-          li {
-            margin: 1rem 0;
-            font-weight: 500;
-            transition: color 0.6s ease;
-            
+          a {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 10px;
+            color: vars.$text-color;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+  
             @media (min-width: vars.$breakpoint-lg) {
-              width: 100%;
-              margin: 0.5rem 0;
+              justify-content: flex-start;
             }
           }
-      
-          &:hover li {
+
+          &:hover a, &.active a {
             color: vars.$secondary-color;
           }
         }

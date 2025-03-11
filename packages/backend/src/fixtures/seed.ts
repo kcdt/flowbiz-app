@@ -43,12 +43,12 @@ async function seed() {
   
   await db.insert(companies).values(companyData);
   console.log('Entreprises insérées avec succès');
+  
+  await db.insert(companies).values(companyData);
+  console.log('Entreprises insérées avec succès');
 
   // 2. Création des utilisateurs
-  const userData: User[] = []
-
-  
-    userData.push(
+  const userData: User[] = [
     {
       id: userIds[0],
       email: 'john.doe@example.com',
@@ -97,7 +97,7 @@ async function seed() {
       createdAt: new Date(),
       updatedAt: new Date()
     }
-  );
+  ]
 
   await db.insert(users).values(userData);
   console.log('Utilisateurs insérés avec succès');

@@ -127,8 +127,14 @@ onMounted(async () => {
     
     <div v-else-if="userStore.currentUser" class="profile-content">
       <div v-if="userStore.error" class="error-message">
-        {{ userStore.error }}
+        <p>
+          {{ userStore.error }}
+        </p>
+        <button class="btn">
+          <Icon name="X" color="black" v-on:click="userStore.error = null"/>
+        </button>
       </div>
+      
       <div v-if="!isEditMode" class="profile-card">
         <div class="profile-header">
           <div class="avatar">

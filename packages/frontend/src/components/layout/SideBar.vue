@@ -57,12 +57,12 @@ const isActive = (path: string) => {
       <nav class="navigation" :class="{ 'active': menuOpen }">
         <ul class="nav-links">
           <template v-for="item in menuItems" :key="item.path">
-            <router-link :to="item.path" v-on:click="toggleMenu">
-              <li :class="{ 'active': isActive(item.path) }" class="btn">
+            <li :class="{ 'active': isActive(item.path) }" class="btn">
+              <router-link :to="item.path" v-on:click="toggleMenu">
                 <Icon :name="item.icon"/>
                 {{ item.label }}
-              </li>
-            </router-link>
+              </router-link>
+            </li>
           </template>
         </ul>
         <div class="btn-container">

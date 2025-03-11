@@ -115,7 +115,6 @@ export const useUserStore = defineStore('user', () => {
     try {
       await userService.delete(id);
       
-      // Si c'est l'utilisateur actuel, effacer les données
       if (currentUser.value && currentUser.value.id === id) {
         currentUser.value = null;
       }
@@ -140,18 +139,15 @@ export const useUserStore = defineStore('user', () => {
   }
   
   return {
-    // State
     currentUser,
     isLoading,
     error,
     currentUserCompany,
     
-    // Getters
     isAuthenticated,
     isAdmin,
     userProfile,
     
-    // Actions
     fetchCurrentUser,
     fetchUserCompany,
     fetchUserById,

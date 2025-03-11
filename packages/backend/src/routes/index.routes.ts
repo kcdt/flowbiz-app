@@ -24,7 +24,7 @@ router.use('/products',
   productRoutes
 );
 
-// http://localhost:3000/product
+// http://localhost:3000/product-categories
 router.use('/product-categories', 
   productCategoriesRoutes
 );

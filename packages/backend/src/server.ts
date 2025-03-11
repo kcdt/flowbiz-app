@@ -3,6 +3,7 @@ import cors from 'cors';
 import { env } from "./config/env";
 import routes from "./routes/index.routes";
 import { requestLogger } from './utils/logger.utils';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 const { PORT, FRONTEND_URL } = env;
@@ -31,6 +32,7 @@ app.use(requestLogger);
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(cookieParser());
 
 app.use(routes);
 

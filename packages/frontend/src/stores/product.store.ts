@@ -15,6 +15,11 @@ export const useProductStore = defineStore('product', () => {
   });
   const isDetailModalOpen = ref(false);
   const isEditModalOpen = ref(false);
+
+  
+  const resetError = () => {
+    error.value = null;
+  };
   
   const getProductById = computed(() => {
     return (id: string) => products.value.find(product => product.id === id);
@@ -37,7 +42,7 @@ export const useProductStore = defineStore('product', () => {
 
   async function fetchProducts() {
     isLoading.value = true;
-    error.value = null;
+    resetError();
     
     try {
       const response = await productService.getAll();
@@ -53,7 +58,7 @@ export const useProductStore = defineStore('product', () => {
 
   async function fetchProductById(id: string) {
     isLoading.value = true;
-    error.value = null;
+    resetError();
     
     try {
       const response = await productService.getById(id);
@@ -69,8 +74,8 @@ export const useProductStore = defineStore('product', () => {
 
   async function createProduct(productData: ProductCreateInput) {
     isLoading.value = true;
-    error.value = null;
-    
+    resetError();
+
     try {
       const response = await productService.create(productData);
       const newProduct = response.data.data;
@@ -86,7 +91,7 @@ export const useProductStore = defineStore('product', () => {
 
   const updateProduct = async(id: string, productData: ProductUpdateInput) => {
     isLoading.value = true;
-    error.value = null;
+    resetError();
     
     try {
       const response = await productService.update(id, productData);
@@ -112,7 +117,7 @@ export const useProductStore = defineStore('product', () => {
 
   const deleteProduct = async(id: string) => {
     isLoading.value = true;
-    error.value = null;
+    resetError();
     
     try {
       await productService.delete(id);
@@ -158,13 +163,13 @@ export const useProductStore = defineStore('product', () => {
   const resetState = () => {
     products.value = [];
     currentProduct.value = null;
-    error.value = null;
+    resetError();
     isLoading.value = false;
   };
 
   const openProductDetail = async (productId: string) => {
     isLoading.value = true;
-    error.value = null;
+    resetError();
     
     try {
       await fetchProductById(productId);
@@ -182,15 +187,15 @@ export const useProductStore = defineStore('product', () => {
 
   const openProductEdit = async (productId: string | null) => {
     isLoading.value = true;
-    error.value = null;
-
-    if (isDetailModalOpen) {
+    resetError();
+  
+    if (isDetailModalOpen.value) {
       isDetailModalOpen.value = false;
     }
     
     try {
       if (productId) {
-        currentProduct.value = await fetchProductById(productId);
+        await fetchProductById(productId);
       } else {
         currentProduct.value = null;
       }
@@ -236,6 +241,7 @@ export const useProductStore = defineStore('product', () => {
     searchProducts,
     filterProductsByPriceRange,
     resetState,
+    resetError,
     openProductDetail,
     closeProductDetail,
     openProductEdit,

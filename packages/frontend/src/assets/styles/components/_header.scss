@@ -21,121 +21,121 @@
       gap: 20px;
     }
   }
-}
 
-.logo {
-  height: 32px;
-
-  &-container {
+  .logo {
+    height: 32px;
+  
+    &-container {
+      display: flex;
+      align-items: center;
+    }
+  
+    @media (min-width: vars.$breakpoint-md) {
+      height: 40px;
+    }
+  }
+  
+  .burger-menu {
     display: flex;
-    align-items: center;
-  }
-
-  @media (min-width: vars.$breakpoint-md) {
-    height: 40px;
-  }
-}
-
-.burger-menu {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 30px;
-  height: 21px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  
-  @media (min-width: vars.$breakpoint-md) {
-    display: none;
-  }
-
-  span {
-    display: block;
-    height: 3px;
-    width: 100%;
-    background-color: vars.$text-color;
-    border-radius: 3px;
-    transition: all 0.3s ease;
-  }
-}
-
-.navigation {
-  position: fixed;
-  top: vars.$header-height;
-  left: 0;
-  width: 100%;
-  height: calc(100vh - #{vars.$header-height});
-  background-color: vars.$bg-color;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 2rem;
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  
-  &.active {
-    transform: translateX(0);
-  }
-  
-  @media (min-width: vars.$breakpoint-md) {
-    display: flex;
-    position: static;
-    transform: none;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
-    height: auto;
-    padding-top: 0;
-    box-shadow: none;
-    width: 100%;
-  }
-}
-
-.nav-links {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  list-style: none;
-  margin: 0 0 2rem 0;
-  
-  @media (min-width: vars.$breakpoint-md) {
-    flex-direction: row;
-    margin: 0 2rem 0 0;
-  }
-
-  li {
-    margin: 1rem 0;
+    width: 30px;
+    height: 21px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
     
     @media (min-width: vars.$breakpoint-md) {
-      margin: 0 1rem;
+      display: none;
+    }
+  
+    span {
+      display: block;
+      height: 3px;
+      width: 100%;
+      background-color: vars.$text-color;
+      border-radius: 3px;
+      transition: all 0.3s ease;
     }
   }
-
-  a {
-    color: vars.$text-color;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: vars.$primary-color;
+  
+  .navigation {
+    position: fixed;
+    top: vars.$header-height;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - #{vars.$header-height});
+    background-color: vars.$bg-color;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 2rem;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    
+    &.active {
+      transform: translateX(0);
+    }
+    
+    @media (min-width: vars.$breakpoint-md) {
+      display: flex;
+      position: static;
+      transform: none;
+      flex-direction: row;
+      justify-content: space-between;
+      height: auto;
+      padding-top: 0;
+      box-shadow: none;
+      width: 100%;
     }
   }
-}
-
-.btn-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-
-  @media (min-width: vars.$breakpoint-md) {
-    justify-content: flex-end;
-    flex-direction: row;
+  
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    list-style: none;
+    margin: 0 0 2rem 0;
+    
+    @media (min-width: vars.$breakpoint-md) {
+      flex-direction: row;
+      margin: 0 2rem 0 0;
+    }
+  
+    li {
+      margin: 1rem 0;
+      
+      @media (min-width: vars.$breakpoint-md) {
+        margin: 0 1rem;
+      }
+    }
+  
+    a {
+      color: vars.$text-color;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+  
+      &:hover {
+        color: vars.$primary-color;
+      }
+    }
+  }
+  
+  .btn-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 20px;
+    width: 100%;
+  
+    @media (min-width: vars.$breakpoint-md) {
+      justify-content: flex-end;
+      flex-direction: row;
+      gap: 20px;
+    }
   }
 }

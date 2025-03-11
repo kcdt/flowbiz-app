@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/auth.store';
+import Icon from '@/components/common/Icon.vue';
 
 const authStore = useAuthStore();
 const email = ref('');
@@ -22,7 +23,12 @@ const handleLogin = async () => {
         <h1 class="login-title">Connexion</h1>
         
         <div v-if="authStore.error" class="error-message">
-          {{ authStore.error }}
+          <p>
+            {{ authStore.error }}
+          </p>
+          <button class="btn">
+            <Icon name="X" color="black" v-on:click="authStore.error = null"/>
+          </button>
         </div>
         
         <form @submit.prevent="handleLogin" class="login-form">
