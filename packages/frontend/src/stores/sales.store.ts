@@ -185,7 +185,6 @@ export const useSalesStore = defineStore('sale', () => {
   };
 
   return {
-    // State
     sales,
     currentSale,
     isLoading,
@@ -193,18 +192,15 @@ export const useSalesStore = defineStore('sale', () => {
     isDetailModalOpen,
     isEditModalOpen,
     
-    // Getters
     getSaleById,
     getSalesByStatus,
     
-    // Actions
     fetchSales,
     fetchSaleById,
     createSale,
     updateSale,
     deleteSale,
     
-    // Utilitaires
     resetState,
     openSaleDetail,
     closeSaleDetail,
