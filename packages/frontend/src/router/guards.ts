@@ -3,6 +3,10 @@ import { useAuthStore } from '@/stores/auth.store';
 
 export function setupRouteGuards(router: Router) {
   router.beforeEach(async (to, from, next) => {
+    if (to.path === from.path && to.hash !== from.hash) {
+      return next();
+    }
+    
     const authStore = useAuthStore();
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     
