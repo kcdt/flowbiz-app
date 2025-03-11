@@ -4,7 +4,7 @@ import { useCategoryStore } from '@/stores/product.category.store';
 
 const props = defineProps({
   categoryId: {
-    type: [String, null],
+    type: String || null,
     default: null
   }
 });
