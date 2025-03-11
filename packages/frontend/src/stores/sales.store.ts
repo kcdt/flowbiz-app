@@ -90,7 +90,6 @@ export const useSalesStore = defineStore('sale', () => {
       
       return updatedSale;
     } catch (err: any) {
-      closeSaleEdit();
       error.value = err.response?.data?.message || 'Erreur lors de la mise à jour du produit';
       throw err;
     } finally {

@@ -93,6 +93,14 @@ onMounted(async () => {
         </div>
         
         <div v-if="sale" class="modal-content">
+          <div v-if="saleStore.error" class="error-message">
+            <p>
+              {{ saleStore.error }}
+            </p>
+            <button class="btn">
+              <Icon name="X" color="black" v-on:click="saleStore.error = null"/>
+            </button>
+          </div>
           <div class="sale-details">
             <div class="sale-info">
               <div class="sale-header">

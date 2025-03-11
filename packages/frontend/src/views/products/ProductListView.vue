@@ -61,11 +61,6 @@ onMounted(async () => {
       <h1>Catalogue</h1>
     </div>
     <div v-if="productStore.isLoading">Chargement...</div>
-    <div v-else-if="productStore.error" class="error">
-      <p class="warning-message">
-        {{ productStore.error }}
-      </p>
-    </div>
     <div v-else class="list-view-content">
       <h3>Valeur totale du stock : {{ productStore.totalInventoryValue.toFixed(2) }} €</h3>
       <div class="filter-container">
@@ -111,8 +106,8 @@ onMounted(async () => {
             </select>
           </div>
           <div class="actions">
-            <div class="btn-secondary" v-on:click="createNewCategory">Gérer les catégories</div>
-            <div class="btn-primary" v-on:click="openNewProductModal">Ajouter un produit</div>
+            <button class="btn-secondary" v-on:click="createNewCategory">Gérer les catégories</button>
+            <button class="btn-primary" v-on:click="openNewProductModal">Ajouter un produit</button>
           </div>
         </div>
       </div>
@@ -125,7 +120,7 @@ onMounted(async () => {
         </div>
       </div>
       <ProductDetailModal 
-        :is-open="productStore.isDetailModalOpen" 
+        :is-open="productStore.isDetailModalOpen"
         @edit="openEditModal"
       />
       <ProductEditModal

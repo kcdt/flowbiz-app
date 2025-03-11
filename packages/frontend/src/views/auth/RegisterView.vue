@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref, watch } from 'vue';
 import { useAuthStore } from '@/stores/auth.store';
+import Icon from '@/components/common/Icon.vue';
 
 const authStore = useAuthStore();
 
@@ -45,7 +46,12 @@ const handleRegister = async () => {
         <h1 class="register-title">Créer un compte</h1>
         
         <div v-if="authStore.error" class="error-message">
-          {{ authStore.error }}
+          <p>
+            {{ authStore.error }}
+          </p>
+          <button class="btn">
+            <Icon name="X" color="black" v-on:click="authStore.error = null"/>
+          </button>
         </div>
         
         <form @submit.prevent="handleRegister" class="register-form">
